@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import './Login.css';
 import Avatar from '../../assets/avatar.png'
 import Background from '../../assets/background.jpg';
-import { sendLogin, sendLogout, setToken } from '../../services/api';
+import { sendLogin, setToken } from '../../services/api';
 
 
 export default function Login() {
@@ -17,14 +17,8 @@ export default function Login() {
         console.log(res);
         if (res.status === 200) setToken(res.data.token);
 
-        // setEmail('');
-        // setPassword('');
-    }
-
-    async function submitLogout() {
-        let res = await sendLogout();
-        console.log(res);
-        // if (res.status === 200) setToken(res.data.token);
+        setEmail('');
+        setPassword('');
     }
 
     return (
@@ -40,7 +34,6 @@ export default function Login() {
                         <input className="btn btn-primary w-100 mt-4 " type="submit" value="Entrar"/>
                     </div>
                 </form>
-                        <button className="btn btn-primary w-100 mt-4" onClick={submitLogout}>Logout</button>
             </div>
         </div>
     );

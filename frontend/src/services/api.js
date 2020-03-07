@@ -23,5 +23,5 @@ export async function sendLogin(data) {
 }
 
 export async function sendLogout() {
-    return await axios.post('/products');
+    return await axios.post('/logout');
 }
