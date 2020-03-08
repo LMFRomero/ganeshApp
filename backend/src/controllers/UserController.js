@@ -10,7 +10,7 @@ module.exports = {
         let NUSP = parseInt(req.body.NUSP);
         let name = (req.body.name).toString();
         let username = (req.body.username).toString();
-        let anoUSP = parseInt(eq.body.anoIngressoUSP);
+        let anoUSP = parseInt(req.body.anoIngressoUSP);
         let anoGanesh = parseInt(req.body.anoIngressoGanesh);
         let privilege = 0;
 
