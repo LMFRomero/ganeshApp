@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import { currentSession } from './session-manager';
 
-const API_ADDR = 'http://143.107.3.11:3333';
+const API_ADDR = 'http://143.107.252.195:3333';
 
 let axios = Axios.create({
     baseURL:API_ADDR, 
