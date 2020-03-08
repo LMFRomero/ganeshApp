@@ -3,6 +3,7 @@ import Axios from 'axios';
 const API_ADDR = 'http://192.168.0.86:3333';
 let axios;
 setToken(null);
+export default axios = Axios.create({baseURL:API_ADDR});
 
 
 export function setToken(token) {
