@@ -6,6 +6,7 @@ import GlitchHop from './pages/GlitchHop/GlitchHop';
 import LoginPage from './pages/LoginRegister/pages/LoginPage';
 import RegisterPage from './pages/LoginRegister/pages/RegisterPage';
 import RootRedirect from './components/RootRedirect';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 
 export default function Routes() {
@@ -16,6 +17,8 @@ export default function Routes() {
       <Route path="/login" exact component={LoginPage}/>
       <Route path="/register" exact component={RegisterPage}/>
       <Route path="/welcome" exact component={GlitchHop}/> {/* TODO: remove debug route */}
+      <Route path="/dashboard" exact component={Dashboard}/> {/* TODO: remove debug route */}
+
       
       {/* TODO: 404 page */}
     </Router>
