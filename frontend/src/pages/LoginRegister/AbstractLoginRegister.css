@@ -1,6 +1,8 @@
-body {
+.alr-page {
   background-image: url('../../assets/background.jpg') !important;
+  background-size: cover;
   color: white !important;
+  min-height: 98vh;
 }
 
 .login-logo {
@@ -13,10 +15,6 @@ body {
   /* border: 2px solid rgba(255,255,255,0.2); */
   /* border-radius: 50px; */
   height: 400px;
-}
-
-.alr-panel a {
-  /* color: ; */
 }
 
 #spacer

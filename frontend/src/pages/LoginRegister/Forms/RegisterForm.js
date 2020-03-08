@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 import { sendRegister } from '../../../services/api';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 let ykey = 2020;
 function generateLast20Years() {
@@ -21,6 +21,8 @@ export default function RegisterForm() {
     let [anoIngressoUSP, setAnoIngressoUSP] = useState('');
     let [anoIngressoGanesh, setAnoIngressoGanesh] = useState('');
 
+    let history = useHistory();
+
     async function submitRegister(event) {
         event.preventDefault();
         let res = await sendRegister({name, username, email, password, NUSP, anoIngressoUSP, anoIngressoGanesh});
@@ -33,6 +35,8 @@ export default function RegisterForm() {
         setNUSP('');
         setAnoIngressoUSP('');
         setAnoIngressoGanesh('');
+
+        history.push('/')
     }
 
     return (
@@ -62,9 +66,9 @@ export default function RegisterForm() {
                     <input className="btn btn-primary w-100 mt-4 " type="submit" value="Registrar-se    "/>
                 </div>
             </form>
-            <ul class="d-sm-flex nav justify-content-between mt-2 mt-sm-4 ml-n3 mr-n3 w-xl-50">
-                <li class="nav-item text-left col-12 p-0 m-0 pl-xl-2">
-                    <Link class="nav-link active" to='/login'>Já sou membro</Link>
+            <ul className="d-sm-flex nav justify-content-between mt-2 mt-sm-4 ml-n3 mr-n3 w-xl-50">
+                <li className="nav-item text-left col-12 p-0 m-0 pl-xl-2">
+                    <Link className="nav-link active" to='/login'>Já sou membro</Link>
                 </li>
             </ul>
         </React.Fragment>

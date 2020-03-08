@@ -1,19 +1,11 @@
 import Axios from 'axios';
+import { currentSession } from './session-manager';
 
-const API_ADDR = 'http://192.168.0.86:3333';
-let axios;
-setToken(null);
-export default axios = Axios.create({baseURL:API_ADDR});
+const API_ADDR = 'http://143.107.252.195:3333';
 
-
-export function setToken(token) {
-    axios = Axios.create({
-        baseURL: API_ADDR,
-        headers: {
-            'x-access-token': JSON.stringify(token)
-        }
-    });
-}
+let axios = Axios.create({
+    baseURL:API_ADDR, 
+});
 
 export async function sendRegister(data) {
     return await axios.post('/register', data);
@@ -24,5 +16,11 @@ export async function sendLogin(data) {
 }
 
 export async function sendLogout() {
-    return await axios.post('/logout');
+    console.log('Sending logout request...');
+    let response = await axios.post('/logout', {sessionID: currentSession.getSessionID()});
+    currentSession.destroyCookie();
+    return response;
 }
+
+
+export default axios;
