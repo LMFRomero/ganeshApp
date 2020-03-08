@@ -1,0 +1,34 @@
+body {
+  background-image: url('../../assets/background.jpg') !important;
+  color: white !important;
+}
+
+.login-logo {
+    width: 100px;
+}
+
+.alr-panel {
+  max-width: 500px !important;
+  /* background-color: rgba(0,0,0,0.1); */
+  /* border: 2px solid rgba(255,255,255,0.2); */
+  /* border-radius: 50px; */
+  height: 400px;
+}
+
+.alr-panel a {
+  /* color: ; */
+}
+
+#spacer
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
