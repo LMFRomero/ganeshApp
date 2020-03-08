@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { currentSession } from '../services/session-manager';
 import GlitchHop from '../pages/GlitchHop/GlitchHop';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import { Redirect } from 'react-router-dom';
 
 export default function RootRedirect() {
-    const [waitingJwtValidation, setWaitingJwtValidation] = useState(true);
+    const [finishedValidation, setFinishedValidation] = useState(false);
     const [animationHasEnded, setAnimationHasEnded] = useState(false);
-    const [jwtValid, setJwtValid] = useState(false);
+    const [valid, setValid] = useState(false);
 
-    async function validateJWTSession() {
-
-        console.log(currentSession.token);
-
-        setJwtValid(await currentSession.isAuthenticated());
-        setWaitingJwtValidation(false);
+    async function validateSession() {
+        let isValid = await currentSession.isAuthenticated();
+        setValid(isValid); //Will change on next render
+        console.log(finishedValidation, animationHasEnded, isValid)
+        if (!isValid) currentSession.destroyCookie();
+        setFinishedValidation(true);
     }
 
-    validateJWTSession();
+    useEffect(() => {
+        validateSession();
+        // eslint-disable-next-line
+    }, []);
 
     return (
         <React.Fragment>
         {
-
-            waitingJwtValidation ? 'Validating session...':
-            !jwtValid ? <Redirect to="/login"/> :
+            !finishedValidation ? 'Validating session...':
+            !valid ? <Redirect to="/login"/> :
             !animationHasEnded ? <GlitchHop onEnded={()=>setAnimationHasEnded(true)}/> :
-            <Dashboard/>
-            
+            <Dashboard/>   
         }
         </React.Fragment>
     )

@@ -11,7 +11,7 @@ export default function LeftNav(props) {
     }
 
     return (
-        <ul class="list-group w-100">
+        <ul className="list-group w-100">
             <Button text="Feed Geral" onClick={handleLeftNavBtnClick}/>
             <Button text="Materiais" onClick={handleLeftNavBtnClick}/>
             <Button text="Reuniões" onClick={handleLeftNavBtnClick}/>

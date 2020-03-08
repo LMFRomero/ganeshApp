@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './GlitchHop.css';
 
@@ -14,13 +14,24 @@ function restoreBackground() {
     document.body.style = styleBKP;
 }
 
-
+let hasEnded = false;
 export default function GlitchHop(props) {
+    function onEnded() {
+        if (hasEnded) return;
+        hasEnded = true;
+        restoreBackground();
+        if (props.onEnded)
+            props.onEnded();
+    }
+
     setBackgroundBlack();
+    
+    setTimeout(onEnded, 2100);
+
 
     return (
         <React.Fragment>
-            <video className="embed-responsive embed-responsive-16by9" autoPlay id="myVideo" onEnded={()=>{restoreBackground(); props.onEnded();}}>
+            <video className="embed-responsive embed-responsive-16by9" autoPlay muted id="myVideo" onEnded={onEnded}>
                 <source src={ClipWelcome} type="video/mp4" />
             </video>
         </React.Fragment>

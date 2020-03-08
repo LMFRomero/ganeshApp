@@ -1,6 +1,7 @@
 .alr-page {
   background-image: url('../../assets/background.jpg') !important;
   color: white !important;
+  min-height: 98vh;
 }
 
 .login-logo {

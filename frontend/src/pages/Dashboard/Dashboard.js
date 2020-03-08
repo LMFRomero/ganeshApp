@@ -6,13 +6,20 @@ import {sendLogout} from '../../services/api';
 
 import LeftNav from './components/LeftNav/LeftNav';
 import CentralPanel from './components/CentralPanel/CentralPanel';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Dashboard() {
     const [currentTab, setcurrentTab] = useState('Feed Geral');
 
+    let history = useHistory();
 
     function onLeftNavChange(event, text) {
         setcurrentTab(text);
+    }
+
+    function logout() {
+        sendLogout();
+        history.push('/login');
     }
 
     return (
@@ -20,7 +27,16 @@ export default function Dashboard() {
             <div className="row dash-nav">
                 <div className="col-12">
                     <nav className="navbar navbar-expand-lg ">
-
+                        <div className="dropdown">
+                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Marucs
+                            </button>
+                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <Link className="dropdown-item" to="/">Perfil</Link>
+                                <Link className="dropdown-item" to="/">Configurações</Link>
+                                <Link className="dropdown-item" to="/logout">Desconectar</Link>
+                            </div>
+                        </div>
                     </nav>
                 </div>
             </div>
@@ -37,7 +53,7 @@ export default function Dashboard() {
                 </div>
                 {/* PAINEL DIREITO */}
                 <div className="col-3 col-md-2 dash-right-panel">
-                    <button onClick={sendLogout}>Logout</button>
+                    <button onClick={logout}>Logout</button>
                 </div>
             </div>
         </React.Fragment>

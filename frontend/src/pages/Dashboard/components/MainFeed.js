@@ -1,5 +1,9 @@
 import React from 'react';
 import FeedCard from '../../../components/FeedCard/FeedCard';
+
+
+import uniqid from 'uniqid';
+
 function generateCards() {
 
     let info = {
@@ -10,7 +14,7 @@ function generateCards() {
     };
 
     const generatedCards = [];
-    for (let i = 0; i < 10; i++) generatedCards.push(<FeedCard {...info}/>)
+    for (let i = 0; i < 10; i++) generatedCards.push(<FeedCard key={uniqid('feedcard-')}{...info}/>)
     return generatedCards;
 }
 
