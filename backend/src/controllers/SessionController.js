@@ -1,43 +1,44 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
 const bCrypt = require('../services/hashes');
-const jwt = require('jsonwebtoken');
+const session = require('express-session');
+const redisStore = require('../services/redis-store');
 
 module.exports = {
     destroy (req, res) {
-        console.log(req.headers);
-        return res.status(200).json({ auth: false, token: "" });
+        redisStore.destroy(req.body.sessionID, (error) => {
+            if (error) res.status(400).end();
+            else res.status(200).end();
+        });
     },
 
-    async store (req, res) {
-        let email = req.body.email;
-        let password = req.body.password;
-
+    async store (email, password) {
         if (!email || !password) {
-            return res.status(400).send('Missing Information!');
+            return null;
         }
+
         let user = await User.findOne({ "email": email });
 
-        if (!user) {
-            return res.status(400).send('Login inválido!'); 
-        }
-
+        if (!user) return null;
 
         let passwordHash = user.password;
-        let id = user._id;
 
+        if (bCrypt.validateHash(passwordHash, password)) return user;
+        else return null;
+    },
 
-        if (bCrypt.validateHash(passwordHash, password)) {
-            var token = jwt.sign({ id }, process.env.SECRET, {
-                expiresIn: 3600 // expires in 1h
-            });
-            
-            res.status(200).send({ auth: true, token: token });
-        }
+    isAuth (req, res, next) {
+        // Cant use this function due to cors not allowing third party cookies
+        // if (req.isAuthenticated()) {
+        //     return next();
+        // }
 
-        else {
-            res.status(400).send('Login inválido!');
-        }
-        
+        redisStore.get(req.body.sessionID, (error, session) => {
+            if (error) console.log(error);
+    
+            if (session) return res.status(200).end();
+            else res.status(403).end();
+        });
+    
     }
 }
