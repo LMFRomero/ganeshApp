@@ -3,7 +3,7 @@ const bCrypt = require('../services/hashes');
 
 module.exports = {
     async store (req, res) {
-        //to do: Anti NoSQL Injection?
+        //TODO: Anti NoSQL Injection?
         
         let newEmail = (req.body.email).toString();
         let password = (req.body.password).toString();
@@ -28,7 +28,7 @@ module.exports = {
             let passwordHash = bCrypt.createHash(password);
 
             user = await User.create({email: newEmail, password: passwordHash, name: name, username: username, NUSP: NUSP, anoIngressoUSP: anoUSP, anoIngressoGanesh: anoGanesh, privilege: 0});
-            return res.json(user);
+            return res.status(201).json({ message: "User created"});
         }
 
         else {

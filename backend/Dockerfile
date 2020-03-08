@@ -16,4 +16,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 3333
-CMD [ "node", "server.js" ]
+CMD [ "node", "src/server.js" ]
