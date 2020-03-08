@@ -12,13 +12,16 @@ module.exports = {
     async store (req, res) {
         let email = req.body.email;
         let password = req.body.password;
+
+        if (!email || !password) {
+            return res.status(400).send('Missing Information!');
+        }
         let user = await User.findOne({ "email": email });
 
         if (!user) {
             return res.status(400).send('Login inválido!'); 
         }
 
-        console.log(req.headers);
 
         let passwordHash = user.password;
         let id = user._id;
