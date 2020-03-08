@@ -16,12 +16,13 @@ export default function LoginForm() {
         setEmail('');
         setPassword('');
         
+        console.log('Login Response:');
         console.log(res);
 
         if (res.status === 200)  {
             setToken(res.data.token);
             currentSession.token = res.data.token;
-            console.log('redirecting');
+            console.log('Login was successful, redirecting to animation at /');
             history.push('/');
         }
 
@@ -43,7 +44,7 @@ export default function LoginForm() {
                     <Link class="nav-link active" to='/register'>Criar conta</Link>
                 </li>
                 <li class="nav-item text-left text-sm-right col-12 col-sm-7 p-0 m-0 pr-xl-2">
-                    <Link class="nav-link disabled" to="/login" refresh="true">Esqueci a senha</Link>
+                    <Link class="nav-link disabled" to="/edacd">Esqueci a senha</Link>
                 </li>
             </ul>
         </React.Fragment>
