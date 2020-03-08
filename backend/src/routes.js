@@ -6,7 +6,6 @@ require('./services/passaport')(passport);
 
 const routes = express.Router();
 
-
 routes.post('/validate', SessionController.isAuth);
 
 routes.post('/register', UserController.store);
@@ -31,8 +30,6 @@ routes.post('/authenticate', (req, res, next) => {
         } 
     })(req, res, next);
 });
-
-
 
 
 routes.get('*', (req, res) => {
