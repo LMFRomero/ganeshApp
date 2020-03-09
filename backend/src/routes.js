@@ -22,6 +22,20 @@ routes.put('/meeting/:id', SessionController.isAuth, MeetingController.update);
 
 routes.delete('/meeting/:id', SessionController.isAuth, MeetingController.destroy);
 
+routes.post('/meeting/:id/changeFront', SessionController.isAuth, MeetingController.changeFront);
+
+routes.post('/meeting/:id/changeTitle', SessionController.isAuth, MeetingController.changeTitle);
+
+routes.post('/meeting/:id/changeAbstract', SessionController.isAuth, MeetingController.changeAbstract);
+
+routes.post('/meeting/:id/changePresenter', SessionController.isAuth, MeetingController.changePresenter);
+
+routes.post('/meeting/:id/changeDate', SessionController.isAuth, MeetingController.changeDate);
+
+routes.post('/meeting/:id/changeDuration', SessionController.isAuth, MeetingController.changeDuration);
+
+
+
 
 routes.get('*', (req, res) => {
     res.status(404).end();

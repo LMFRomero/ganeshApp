@@ -10,6 +10,10 @@ const meetingSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    presenter: {
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
