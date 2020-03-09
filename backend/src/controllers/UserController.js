@@ -34,5 +34,20 @@ module.exports = {
         else {
             res.json({ message: "User already exists" });
         }
-    }
+    },
+
+    async verify (email, password) {
+        if (!email || !password) {
+            return null;
+        }
+
+        let user = await User.findOne({ "email": email });
+
+        if (!user) return null;
+
+        let passwordHash = user.password;
+
+        if (bCrypt.validateHash(passwordHash, password)) return user;
+        else return null;
+    },
 }
