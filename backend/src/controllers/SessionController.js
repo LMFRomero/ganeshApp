@@ -24,7 +24,7 @@ module.exports = {
         redisStore.get(req.body.sessionID, (error, session) => {
             if (error) console.log(error);
 
-            if (session) return res.status(200).end();
+            if (session) next();
             else res.status(403).end();
         });
     },
