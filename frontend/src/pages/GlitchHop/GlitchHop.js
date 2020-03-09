@@ -31,7 +31,7 @@ export default function GlitchHop(props) {
 
     return (
         <React.Fragment>
-            <video className="embed-responsive embed-responsive-16by9" autoPlay muted id="myVideo" onEnded={onEnded}>
+            <video className="embed-responsive embed-responsive-16by9" autoPlay muted="muted" preload="none" id="myVideo">
                 <source src={ClipWelcome} type="video/mp4" />
             </video>
         </React.Fragment>
