@@ -5,6 +5,7 @@ const SessionController = require('./controllers/SessionController');
 const MeetingController = require('./controllers/MeetingController');
 
 const routes = express.Router();
+const qrcode = require('./services/qrcode');
 
 routes.post('/validate', SessionController.isAuth, (req, res) => {
     res.status(200).end();
@@ -33,6 +34,8 @@ routes.post('/meeting/:id/changePresenter', SessionController.isAuth, MeetingCon
 routes.post('/meeting/:id/changeDate', SessionController.isAuth, MeetingController.changeDate);
 
 routes.post('/meeting/:id/changeDuration', SessionController.isAuth, MeetingController.changeDuration);
+
+routes.get('/teste', qrcode);
 
 
 
