@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import './GlitchHop.css';
 
-import ClipWelcome from '../../assets/clip_welcome.gif';
+import ClipWelcome from '../../assets/clip_welcome.mp4';
 
 let styleBKP;
 function setBackgroundBlack() {
@@ -31,10 +31,9 @@ export default function GlitchHop(props) {
 
     return (
         <React.Fragment>
-            <img className="img-fluid d-block mx-auto clip-welcome" src={ClipWelcome} alt='loading'/>
-            {/* <video className="embed-responsive embed-responsive-16by9" autoPlay muted id="myVideo">
+            <video className="embed-responsive embed-responsive-16by9" autoPlay muted id="myVideo" onEnded={onEnded}>
                 <source src={ClipWelcome} type="video/mp4" />
-            </video> */}
+            </video>
         </React.Fragment>
     );
 }
