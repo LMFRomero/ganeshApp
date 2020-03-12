@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import { currentSession } from './session-manager';
 
-const API_ADDR = 'http://127.0.0.1:3333';
+const API_ADDR = 'http://192.168.0.86:3333';
 
 let axios = Axios.create({
     baseURL:API_ADDR, 
@@ -32,5 +32,17 @@ export async function sendLogout() {
     return response;
 }
 
+export async function sendForgotPassword(email: string) {
+    console.log('Sending password-reset request');
+    axios.post('/forgot-password', {
+        email
+    });
+}
+
+export async function sendResetPassword(token: string, newPassword: string) {
+    axios.post('/reset-password', {
+        token, newPassword
+    });
+}
 
 export default axios;

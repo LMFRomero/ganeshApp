@@ -2,13 +2,10 @@ body {
     background-color: black !important;
 }
 
-/* .clip-welcome {
-} */
-
-/* #myVideo {
+#myVideo {
     position: fixed;
     right: 0;
     bottom: 0;
     min-width: 100%;
     min-height: 100%;
-} */
+}

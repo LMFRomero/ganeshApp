@@ -23,13 +23,13 @@ export default function RootRedirect() {
     }, []);
 
     return (
-        <div className="w-100">
+        <React.Fragment>
         {
             !finishedValidation ? 'Validating session...':
             !valid ? <Redirect to="/login"/> :
             !animationHasEnded ? <GlitchHop onEnded={()=>setAnimationHasEnded(true)}/> :
             <Dashboard/>   
         }
-        </div>
+        </React.Fragment>
     )
 }

@@ -30,7 +30,6 @@ export default function GlitchHop(props: {onEnded: ()=>void}) {
     
     setTimeout(onEnded, 2100);
 
-
     return (
         <React.Fragment>
             <video className="embed-responsive embed-responsive-16by9" autoPlay muted={true} preload="none" id="myVideo">
