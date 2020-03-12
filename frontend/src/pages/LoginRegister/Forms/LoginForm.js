@@ -43,7 +43,7 @@ export default function LoginForm() {
                     <Link className="nav-link active" to='/register'>Criar conta</Link>
                 </li>
                 <li className="nav-item text-left text-sm-right col-12 col-sm-7 p-0 m-0 pr-xl-2">
-                    <Link className="nav-link disabled" to="/edacd">Esqueci a senha</Link>
+                    <Link className="nav-link" to="/forgot-password">Esqueci a senha</Link>
                 </li>
             </ul>
         </React.Fragment>
