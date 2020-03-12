@@ -3,6 +3,6 @@ import AbstractLoginRegister from '../AbstractLoginRegister';
 
 export default function LoginPage(props) {
     return (
-        <AbstractLoginRegister formType="Login"/>
+        <AbstractLoginRegister {...props} formType="Login"/>
     )
 }

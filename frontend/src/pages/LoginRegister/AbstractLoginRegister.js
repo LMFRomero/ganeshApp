@@ -4,6 +4,8 @@ import RegisterForm from './Forms/RegisterForm';
 import Avatar from '../../assets/avatar.png'
 
 import './AbstractLoginRegister.css';
+import ForgotPasswordForm from './Forms/ForgotPasswordForm';
+import ResetPasswordForm from './Forms/ResetPasswordForm';
 
 export default function AbstractLoginRegister(props) {
     return (
@@ -13,8 +15,10 @@ export default function AbstractLoginRegister(props) {
                     <img className="img login-logo" alt="avatar" src={Avatar}/>
                 </div>
                 {
-                    props.formType==="Login"? <LoginForm/>:
-                    props.formType==="Register"? <RegisterForm/>:
+                    props.formType==="Login"? <LoginForm {...props}/>:
+                    props.formType==="Register"? <RegisterForm {...props}/>:
+                    props.formType==="ForgotPassword"? <ForgotPasswordForm {...props}/>:
+                    props.formType==="ResetPassword"? <ResetPasswordForm {...props}/>:
                     'ERROR 500: wrong AbstractLoginRegister.formType'
                 }
                 </div>    
