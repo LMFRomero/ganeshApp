@@ -17,22 +17,23 @@ export default function RegisterForm() {
     let [username, setUsername] = useState('');
     let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
-    let [NUSP, setNUSP] = useState('');
+    let [NUSP_str, setNUSP_str] = useState('');
     let [anoIngressoUSP, setAnoIngressoUSP] = useState('');
     let [anoIngressoGanesh, setAnoIngressoGanesh] = useState('');
 
     let history = useHistory();
 
-    async function submitRegister(event) {
+    async function submitRegister(event: React.FormEvent) {
         event.preventDefault();
-        let res = await sendRegister({name, username, email, password, NUSP, anoIngressoUSP, anoIngressoGanesh});
+        const NUSP = parseInt(NUSP_str);
+        const res = await sendRegister({name, username, email, password, NUSP, anoIngressoUSP, anoIngressoGanesh});
         console.log(res);
 
         setName('');
         setUsername('')
         setEmail('');
         setPassword('');
-        setNUSP('');
+        setNUSP_str('');
         setAnoIngressoUSP('');
         setAnoIngressoGanesh('');
 
@@ -48,7 +49,7 @@ export default function RegisterForm() {
                     <input className="form-control mt-2" type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required/>
                     <input className="form-control mt-2" type="email" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
                     <input className="form-control mt-2" type="password" placeholder="Senha" value={password}  onChange={(e)=>setPassword(e.target.value)} required/>
-                    <input className="form-control mt-2" type="number" placeholder="Número USP" value={NUSP} onChange={(e)=>setNUSP(parseInt(e.target.value))} required/>
+                    <input className="form-control mt-2" type="number" placeholder="Número USP" value={NUSP_str} onChange={(e)=>setNUSP_str(e.target.value)} required/>
                     
 
                     <label htmlFor="ingrusp" className="mt-2">Ingresso USP:</label>

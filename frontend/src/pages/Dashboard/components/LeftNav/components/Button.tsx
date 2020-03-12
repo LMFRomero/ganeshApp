@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Button(props) {
+export default function Button(props: {text: string, onClick: (event: React.MouseEvent, text: string) => void}) {
     return (
         <button 
             type="button" 

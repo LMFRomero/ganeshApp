@@ -1,7 +1,25 @@
 import api, { sendLogin } from "./api";
 
+//Copied from  react-cookie's types.d.ts 
+interface CookieSetOptions {
+    path?: string;
+    expires?: Date;
+    maxAge?: number;
+    domain?: string;
+    secure?: boolean;
+    httpOnly?: boolean;
+    sameSite?: boolean | 'none' | 'lax' | 'strict';
+    encode?: (value: string) => string;
+}
 
-async function loginAndRetrieveSessionID(email, password) {
+export interface CookieManager {
+    cookies: Array<any>[],
+    (name: string, value: any, options?: CookieSetOptions | undefined): void
+
+    // setCookie, removeCookie
+}
+
+async function loginAndRetrieveSessionID(email: string, password: string) {
     if (!email || !password) {
         console.error('Missing login information!');
         return undefined;
@@ -11,10 +29,13 @@ async function loginAndRetrieveSessionID(email, password) {
     return loginResponse.data.sessionID;
 }
 
-let globalSessionID = null;
+let globalSessionID: string | null = null;
 
 export class Session {
-    constructor(cookieManager, data) {   
+
+    cookieManager:any;
+
+    constructor(cookieManager: any, data?: any) {   
         this.cookieManager = cookieManager;
         if (!data) 
             globalSessionID = null;
@@ -42,7 +63,7 @@ export class Session {
         this.cookieManager.removeCookie('ganesh');
     }
 
-    async authenticate(email, password, callback) {
+    async authenticate(email: string, password: string, callback?: Function) {
         let sessionID = await loginAndRetrieveSessionID(email, password);
         globalSessionID = sessionID;
 
@@ -53,7 +74,7 @@ export class Session {
         else return sessionID;
     }
 
-    hasSession() {
+    hasSession(): boolean {
         console.log('inner hassession:', globalSessionID)
         return globalSessionID !== null && globalSessionID !== undefined;
     }
@@ -62,19 +83,19 @@ export class Session {
         return globalSessionID;
     }
 
-    async isValid() {
+    async isValid(): Promise<boolean> {
         console.log('checking if ', globalSessionID, 'is valid')
         let sessionID = globalSessionID;
         try {
-            let response = await api.post('/validate', {sessionID});
+            const response = await api.post('/validate', {sessionID});
             if (response.status===200) return true;
+            else return false;
         } catch {
             return false;
         }
-            
     }
 
-    async isAuthenticated() {
+    async isAuthenticated(): Promise<boolean> {
         // if (!this.hasSession())
         //     this.loadSessionFromCookie(); //Try to get session from cookie if forgotten
         return this.hasSession() && await this.isValid();
@@ -82,6 +103,6 @@ export class Session {
 }
 
 export let currentSession = new Session(null);
-export function createSession(cookieManager, data) {
+export function createSession(cookieManager: any, data?: any) {
     currentSession = new Session(cookieManager, data);
 }

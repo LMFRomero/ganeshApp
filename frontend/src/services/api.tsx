@@ -1,17 +1,27 @@
 import Axios from 'axios';
 import { currentSession } from './session-manager';
 
-const API_ADDR = 'http://143.107.252.195:3333';
+const API_ADDR = 'http://127.0.0.1:3333';
 
 let axios = Axios.create({
     baseURL:API_ADDR, 
 });
 
-export async function sendRegister(data) {
+type registerData = {
+    name: string,
+    username: string,
+    email: string,
+    password: string,
+    NUSP: Number,
+    anoIngressoUSP: string,
+    anoIngressoGanesh: string,    
+}
+
+export async function sendRegister(data: registerData) {
     return await axios.post('/register', data);
 }
 
-export async function sendLogin(data) {
+export async function sendLogin(data: any) {
     return await axios.post('/authenticate', data);
 }
 

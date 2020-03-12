@@ -13,7 +13,7 @@ export default function Dashboard() {
 
     let history = useHistory();
 
-    function onLeftNavChange(event, text) {
+    function onLeftNavChange(event: React.MouseEvent<Element, MouseEvent>, text: string) {
         setcurrentTab(text);
     }
 
