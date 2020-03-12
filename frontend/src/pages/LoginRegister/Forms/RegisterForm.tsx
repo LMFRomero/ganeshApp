@@ -12,7 +12,7 @@ function generateLast20Years() {
     return options;
 }
 
-export default function RegisterForm() {
+export default function RegisterForm(props: object) {
     let [name, setName] = useState('');
     let [username, setUsername] = useState('');
     let [email, setEmail] = useState('');

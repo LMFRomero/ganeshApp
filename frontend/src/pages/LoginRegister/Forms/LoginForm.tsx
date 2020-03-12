@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { currentSession } from '../../../services/session-manager';
 
-export default function LoginForm() {
+export default function LoginForm(props : object) {
     let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
     let history = useState(useHistory())[0];

@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { sendResetPassword } from '../../../services/api';
 
 
-
-export default function ResetPasswordForm({match}) {
-    const token = match.params.token;
+export default function ResetPasswordForm(props: {token: string}) {
+    const token = props.token;
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
 
-    async function sendReset(event) {
+    async function sendReset(event: FormEvent) {
         event.preventDefault();
 
         if (password1 !== password2) {

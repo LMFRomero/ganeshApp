@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 
 import './ForgotPasswordForm.css';
 
 import {sendForgotPassword} from '../../../services/api';
 import Modal, { showModal } from '../../../components/Modal';
 
-export default function ForgotPasswordForm(props) {
+export default function ForgotPasswordForm(props: object) {
     const modalID = '#forgotPasswordModal';
     const [email, setEmail] = useState('marcuscastelo@usp.br');
 
-    function promptConfirmation(event) {
+    function promptConfirmation(event: FormEvent) {
         event.preventDefault();
         showModal(modalID);
     }

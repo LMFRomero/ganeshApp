@@ -1,8 +1,9 @@
 import React from 'react';
-import AbstractLoginRegister, { ALRProps } from '../AbstractLoginRegister';
+import AbstractLoginRegister from '../AbstractLoginRegister';
+import { RouteComponentProps } from 'react-router-dom';
 
-export default function LoginPage(props: ALRProps) {
+export default function LoginPage(props: RouteComponentProps) {
     return (
-        <AbstractLoginRegister formType="Login"/>
+        <AbstractLoginRegister {...props} formType="Login"/>
     )
 }
