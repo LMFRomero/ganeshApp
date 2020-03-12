@@ -7,7 +7,7 @@ import LoginPage from './pages/LoginRegister/pages/LoginPage';
 import RegisterPage from './pages/LoginRegister/pages/RegisterPage';
 import RootRedirect from './components/RootRedirect';
 import Dashboard from './pages/Dashboard/Dashboard';
-import { sendLogout } from './services/api';
+import { sendLogout } from './services/api.tsx';
 
 
 export default function Routes() {

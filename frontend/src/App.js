@@ -2,7 +2,7 @@ import React from 'react';
 import {useCookies} from 'react-cookie';
 
 import Routes from './routes';
-import { createSession, currentSession } from './services/session-manager';
+import { createSession, currentSession } from './services/session-manager.tsx';
 
 
 export default function App() {

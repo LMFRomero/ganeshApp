@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import './Dashboard.css';
 
-import {sendLogout} from '../../services/api';
+import {sendLogout} from '../../services/api.tsx';
 
 import LeftNav from './components/LeftNav/LeftNav';
 import CentralPanel from './components/CentralPanel/CentralPanel';

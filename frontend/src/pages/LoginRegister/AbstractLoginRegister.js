@@ -1,6 +1,6 @@
 import React from 'react';
 import LoginForm from './Forms/LoginForm';
-import RegisterForm from './Forms/RegisterForm';
+import RegisterForm from './Forms/RegisterForm.tsx';
 import Avatar from '../../assets/avatar.png'
 
 import './AbstractLoginRegister.css';

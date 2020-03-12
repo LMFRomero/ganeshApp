@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { currentSession } from '../services/session-manager';
+import { currentSession } from '../services/session-manager.tsx';
 import GlitchHop from '../pages/GlitchHop/GlitchHop';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import { Redirect } from 'react-router-dom';
