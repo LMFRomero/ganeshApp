@@ -9,7 +9,7 @@ export default function LoginForm() {
     let history = useState(useHistory())[0];
 
 
-    async function submitLogin(event) {
+    async function submitLogin(event: React.FormEvent) {
         //Inhibits default <form> action
         event.preventDefault();
         

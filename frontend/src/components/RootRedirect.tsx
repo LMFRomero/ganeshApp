@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { currentSession } from '../services/session-manager.tsx';
+import { currentSession } from '../services/session-manager';
 import GlitchHop from '../pages/GlitchHop/GlitchHop';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import { Redirect } from 'react-router-dom';
@@ -10,7 +10,7 @@ export default function RootRedirect() {
     const [valid, setValid] = useState(false);
 
     async function validateSession() {
-        let isValid = await currentSession.isAuthenticated();
+        const isValid = await currentSession.isAuthenticated();
         setValid(isValid); //Will change on next render
         console.log(finishedValidation, animationHasEnded, isValid)
         if (!isValid) currentSession.destroyCookie();

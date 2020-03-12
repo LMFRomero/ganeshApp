@@ -13,6 +13,7 @@ function generateCards() {
         links: [{url:'/welcome', label:'testWelcome'}]
     };
 
+
     const generatedCards = [];
     for (let i = 0; i < 10; i++) generatedCards.push(<FeedCard key={uniqid('feedcard-')}{...info}/>)
     return generatedCards;

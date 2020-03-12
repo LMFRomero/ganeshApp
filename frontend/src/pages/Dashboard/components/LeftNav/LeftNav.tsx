@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 
 import $ from 'jquery';
 import Button from './components/Button';
 
-export default function LeftNav(props) {
-    function handleLeftNavBtnClick(event, text) {
+export default function LeftNav(props: {onChange: (event: MouseEvent, text:string) => void }) {
+    function handleLeftNavBtnClick(event: MouseEvent, text: string) {
         $('.dash-left-nav-btn').removeClass('active');
         $(event.target).addClass('active');
         if (props.onChange) props.onChange(event, text);
