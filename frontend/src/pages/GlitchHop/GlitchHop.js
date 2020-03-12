@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import './GlitchHop.css';
 
@@ -27,7 +27,6 @@ export default function GlitchHop(props) {
     setBackgroundBlack();
     
     setTimeout(onEnded, 2100);
-
 
     return (
         <React.Fragment>

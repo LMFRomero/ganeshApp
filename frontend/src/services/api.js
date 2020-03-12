@@ -22,5 +22,17 @@ export async function sendLogout() {
     return response;
 }
 
+export async function sendForgotPassword(email) {
+    console.log('Sending password-reset request');
+    axios.post('/forgot-password', {
+        email
+    });
+}
+
+export async function sendResetPassword(token, newPassword) {
+    axios.post('/reset-password', {
+        token, newPassword
+    });
+}
 
 export default axios;
