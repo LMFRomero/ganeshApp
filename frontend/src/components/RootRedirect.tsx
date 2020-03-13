@@ -2,7 +2,7 @@ import React from 'react';
 import { currentSession } from '../services/session-manager';
 import GlitchHop from '../pages/GlitchHop/GlitchHop';
 import Dashboard from '../pages/Dashboard/Dashboard';
-import { Redirect } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 
 type RootRedirectState = {
     backendResponded: Boolean,
@@ -12,8 +12,8 @@ type RootRedirectState = {
 
 export default class RootRedirect extends React.Component<{}, RootRedirectState>{
     timeout: NodeJS.Timeout | null;
-    constructor() {
-        super({backendResponded:Boolean});
+    constructor(props: RouteComponentProps) {
+        super(props);
         this.timeout = null;
         this.validateSession();
         this.setState({
