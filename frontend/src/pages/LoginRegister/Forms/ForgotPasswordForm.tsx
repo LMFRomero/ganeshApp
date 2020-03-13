@@ -15,7 +15,7 @@ export default function ForgotPasswordForm(props: object) {
     }
 
     async function submitForgotPassword() {
-        await sendForgotPassword(email);
+        await sendForgotPassword({email});
     }
 
     // setTimeout(()=>$("#forgotPasswordModal").modal(),500);

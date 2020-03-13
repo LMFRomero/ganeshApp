@@ -10,22 +10,19 @@ export default function LoginForm(props : object) {
 
 
     async function submitLogin(event: React.FormEvent) {
-        //Inhibits default <form> action
         event.preventDefault();
         
         console.log('Attempting login with backend...')
-        await currentSession.authenticate(email, password)
+        const success = await currentSession.authenticate(email, password);
 
-        setEmail('');
-        setPassword('');
+        if (success) {
+            history.push('/');   
+            setEmail('');
+            setPassword('');
+        } else {
+            //POPUP TOAST
+        }
         
-        console.log('hassession: ',currentSession.hasSession(), currentSession.getSessionID())
-            if (currentSession.hasSession())  {
-                history.push('/');
-                console.log('Login was successful, redirecting to animation at /');
-            }
-
-
     }
 
     return (
