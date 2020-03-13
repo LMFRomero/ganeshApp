@@ -1,38 +1,33 @@
 const express = require('express');
+
 const UserController = require('./controllers/UserController');
 const SessionController = require('./controllers/SessionController');
-const passport = require('passport');
-require('./services/passaport')(passport);
+const MeetingController = require('./controllers/MeetingController');
+const ResetPasswordController = require('./controllers/ResetPasswordController');
 
 const routes = express.Router();
 
-
-routes.post('/validate', SessionController.isAuth);
+routes.post('/validate', SessionController.isAuth, (req, res) => {
+    res.status(200).end();
+});
 
 routes.post('/register', UserController.store);
 
 routes.post('/logout', SessionController.destroy);
 
-routes.post('/authenticate', (req, res, next) => {
-    // TODO: treat a lot of sessions request on redis
-    passport.authenticate('local', 
-    (err, user, info) => {
-        if (err) return next(err);
+routes.post('/authenticate', SessionController.store);
 
-        if (!user) {
-            return res.status(403).end();
-        }
+routes.post('/meeting ', SessionController.isAuth, MeetingController.store);
 
-        else {
-            req.logIn(user, (err) => {
-                if (err) return next(err);
-                return res.status(200).json({sessionID: req.session.id});
-            });
-        } 
-    })(req, res, next);
-});
+routes.put('/meeting/:id', SessionController.isAuth, MeetingController.update);
 
+routes.put('/meeting/change/:id', SessionController.isAuth, MeetingController.changeMeeting);
 
+routes.delete('/meeting/:id', SessionController.isAuth, MeetingController.destroy);
+
+routes.post('/forgot-password', ResetPasswordController.store);
+
+routes.post('/reset-password/', ResetPasswordController.update);
 
 
 routes.get('*', (req, res) => {

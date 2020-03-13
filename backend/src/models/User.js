@@ -9,6 +9,11 @@ const UserSchema = new mongoose.Schema({
     anoIngressoUSP: Number,
     anoIngressoGanesh: Number,
     privilege: Number,
+    meetings: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Meeting'
+    }]
+    
 });
 
 module.exports = mongoose.model('User', UserSchema);

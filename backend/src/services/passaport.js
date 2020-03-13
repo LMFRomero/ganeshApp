@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local');
-const SessionController = require('../controllers/SessionController');
+const UserController = require('../controllers/UserController');
 const User = require('../models/User');
 
 module.exports = function (passport) {
@@ -18,7 +18,7 @@ module.exports = function (passport) {
         passwordField: 'password'
     },
         (username, password, done) => {
-            SessionController.store(username, password).then((user => {
+            UserController.verify(username, password).then((user => {
                 if (!user) {
                     return done(null, false, { message: "Invalid authentication"});
                 }
