@@ -3,54 +3,75 @@ const User = require('../models/User');
 const mongoose = require('mongoose');
 const transporter = require('../services/nodemailer-auth');
 const bCrypt = require('../services/hashes');
+const { SafeFindOne, SafeCreateObj, SafeDeleteOne, SafeUpdateOne } = require('../services/safe-exec');
 
 module.exports = {
     async store (req, res) {
         const { email } = req.body;
 
-        const user = await User.findOne({ email });
+        const user = await SafeFindOne(User, { email });
+        
+        if (!user) {
+            return res.status(200).end();
+        }
 
-        if (!user) return res.status(200).end();
+        const pastUser = await SafeFindOne(ResetPassword, { name: user._id });
+        
+        if (pastUser) {
+            await SafeDeleteOne(ResetPassword, { name: user._id });
+        }
 
-        const resetUser = await ResetPassword.create({ name: user._id });
+        try {
 
-        if (!resetUser) return res.status(200).end();
+            const resetUser = await SafeCreateObj(ResetPassword, { name: user._id });
 
-        const mailOptions = {
-            from: {
-                name: 'Ganesh Password Reset',
-                address: 'lucasmfromero@gmail.com'
-            },
-            to: "lucasromero@usp.br",
-            subject: 'Link para reset de senha',
-            text: 'http://192.168.0.13:3000/reset-password/' + resetUser.id
-        };
-
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-                console.log(error);
-                return res.status(400).end();
+            if (!resetUser) {
+                return res.status(200).end();
             }
-            return res.status(200).json({ id: resetUser.id });
-        });
+
+            const mailOptions = {
+                from: {
+                    name: 'Ganesh Password Reset',
+                    address: 'lucasmfromero@gmail.com'
+                },
+                to: email,
+                subject: 'Link para reset de senha',
+                text: `Se você não solicitou este email, sua conta pode estar em risco. Caso você tenha solicitado, utilize o link a seguir para resetar sua senha: http://${process.env.APP_IP}/reset-password/` + resetUser.id
+            };
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                    return res.status(400).end();
+                }
+
+                return res.status(200).json({ id: resetUser.id });
+            });
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
         
     },
 
     async update (req, res) {
-        const resetID = req.body.id;
+        const resetID = req.body.resetID;
 
-        if (!resetID) return res.status(200).end();
+        if (!resetID) {
+            return res.status(401).end();
+        }
 
-        const resetUser = await ResetPassword.findOne({ "_id": resetID });
+        const resetUser = await SafeFindOne(ResetPassword, { "_id": resetID });
 
-        if (!resetUser) return res.status(200).end();
+        if (!resetUser) {
+            return res.status(400).end();
+        }
 
-        const password = req.body.password;
+        const passwordHash = bCrypt.createHash(req.body.password);
 
-        const passwordHash = bCrypt.createHash(password);
-
-        await User.updateOne({ "_id": resetUser.name }, { $set: { password: passwordHash } }); 
-
+        await SafeUpdateOne(User, { "_id": resetUser.name }, { $set: { password: passwordHash } }); 
+        
         return res.status(200).end();
     },
 }

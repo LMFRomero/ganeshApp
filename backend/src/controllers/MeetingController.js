@@ -3,68 +3,108 @@ Meeting = require('../models/Meeting');
 User = require('../models/User');
 
 module.exports = {
+    //this function will store new Meetings into the database
     async store (req, res) {
-        let passportID;
-
-        if (!req.body || !req.body.sessionID) return res.status(401).end();
-
-        
-        redisStore.get(req.body.sessionID, async (error, session) => {
-            if (error) {
-                console.log(error);
-                return;
-            }
-
-            passportID = session.passport.user;
-            
-            let user = await User.findOne({ "_id": passportID });
-            
-            if (!user) return res.status(401).end();
-    
-            const { title, front, date, duration, abstract } = req.body;
-            const creator = user._id;
-            const now = new Date();
-
-            if (Object.prototype.toString.call(date) !== '[object Date]') return res.status(400).end();
-    
-            if (!title || !front || !abstract || isNaN(duration)) return res.status(400).end();
-    
-            if (now > date) return res.status(400).json({ "message": "Date not allowed"});
-    
-            const meeting = await Meeting.create({title, front, abstract, date, duration, creator, "members": [] });
-
-            return res.status(200).end();
-        });
-    },
-    
-    async update (req, res) {
-        let user;
-
+        //verify if there is a body and if there is a session assigned to that request
         if (!req.body || !req.body.sessionID) {
             return res.status(401).end();
         }
 
-        redisStore.get(req.body.sessionID, async (error, session) => {
-            if (error) {
-                console.log(error);
-                return res.status(400).end();
-            }
+        try {
+            //get the user attached to that session and create a meeting 
+            redisStore.get(req.body.sessionID, async (error, session) => {
+                if (error) {
+                    console.log(error);
+                    return;
+                }
 
-            user = await User.findOne({ "_id": session.passport.user });
+                const passportID = session.passport.user;
+                
+                //find the user that will be defined as creator of the meeting request
+                const user = await SafeFindOne(User, { "_id": passportID });
 
-            if (!user) return res.status(401).end();
-            
-            const meeting = await Meeting.findOne({ "_id": req.params.id });
+                if (!user) {
+                    return res.status(401).end();
+                }
 
-            meeting.members.push(user._id);
+                //get the attributes of the meeting from the front
+                const { title, front, date, duration, abstract } = req.body;
+                const creator = user._id;
+                const now = new Date();
 
-            console.log(meeting.members);
+                //parse body params
+                if (Object.prototype.toString.call(date) !== '[object Date]') {
+                    return res.status(400).end();
+                }
+
+                if (!title || !front || !abstract || isNaN(duration)) {
+                    return res.status(400).end();
+                }
+
+                if (now > date) {
+                    return res.status(400).end();
+                }
+
+                //create a meeting in database
+                await SafeCreateObj(Meeting, {title, front, abstract, date, duration, creator, "members": [] });
+            });
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }       
+    },
     
-            await meeting.save();
+    async update (req, res) {
+        //this function set presence of a member in a given meeting
+        if (!req.body || !req.body.sessionID) {
+            return res.status(401).end();
+        }
 
-            return res.status(200).end();
-        });
+        //find whether the given meeting exists or not
+        const meeting = await SafeFindOne(Meeting, { "_id": req.params.id });
 
+        if (!meeting) {
+            return res.status(400).end();
+        }
+
+        //check if the presence can be set by comparing the dates (check if the meeting is taking place or note)
+        const now = new Date();
+        const meetingStart = meeting.date;
+        let meetingFinish = meetingStart;
+        meetingFinish.setHours(meetingStart.getHours()+duration);
+
+        if (now < meetingStart || now > meetingFinish) {
+            return res.status(400).end();
+        }
+        
+        try {
+            //checks if there is a session assigned to the user in redis and set his frequency in the meeting
+            redisStore.get(req.body.sessionID, async (error, session) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(400).end();
+                }
+
+                const user = await SafeFindOne(User, { "_id": session.passport.user });
+
+                if (!user) {
+                    return res.status(401).end();
+                }
+
+                meeting.members.push(user._id);
+                await meeting.save();
+
+                user.meetings.push(req.params.id);
+                await user.save();
+
+                return res.status(200).end();
+            });
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
     },
 
     async destroy (req, res) {
@@ -76,8 +116,8 @@ module.exports = {
             return res.status(400).end();
         }
 
-        await Meeting.deleteOne({ "_id": req.params.id});
-
+        await SafeDeleteOne(Meeting, { "_id": req.params.id});
+        
         return res.status(200).end();
     },
 
@@ -95,8 +135,8 @@ module.exports = {
         if (isNaN(duration) == true) return res.status(400).end();
 
         if (Object.prototype.toString.call(date) !== '[object Date]') return res.status(400).end();
-        
-        const meeting = await Meeting.updateOne({ "_id": req.params.id }, { $set: { title, front, abstract, date, duration } });
+
+        await SafeUpdateOne(Meeting, { "_id": req.params.id }, { $set: { title, front, abstract, date, duration } });
 
         return res.status(200).end();
     },

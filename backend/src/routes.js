@@ -6,7 +6,6 @@ const MeetingController = require('./controllers/MeetingController');
 const ResetPasswordController = require('./controllers/ResetPasswordController');
 
 const routes = express.Router();
-const qrcode = require('./services/qrcode');
 
 routes.post('/validate', SessionController.isAuth, (req, res) => {
     res.status(200).end();
@@ -28,7 +27,7 @@ routes.delete('/meeting/:id', SessionController.isAuth, MeetingController.destro
 
 routes.post('/forgot-password', ResetPasswordController.store);
 
-routes.put('/reset-password/', ResetPasswordController.update);
+routes.post('/reset-password/', ResetPasswordController.update);
 
 
 routes.get('*', (req, res) => {

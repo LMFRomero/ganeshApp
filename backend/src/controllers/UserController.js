@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bCrypt = require('../services/hashes');
+const { SafeFindOne, SafeCreateObj } = require('../services/safe-exec');
 
 module.exports = {
     async store (req, res) {
@@ -22,18 +23,17 @@ module.exports = {
             return res.status(400).json({ message: "Bad Request" }).end();
         }
 
-        let user = await User.findOne({ "email": newEmail });
+        let user = await SafeFindOne(User, { "email": newEmail });
 
-        if (!user) {
-            let passwordHash = bCrypt.createHash(password);
-
-            user = await User.create({email: newEmail, password: passwordHash, name: name, username: username, NUSP: NUSP, anoIngressoUSP: anoUSP, anoIngressoGanesh: anoGanesh, privilege: 0});
-            return res.status(201).json({ message: "User created"});
+        if (user) {
+            return res.status(409).end();
         }
 
-        else {
-            res.json({ message: "User already exists" });
-        }
+        let passwordHash = bCrypt.createHash(password);
+
+        user = await SafeCreateObj(User, {email: newEmail, password: passwordHash, name: name, username: username, NUSP: NUSP, anoIngressoUSP: anoUSP, anoIngressoGanesh: anoGanesh, privilege: 0});
+
+        return res.status(201).end();
     },
 
     async verify (email, password) {
@@ -41,13 +41,18 @@ module.exports = {
             return null;
         }
 
-        let user = await User.findOne({ "email": email });
+        let user = await SafeFindOne(User, { "email": email });
 
-        if (!user) return null;
+        if (!user) {
+            return null;
+        }
 
         let passwordHash = user.password;
 
-        if (bCrypt.validateHash(passwordHash, password)) return user;
-        else return null;
+        if (bCrypt.validateHash(passwordHash, password)) {
+            return user;
+        } else {
+            return null;
+        }
     },
 }
