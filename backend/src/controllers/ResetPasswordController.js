@@ -39,25 +39,17 @@ module.exports = {
     async update (req, res) {
         const resetID = req.body.id;
 
-        console.log(resetID);
-
         if (!resetID) return res.status(200).end();
-
-        console.log(2);
 
         const resetUser = await ResetPassword.findOne({ "_id": resetID });
 
         if (!resetUser) return res.status(200).end();
-
-        console.log(3);
 
         const password = req.body.password;
 
         const passwordHash = bCrypt.createHash(password);
 
         await User.updateOne({ "_id": resetUser.name }, { $set: { password: passwordHash } }); 
-
-        console.log(4);
 
         return res.status(200).end();
     },

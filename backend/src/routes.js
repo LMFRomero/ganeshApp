@@ -18,23 +18,13 @@ routes.post('/logout', SessionController.destroy);
 
 routes.post('/authenticate', SessionController.store);
 
-routes.post('/meeting/', SessionController.isAuth, MeetingController.store);
+routes.post('/meeting ', SessionController.isAuth, MeetingController.store);
 
 routes.put('/meeting/:id', SessionController.isAuth, MeetingController.update);
 
+routes.put('/meeting/change/:id', SessionController.isAuth, MeetingController.changeMeeting);
+
 routes.delete('/meeting/:id', SessionController.isAuth, MeetingController.destroy);
-
-routes.post('/meeting/:id/changeFront', SessionController.isAuth, MeetingController.changeFront);
-
-routes.post('/meeting/:id/changeTitle', SessionController.isAuth, MeetingController.changeTitle);
-
-routes.post('/meeting/:id/changeAbstract', SessionController.isAuth, MeetingController.changeAbstract);
-
-routes.post('/meeting/:id/changePresenter', SessionController.isAuth, MeetingController.changePresenter);
-
-routes.post('/meeting/:id/changeDate', SessionController.isAuth, MeetingController.changeDate);
-
-routes.post('/meeting/:id/changeDuration', SessionController.isAuth, MeetingController.changeDuration);
 
 routes.post('/forgot-password', ResetPasswordController.store);
 
