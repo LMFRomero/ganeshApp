@@ -69,7 +69,6 @@ module.exports = {
     },
 
     async destroy (req, res) {
-        
         if (!req.body || !req.body.sessionID) {
             return res.status(401).end();
         }
@@ -78,15 +77,12 @@ module.exports = {
             return res.status(400).end();
         }
 
-        const returnFunc = await Meeting.deleteOne({ "_id": req.params.id});
+        await Meeting.deleteOne({ "_id": req.params.id});
 
-        if (returnFunc) return res.status(200).end();
-        else return res.status(404).end();
-
+        return res.status(200).end();
     },
 
     async changePresenter (req, res) {
-
         if (!req.body || !req.body.sessionID || !req.body.presenter) {
             return res.status(401).end();
         }

@@ -3,6 +3,7 @@ const express = require('express');
 const UserController = require('./controllers/UserController');
 const SessionController = require('./controllers/SessionController');
 const MeetingController = require('./controllers/MeetingController');
+const ResetPasswordController = require('./controllers/ResetPasswordController');
 
 const routes = express.Router();
 const qrcode = require('./services/qrcode');
@@ -35,9 +36,9 @@ routes.post('/meeting/:id/changeDate', SessionController.isAuth, MeetingControll
 
 routes.post('/meeting/:id/changeDuration', SessionController.isAuth, MeetingController.changeDuration);
 
-routes.get('/teste', qrcode);
+routes.post('/forgot-password', ResetPasswordController.store);
 
-
+routes.put('/reset-password/', ResetPasswordController.update);
 
 
 routes.get('*', (req, res) => {

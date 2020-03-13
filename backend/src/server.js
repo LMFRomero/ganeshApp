@@ -47,6 +47,7 @@ app.use(passport.session());
 mongoose.connect(`${process.env.GANESH_CLUSTER}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
 });
 
 redisClient.on('error', (err) => {
