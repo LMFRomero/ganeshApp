@@ -3,16 +3,16 @@ const User = require('../models/User');
 const mongoose = require('mongoose');
 const transporter = require('../services/nodemailer-auth');
 const bCrypt = require('../services/hashes');
-const { SafeFindOne, SafeCreateObj, SafeDeleteOne, SafeUpdateOne } = require('../services/safe-exec');
+const { SafeFindOne, SafeCreateObj, SafeDeleteOne, SafeUpdateOne, SafeFindById } = require('../services/safe-exec');
 
 module.exports = {
     async store (req, res) {
         const { email } = req.body;
 
         const user = await SafeFindOne(User, { email });
-        
+
         if (!user) {
-            return res.status(200).end();
+            return res.status(404).end();
         }
 
         const pastUser = await SafeFindOne(ResetPassword, { name: user._id });
@@ -26,7 +26,7 @@ module.exports = {
             const resetUser = await SafeCreateObj(ResetPassword, { name: user._id });
 
             if (!resetUser) {
-                return res.status(200).end();
+                return res.status(500).end();
             }
 
             const mailOptions = {
@@ -61,16 +61,20 @@ module.exports = {
         if (!resetID) {
             return res.status(401).end();
         }
+        
+        console.log(resetID);
 
-        const resetUser = await SafeFindOne(ResetPassword, { "_id": resetID });
+        const tmpReset = await SafeFindById(ResetPassword, resetID);
 
-        if (!resetUser) {
+        console.log(tmpReset);
+
+        if (!tmpReset) {
             return res.status(400).end();
         }
 
         const passwordHash = bCrypt.createHash(req.body.password);
 
-        await SafeUpdateOne(User, { "_id": resetUser.name }, { $set: { password: passwordHash } }); 
+        await SafeUpdateOne(User, { "_id": tmpReset.name }, { $set: { password: passwordHash } }); 
         
         return res.status(200).end();
     },

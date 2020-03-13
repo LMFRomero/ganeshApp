@@ -3,7 +3,7 @@ module.exports = {
         let answerFromDB;
 
         try {
-            answerFromDB = await obj.findOne(params);
+            answerFromDB = await obj.findOne({ email: "marcuscastelo@usp.br" });
         } catch (error) {
             console.log(error);
             return null;
@@ -42,7 +42,7 @@ module.exports = {
         let answerFromDB;
 
         try {
-            answerFromDB = await obj.deleteOne(attToFind, newAtt);
+            answerFromDB = await obj.updateOne(attToFind, newAtt);
         } catch (error) {
             console.log(error);
             return null;
@@ -50,4 +50,17 @@ module.exports = {
 
         return answerFromDB;
     },
+
+    async SafeFindById(obj, param) {
+        let answerFromDB;
+
+        try {
+            answerFromDB = await obj.findById(param);
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+
+        return answerFromDB;
+    }
 }

@@ -1,7 +1,7 @@
 redisStore = require('../services/redis-store');
 Meeting = require('../models/Meeting');
 User = require('../models/User');
-
+const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj } = require('../services/safe-exec');
 module.exports = {
     //this function will store new Meetings into the database
     async store (req, res) {
@@ -21,7 +21,7 @@ module.exports = {
                 const passportID = session.passport.user;
                 
                 //find the user that will be defined as creator of the meeting request
-                const user = await SafeFindOne(User, { "_id": passportID });
+                const user = await SafeFindById(User, passportID);
 
                 if (!user) {
                     return res.status(401).end();
@@ -62,7 +62,7 @@ module.exports = {
         }
 
         //find whether the given meeting exists or not
-        const meeting = await SafeFindOne(Meeting, { "_id": req.params.id });
+        const meeting = await SafeFindById(Meeting, req.params.id);
 
         if (!meeting) {
             return res.status(400).end();
@@ -86,7 +86,7 @@ module.exports = {
                     return res.status(400).end();
                 }
 
-                const user = await SafeFindOne(User, { "_id": session.passport.user });
+                const user = await SafeFindById(User, session.passport.user);
 
                 if (!user) {
                     return res.status(401).end();
