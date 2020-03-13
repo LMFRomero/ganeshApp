@@ -26,18 +26,21 @@ export default function RegisterForm(props: object) {
     async function submitRegister(event: React.FormEvent) {
         event.preventDefault();
         const NUSP = parseInt(NUSP_str);
-        const res = await sendRegister({name, username, email, password, NUSP, anoIngressoUSP, anoIngressoGanesh});
-        console.log(res);
 
-        setName('');
-        setUsername('')
-        setEmail('');
-        setPassword('');
-        setNUSP_str('');
-        setAnoIngressoUSP('');
-        setAnoIngressoGanesh('');
-
-        history.push('/')
+        const safeResponse = await sendRegister({name, username, email, password, NUSP, anoIngressoUSP, anoIngressoGanesh});
+        if (safeResponse.type === 'Success') {
+            setName('');
+            setUsername('')
+            setEmail('');
+            setPassword('');
+            setNUSP_str('');
+            setAnoIngressoUSP('');
+            setAnoIngressoGanesh('');
+            history.push('/')
+        } else {
+            if ((safeResponse.error?.code || '') === '409')
+            alert('Email já registrado')
+        }
     }
 
     return (
@@ -47,7 +50,7 @@ export default function RegisterForm(props: object) {
                 <div className="form-group">
                     <input className="form-control mt-2" type="text" placeholder="Nome Completo" value={name} onChange={(e)=>setName(e.target.value)} required/>
                     <input className="form-control mt-2" type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required/>
-                    <input className="form-control mt-2" type="email" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
+                    <input id="email-field" className="form-control mt-2" type="email" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
                     <input className="form-control mt-2" type="password" placeholder="Senha" value={password}  onChange={(e)=>setPassword(e.target.value)} required/>
                     <input className="form-control mt-2" type="number" placeholder="Número USP" value={NUSP_str} onChange={(e)=>setNUSP_str(e.target.value)} required/>
                     
