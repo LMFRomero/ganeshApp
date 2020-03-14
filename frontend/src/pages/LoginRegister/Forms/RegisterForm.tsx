@@ -1,47 +1,83 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import { sendRegister } from '../../../services/api';
 import { Link, useHistory } from 'react-router-dom';
 
-let ykey = 2020;
-function generateLast20Years() {
-    let currYear = new Date().getFullYear();
-    let options = [];
-    for(let i = currYear; i > currYear-20; i--)
-        options.push(<option key={ykey++}>{i}</option>);
+import $ from 'jquery';
+
+let keyPostfix = 0;
+function generateLastYears(yearsToGenerate: number) {
+    const currYear = new Date().getFullYear();
+    const milis = new Date().getUTCMilliseconds();
+    const options = [];
+
+    for(let i = currYear; i > currYear-yearsToGenerate; i--)
+        options.push(<option key={milis+'-'+(keyPostfix++)+i}>{i}</option>);
     return options;
 }
 
 export default function RegisterForm(props: object) {
-    let [name, setName] = useState('');
-    let [username, setUsername] = useState('');
-    let [email, setEmail] = useState('');
-    let [password, setPassword] = useState('');
-    let [NUSP_str, setNUSP_str] = useState('');
-    let [anoIngressoUSP, setAnoIngressoUSP] = useState('');
-    let [anoIngressoGanesh, setAnoIngressoGanesh] = useState('');
+    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password1, setPassword1] = useState('');
+    const [password2, setPassword2] = useState('');
+    const [NUSP_str, setNUSP_str] = useState('');
+    const [anoIngressoUSP, setAnoIngressoUSP] = useState('');
+    const [anoIngressoGanesh, setAnoIngressoGanesh] = useState('');
 
-    let history = useHistory();
+    const history = useHistory();
 
     async function submitRegister(event: React.FormEvent) {
         event.preventDefault();
         const NUSP = parseInt(NUSP_str);
+        if (password1 !== password2) {
+            alert('Senhas não coincidem');
+            return;
+        }
 
-        const safeResponse = await sendRegister({name, username, email, password, NUSP, anoIngressoUSP, anoIngressoGanesh});
-        if (safeResponse.type === 'Success') {
+        if (isNaN(NUSP)) {
+            alert('NUSP deve ser um número');
+            return;
+            //TODO: define behavior with non-USP members
+        }
+
+        const safeRes = await sendRegister({name, username, email, password: password1, NUSP, anoIngressoUSP, anoIngressoGanesh});
+
+        if (safeRes.type === 'Success') {
             setName('');
             setUsername('')
             setEmail('');
-            setPassword('');
+            setPassword1('');
+            setPassword2('');
             setNUSP_str('');
             setAnoIngressoUSP('');
             setAnoIngressoGanesh('');
+            
             history.push('/')
         } else {
-            if ((safeResponse.error?.code || '') === '409')
-            alert('Email já registrado')
+            if (safeRes.error?.message === 'Network Error') {
+                alert('Servidor está fora de alcance, por favor tente novamente mais tarde');
+            } else if (safeRes.error?.code === '409') {
+                alert('Email já registrado')
+            }
         }
     }
+
+    function checkPasswords() {
+        const pass1 = $('#password-field-1');
+        const pass2 = $('#password-field-2');
+        if (password1 === '' || password2 === '' || password2 === password1) {
+            pass1.removeClass('is-invalid');
+            pass2.removeClass('is-invalid');
+            return;
+        }
+
+        pass1.addClass('is-invalid');
+        pass2.addClass('is-invalid');
+    }
+
+    useEffect(checkPasswords, [password1, password2]);
 
     return (
         <React.Fragment>
@@ -51,20 +87,24 @@ export default function RegisterForm(props: object) {
                     <input className="form-control mt-2" type="text" placeholder="Nome Completo" value={name} onChange={(e)=>setName(e.target.value)} required/>
                     <input className="form-control mt-2" type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required/>
                     <input id="email-field" className="form-control mt-2" type="email" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
-                    <input className="form-control mt-2" type="password" placeholder="Senha" value={password}  onChange={(e)=>setPassword(e.target.value)} required/>
-                    <input className="form-control mt-2" type="number" placeholder="Número USP" value={NUSP_str} onChange={(e)=>setNUSP_str(e.target.value)} required/>
+                    <input id="password-field-1" className="form-control mt-2" type="password" placeholder="Senha" value={password1}  onChange={(e)=>setPassword1(e.target.value)} required/>
+                    <input id="password-field-2" className="form-control mt-2" type="password" placeholder="Confirme a senha" value={password2}  onChange={(e)=>setPassword2(e.target.value)} required/>
+                    <div className="invalid-feedback">
+                        Senhas não coincidem
+                    </div>
                     
 
+                    <input className="form-control mt-2" type="number" placeholder="Número USP" value={NUSP_str} onChange={(e)=>setNUSP_str(e.target.value)} required/>
                     <label htmlFor="ingrusp" className="mt-2">Ingresso USP:</label>
                     <select id="ingrusp" className="form-control" value={anoIngressoUSP} onChange={(e)=>setAnoIngressoUSP(e.target.value)} required>
                         <option disabled value=""> -- Selecione um ano -- </option>
-                        {generateLast20Years()}
+                        {generateLastYears(20)}
                     </select>
 
                     <label htmlFor="ingranesh" className="mt-2">Ingresso Ganesh:</label>
                     <select id="ingranesh" className="form-control" value={anoIngressoGanesh} onChange={(e)=>setAnoIngressoGanesh(e.target.value)} required>
                         <option disabled value=""> -- Selecione um ano -- </option>
-                        {generateLast20Years()}
+                        {generateLastYears(20)}
                     </select>
 
                     <input className="btn btn-primary w-100 mt-4 " type="submit" value="Registrar-se    "/>
