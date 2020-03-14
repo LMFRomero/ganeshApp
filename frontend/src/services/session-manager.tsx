@@ -1,4 +1,5 @@
 import api, { sendLogin } from "./api";
+import { SafeResponse } from "./safeRequests";
 
 //Copied from  react-cookie's types.d.ts 
 interface CookieSetOptions {
@@ -59,19 +60,18 @@ export class Session {
             this.cookieManager.removeCookie('ganesh');
     }
 
-    async authenticate(email: string, password: string) {
+    async authenticate(email: string, password: string): Promise<SafeResponse<{sessionID: string}>> {
         if (!email || !password) throw new Error("Missing login information");
         const response = await sendLogin({email, password});
         if (response.type === 'Success') {
             this.sessionID = response.response?.data.sessionID || null;
             this.saveSessionToCookie();
-            return true;
         }
         else if (response.type === 'Error') {
             this.sessionID = null;
             this.destroyCookie();
-            return false;
         }
+        return response;
     }
 
     hasSession(): boolean {
