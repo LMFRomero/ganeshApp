@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 import { useHistory, Link } from 'react-router-dom';
-import { currentSession } from '../../../services/session-manager';
+import { sendLogin } from 'src/services/api';
 
 export default function LoginForm(props : object) {
     let [email, setEmail] = useState('');
@@ -13,9 +13,9 @@ export default function LoginForm(props : object) {
         event.preventDefault();
         
         console.log('Attempting login with backend...')
-        const success = await currentSession.authenticate(email, password);
+        const response = await sendLogin({email, password});
 
-        if (success) {
+        if (response.type === 'Success') {
             history.push('/');   
             setEmail('');
             setPassword('');

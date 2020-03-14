@@ -1,8 +1,8 @@
 import React from 'react';
-import { currentSession } from '../services/session-manager';
 import GlitchHop from '../pages/GlitchHop/GlitchHop';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { sendValidate } from 'src/services/api';
 
 type RootRedirectState = {
     backendResponded: Boolean,
@@ -30,23 +30,21 @@ export default class RootRedirect extends React.Component<{}, RootRedirectState>
     }
     
     async validateSession() {
-        const sessionValid = await currentSession.isAuthenticated();
+        const safeRes = await sendValidate();
+        const sessionValid = safeRes.type === 'Success';
 
         this.setState({
             sessionValid,
             backendResponded: true
         });
         
-        if (!sessionValid)  {
-            currentSession.destroyCookie();
-            return;
+        if (sessionValid) {       
+            this.animationTimeout = setTimeout(()=> {
+                this.setState({
+                    animationEnded: true
+                })
+            }, 2000, []);
         }
-        
-        this.animationTimeout = setTimeout(()=> {
-            this.setState({
-                animationEnded: true
-            })
-        }, 2000, []);
     }
 
 

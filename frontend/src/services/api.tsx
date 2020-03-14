@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import { currentSession } from './session-manager';
 import { safePost, SafeResponse } from './safeRequests';
 
 const API_ADDR = 'http://192.168.0.86:3333';
@@ -17,13 +16,12 @@ export async function sendRegister(data: { name: string, username: string, email
 
 export async function sendLogin(data: { email: string, password: string }): Promise<SafeResponse<{sessionID: string}>> {
     console.log('Sending login request');
-    return await safePost(axios, '/authenticate', data, undefined, 'Failed ot send login') as SafeResponse<{sessionID: string}>;
+    return await safePost(axios, '/authenticate', data, {withCredentials:true}, 'Failed ot send login') as SafeResponse<{sessionID: string}>;
 }
 
 export async function sendLogout(): Promise<SafeResponse>{
     console.log('Sending logout request...');
-    currentSession.destroyCookie();
-    return await safePost(axios, '/logout', {sessionID: currentSession.sessionID}, undefined, "Failed to send logout");    
+    return await safePost(axios, '/logout', undefined, {withCredentials:true}, "Failed to send logout");    
 }
 
 export async function sendForgotPassword(data: {email: string}): Promise<SafeResponse> {
@@ -36,9 +34,9 @@ export async function sendResetPassword(data: {resetID: string, password: string
     return await safePost(axios, '/reset-password', data, undefined, 'Failed to send reset-password');
 }
 
-export async function sendValidate(data: {sessionID: string}): Promise<SafeResponse> {
+export async function sendValidate(): Promise<SafeResponse> {
     console.log('Sending session validation request')
-    return await safePost(axios, '/validate', data, undefined, 'Failed to validate session');
+    return await safePost(axios, '/validate', undefined, {withCredentials:true}, 'Failed to validate session');
 }
 
 export default axios;
