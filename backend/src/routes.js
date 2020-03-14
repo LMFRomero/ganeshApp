@@ -17,7 +17,7 @@ routes.post('/logout', SessionController.destroy);
 
 routes.post('/authenticate', SessionController.store);
 
-routes.post('/meeting ', SessionController.isAuth, MeetingController.store);
+routes.post('/meeting', SessionController.isAuth, MeetingController.store);
 
 routes.put('/meeting/:id', SessionController.isAuth, MeetingController.update);
 
@@ -25,9 +25,12 @@ routes.put('/meeting/change/:id', SessionController.isAuth, MeetingController.ch
 
 routes.delete('/meeting/:id', SessionController.isAuth, MeetingController.destroy);
 
+routes.get('/meeting', SessionController.isAuth, MeetingController.show);
+
 routes.post('/forgot-password', ResetPasswordController.store);
 
-routes.post('/reset-password/', ResetPasswordController.update);
+routes.post('/reset-password', ResetPasswordController.update);
+
 
 
 routes.get('*', (req, res) => {

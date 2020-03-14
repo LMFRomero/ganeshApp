@@ -23,7 +23,9 @@ module.exports = {
             return res.status(400).json({ message: "Bad Request" }).end();
         }
 
-        let user = await SafeFindOne(User, { "email": newEmail });
+        let user = await SafeFindOne(User, { email: newEmail });
+
+        console.log(user);
 
         if (user) {
             return res.status(409).end();

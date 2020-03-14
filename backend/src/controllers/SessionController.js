@@ -49,15 +49,16 @@ module.exports = {
 
             passport.authenticate('local', (err, user, info) => {
                 if (err) return next(err);
-
+                
+                
                 if (!user) {
-                    return res.status(403).end();
+                    return res.status(401).end();
                 }
 
                 else {
                     req.logIn(user, (err) => {
                         if (err) return next(err);
-                        return res.status(200).json({sessionID: req.session.id});
+                        return res.status(200).json({ sessionID: req.session.id, user: user.username });
                     });
                 } 
             })(req, res, next);

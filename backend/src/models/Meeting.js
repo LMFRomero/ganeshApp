@@ -6,6 +6,7 @@ const meetingSchema = new mongoose.Schema({
     abstract: String,
     date: Date,
     duration: Number,
+    room: Number,
     creator: {
         type:mongoose.Schema.Types.ObjectId,
         ref: 'User'

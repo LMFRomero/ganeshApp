@@ -1,7 +1,10 @@
-redisStore = require('../services/redis-store');
-Meeting = require('../models/Meeting');
-User = require('../models/User');
-const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj } = require('../services/safe-exec');
+const redisStore = require('../services/redis-store');
+const Meeting = require('../models/Meeting');
+const User = require('../models/User');
+const transporter = require('../services/nodemailer-auth');
+const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
+
+
 module.exports = {
     //this function will store new Meetings into the database
     async store (req, res) {
@@ -28,25 +31,31 @@ module.exports = {
                 }
 
                 //get the attributes of the meeting from the front
-                const { title, front, date, duration, abstract } = req.body;
+                const { title, front, duration, abstract, room } = req.body;
                 const creator = user._id;
+                const date = new Date(req.body.date);
                 const now = new Date();
 
                 //parse body params
                 if (Object.prototype.toString.call(date) !== '[object Date]') {
+                    console.log(1)
                     return res.status(400).end();
                 }
 
-                if (!title || !front || !abstract || isNaN(duration)) {
+                if (!title || !front || !abstract || isNaN(duration) || isNaN(room)) {
+                    console.log(2);
                     return res.status(400).end();
                 }
 
                 if (now > date) {
-                    return res.status(400).end();
+                    console.log(3);
+                    return res.status(400).json({ message: "Data Invalida" });
                 }
 
                 //create a meeting in database
-                await SafeCreateObj(Meeting, {title, front, abstract, date, duration, creator, "members": [] });
+                await SafeCreateObj(Meeting, {title, front, abstract, room, date, duration, creator, "members": [] });
+
+                return res.status(200).end();
             });
 
         } catch (error) {
@@ -70,7 +79,7 @@ module.exports = {
 
         //check if the presence can be set by comparing the dates (check if the meeting is taking place or note)
         const now = new Date();
-        const meetingStart = meeting.date;
+        const meetingStart = new Date(meeting.date);
         let meetingFinish = meetingStart;
         meetingFinish.setHours(meetingStart.getHours()+duration);
 
@@ -126,18 +135,26 @@ module.exports = {
             return res.status(401).end();
         }
 
-        const { title, front, abstract, date, duration } = req.body;
+        const { title, front, abstract, duration } = req.body;
+        const date = new Date(req.body.date);
 
         if (!req.params.id || !title || !front || !abstract) {
             return res.status(400).end();
         }
 
-        if (isNaN(duration) == true) return res.status(400).end();
+        if (isNaN(duration) || isNaN(room)) return res.status(400).end();
 
         if (Object.prototype.toString.call(date) !== '[object Date]') return res.status(400).end();
 
-        await SafeUpdateOne(Meeting, { "_id": req.params.id }, { $set: { title, front, abstract, date, duration } });
+        await SafeUpdateOne(Meeting, { "_id": req.params.id }, { $set: { title, room, front, abstract, date, duration } });
 
         return res.status(200).end();
+    },
+
+    async show (req, res) {
+        const now = new Date();
+        const objects = await SafeFind(Meeting, { date: { $gt: now } });
+
+        return res.status(200).json(objects);
     },
 }

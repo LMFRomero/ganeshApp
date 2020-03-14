@@ -1,9 +1,9 @@
 module.exports = {
-    async SafeFindOne(obj, params) {
+    async SafeFindOne(collection, params) {
         let answerFromDB;
 
         try {
-            answerFromDB = await obj.findOne({ email: "marcuscastelo@usp.br" });
+            answerFromDB = await collection.findOne(params);
         } catch (error) {
             console.log(error);
             return null;
@@ -12,11 +12,11 @@ module.exports = {
         return answerFromDB;
     },
 
-    async SafeCreateObj (obj, params) {
+    async SafeCreateObj (collection, params) {
         let answerFromDB;
 
         try {
-            answerFromDB = await obj.create(params);
+            answerFromDB = await collection.create(params);
         } catch (error) {
             console.log(error);
             return null;
@@ -25,11 +25,11 @@ module.exports = {
         return answerFromDB;
     },
 
-    async SafeDeleteOne (obj, params) {
+    async SafeDeleteOne (collection, params) {
         let answerFromDB;
 
         try {
-            answerFromDB = await obj.deleteOne(params);
+            answerFromDB = await collection.deleteOne(params);
         } catch (error) {
             console.log(error);
             return null;
@@ -38,11 +38,11 @@ module.exports = {
         return answerFromDB;
     },
 
-    async SafeUpdateOne (obj, attToFind, newAtt) {
+    async SafeUpdateOne (collection, attToFind, newAtt) {
         let answerFromDB;
 
         try {
-            answerFromDB = await obj.updateOne(attToFind, newAtt);
+            answerFromDB = await collection.updateOne(attToFind, newAtt);
         } catch (error) {
             console.log(error);
             return null;
@@ -51,11 +51,24 @@ module.exports = {
         return answerFromDB;
     },
 
-    async SafeFindById(obj, param) {
+    async SafeFindById(collection, param) {
         let answerFromDB;
 
         try {
-            answerFromDB = await obj.findById(param);
+            answerFromDB = await collection.findById(param);
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+
+        return answerFromDB;
+    },
+
+    async SafeFind(collection, param) {
+        let answerFromDB;
+
+        try {
+            answerFromDB = await collection.find(param);
         } catch (error) {
             console.log(error);
             return null;
