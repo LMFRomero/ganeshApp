@@ -91,8 +91,6 @@ export class Session {
     }
 
     async isAuthenticated(): Promise<boolean> {
-        // if (!this.hasSession())
-        //     this.loadSessionFromCookie(); //Try to get session from cookie if forgotten
         return this.hasSession() && await this.isValid();
     }
 }

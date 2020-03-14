@@ -11,38 +11,47 @@ type RootRedirectState = {
 }
 
 export default class RootRedirect extends React.Component<{}, RootRedirectState>{
-    timeout: NodeJS.Timeout | null;
+    animationTimeout?: NodeJS.Timeout;
     constructor(props: RouteComponentProps) {
         super(props);
-        this.timeout = null;
-        this.validateSession();
-        this.setState({
+        this.state = {
             backendResponded: false,
             sessionValid: false,
             animationEnded: false
-        });
+        };
+
+
         this.validateSession.bind(this);
         this.render.bind(this);
     }
 
+    componentDidMount() {
+        this.validateSession();
+    }
+    
     async validateSession() {
         const sessionValid = await currentSession.isAuthenticated();
-        if (!sessionValid) currentSession.destroyCookie();
+
         this.setState({
             sessionValid,
             backendResponded: true
         });
-        this.timeout = setTimeout(()=> {
+        
+        if (!sessionValid)  {
+            currentSession.destroyCookie();
+            return;
+        }
+        
+        this.animationTimeout = setTimeout(()=> {
             this.setState({
                 animationEnded: true
             })
-        }, 2000);
+        }, 2000, []);
     }
 
+
     componentWillUnmount() {
-        if (this.timeout)
-            clearTimeout(this.timeout);
-        this.timeout = null;
+        clearTimeout(this.animationTimeout as NodeJS.Timeout);
     }
 
     render() { 
