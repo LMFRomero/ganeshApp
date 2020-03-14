@@ -1,9 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react'
+
 
 import { sendRegister } from '../../../services/api';
 import { Link, useHistory } from 'react-router-dom';
 
 import $ from 'jquery';
+import Toast from 'src/components/Toast/Toast';
+import AxiosErrorToast from 'src/components/Toast/AxiosErrorToast';
+import { AxiosError } from 'axios';
 
 let keyPostfix = 0;
 function generateLastYears(yearsToGenerate: number) {
@@ -26,41 +30,40 @@ export default function RegisterForm(props: object) {
     const [anoIngressoUSP, setAnoIngressoUSP] = useState('');
     const [anoIngressoGanesh, setAnoIngressoGanesh] = useState('');
 
+    const [invalidEmails, setInvalidEmails] = (useState(['\0']) as [string[], React.Dispatch<React.SetStateAction<string[]>>]);
+
+
     const history = useHistory();
+    const preValidationToast = React.createRef<Toast>();
+    const postValidationAxiosToast = React.createRef<AxiosErrorToast>();
+
 
     async function submitRegister(event: React.FormEvent) {
         event.preventDefault();
         const NUSP = parseInt(NUSP_str);
         if (password1 !== password2) {
-            alert('Senhas não coincidem');
+            preValidationToast.current?.showContent({body: "As senhas não coincidem"})
             return;
         }
 
-        if (isNaN(NUSP)) {
-            alert('NUSP deve ser um número');
-            return;
-            //TODO: define behavior with non-USP members
-        }
+        //TODO: define behavior with non-USP members
 
         const safeRes = await sendRegister({name, username, email, password: password1, NUSP, anoIngressoUSP, anoIngressoGanesh});
 
         if (safeRes.type === 'Success') {
-            setName('');
-            setUsername('')
-            setEmail('');
-            setPassword1('');
-            setPassword2('');
-            setNUSP_str('');
-            setAnoIngressoUSP('');
-            setAnoIngressoGanesh('');
-            
             history.push('/')
-        } else {
-            if (safeRes.error?.message === 'Network Error') {
-                alert('Servidor está fora de alcance, por favor tente novamente mais tarde');
-            } else if (safeRes.error?.code === '409') {
-                alert('Email já registrado')
+        } 
+        else {
+            const error = safeRes.error as AxiosError;
+            console.log(JSON.stringify(error))
+            console.log(error.code)
+            if (error.message === "Request failed with status code 409") {
+                setInvalidEmails([
+                    ...invalidEmails, email
+                ])
+                $('#email-field').addClass('is-invalid')
             }
+            postValidationAxiosToast.current?.showAxiosError(error);
         }
     }
 
@@ -77,6 +80,15 @@ export default function RegisterForm(props: object) {
         pass2.addClass('is-invalid');
     }
 
+    useEffect(()=>{
+        const emailField = $("#email-field");
+        console.log()
+        if (invalidEmails.indexOf(emailField.val() as string) >= 0)
+            emailField.addClass('is-invalid');
+        else
+            emailField.removeClass('is-invalid');
+
+    }, [email, invalidEmails])
     useEffect(checkPasswords, [password1, password2]);
 
     return (
@@ -86,11 +98,19 @@ export default function RegisterForm(props: object) {
                 <div className="form-group">
                     <input className="form-control mt-2" type="text" placeholder="Nome Completo" value={name} onChange={(e)=>setName(e.target.value)} required/>
                     <input className="form-control mt-2" type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required/>
-                    <input id="email-field" className="form-control mt-2" type="email" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
-                    <input id="password-field-1" className="form-control mt-2" type="password" placeholder="Senha" value={password1}  onChange={(e)=>setPassword1(e.target.value)} required/>
-                    <input id="password-field-2" className="form-control mt-2" type="password" placeholder="Confirme a senha" value={password2}  onChange={(e)=>setPassword2(e.target.value)} required/>
-                    <div className="invalid-feedback">
-                        Senhas não coincidem
+                    <div>
+                        <input id="email-field" className="form-control mt-2 is-invalid" type="email" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
+                        <div className="invalid-feedback">
+                            Email já cadastrado
+                        </div>
+                    </div>
+
+                    <div>
+                        <input id="password-field-1" className="form-control mt-2" type="password" placeholder="Senha" value={password1}  onChange={(e)=>setPassword1(e.target.value)} required/>
+                        <input id="password-field-2" className="form-control mt-2" type="password" placeholder="Confirme a senha" value={password2}  onChange={(e)=>setPassword2(e.target.value)} required/>
+                        <div className="invalid-feedback">
+                            Senhas não coincidem
+                        </div>
                     </div>
                     
 
@@ -115,6 +135,14 @@ export default function RegisterForm(props: object) {
                     <Link className="nav-link active" to='/login'>Já sou membro</Link>
                 </li>
             </ul>
+            <Toast id="preValidationToast" ref={preValidationToast}
+                title="Informações incorretas"
+                delay={1500}/>
+            <AxiosErrorToast 
+                id="postValidationAxiosToast" 
+                ref={postValidationAxiosToast}
+
+            />
         </React.Fragment>
     );
 }

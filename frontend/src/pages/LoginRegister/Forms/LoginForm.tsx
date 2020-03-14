@@ -21,8 +21,6 @@ export default function LoginForm(props : object) {
 
         if (response.type === 'Success') {
             history.push('/');   
-            setEmail('');
-            setPassword('');
         } else {
             console.log('try to show toast')
             const error = response.error as AxiosError;
