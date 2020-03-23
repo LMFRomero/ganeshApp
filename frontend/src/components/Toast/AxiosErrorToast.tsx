@@ -17,7 +17,7 @@ const defaultErrorMessageHandler: ErrorMessages = {
 }   
 
 function getErrorMessage(error: AxiosError, messageHandler: ErrorMessages): string {
-    return 'TODO: configure errorMessages';
+    return error.message === 'Network Error' ? messageHandler.onTimeout: 'TODO: implement other error messages';
 }
 
 export default class AxiosErrorToast extends Toast{

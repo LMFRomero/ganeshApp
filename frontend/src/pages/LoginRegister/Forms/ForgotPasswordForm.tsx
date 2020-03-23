@@ -4,10 +4,14 @@ import './ForgotPasswordForm.css';
 
 import {sendForgotPassword} from '../../../services/api';
 import Modal, { showModal } from '../../../components/Modal';
+import { AxiosError } from 'axios';
+import AxiosErrorToast from 'src/components/Toast/AxiosErrorToast';
 
 export default function ForgotPasswordForm(props: object) {
     const modalID = '#forgotPasswordModal';
     const [email, setEmail] = useState('marcuscastelo@usp.br');
+
+    let connectionErrorToastRef = React.createRef<AxiosErrorToast>();
 
     function promptConfirmation(event: FormEvent) {
         event.preventDefault();
@@ -15,11 +19,12 @@ export default function ForgotPasswordForm(props: object) {
     }
 
     async function submitForgotPassword() {
-        await sendForgotPassword({email});
+        const safeResponse = await sendForgotPassword({email});
+        if (safeResponse.type === 'Error') {
+            const error = safeResponse.error as AxiosError;
+            connectionErrorToastRef.current?.showAxiosError(error);
+        }
     }
-
-    // setTimeout(()=>$("#forgotPasswordModal").modal(),500);
-    
 
     return (
         <React.Fragment>
@@ -37,6 +42,11 @@ export default function ForgotPasswordForm(props: object) {
                 footer={(<React.Fragment><button type="button" className="btn btn-secondary" data-dismiss="modal">Não</button>
                 <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={submitForgotPassword}>Sim, enviar</button></React.Fragment>)}
                 />
+            <AxiosErrorToast id="connectionErrorToast"
+                title="Erro no envio de recuperação de senha"
+                delay={2500}
+                ref={connectionErrorToastRef}
+            />
         </React.Fragment>
     )
 }
