@@ -24,7 +24,7 @@ export default function Dashboard() {
 
     return (
         <React.Fragment>
-            <div className="row dash-nav">
+            <div className="row no-gutters dash-nav">
                 <div className="col-12">
                     <nav className="navbar navbar-expand-lg ">
                         <div className="dropdown">
@@ -40,7 +40,7 @@ export default function Dashboard() {
                     </nav>
                 </div>
             </div>
-            <div className="row dash-box">
+            <div className="row no-gutters dash-box">
                 {/* PAINEL ESQUERDO */}
                 <div className="d-none d-md-flex col-2 p-0 dash-left-panel">
                     <LeftNav onChange={onLeftNavChange}/>
