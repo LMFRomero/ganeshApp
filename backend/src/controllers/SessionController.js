@@ -3,69 +3,54 @@ const User = require('../models/User');
 const bCrypt = require('../services/hashes');
 const session = require('express-session');
 const redisStore = require('../services/redis-store');
-const passport = require('passport');
+const express = require('express');
 
+const passport = require('passport');
 require('../services/passaport')(passport);
 
+/**
+ * @typedef {express.Request} Request
+ * @typedef {express.Response} Response
+ */
+
 module.exports = {
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     */
     destroy (req, res) {
-        try {
 
-            redisStore.destroy(req.body.sessionID, (error) => {
-                if (error) res.status(400).end();
-                else res.status(200).end();
-            });
+        if (req.isAuthenticated()) 
+            req.logOut();
+                
+        res.cookie('ganeshSession', {expires: Date.now()})
 
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
-        }
-
+        return res.status(200).end();
     },
 
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @param {*} next 
+     */
     isAuth (req, res, next) {
-        // Cant use this function due to cors not allowing third party cookies
-        // if (req.isAuthenticated()) {
-        //     return next();
+        if (req.isAuthenticated()) {
+            return next();
+        } else res.status(401).end();
+        // try {
+
+        // redisStore.get(req.body.sessionID, (error, session) => {
+        //     if (error) console.log(error);
+
+        //     if (session) next();
+        //     else res.status(401).end();
+        // });
+
+        // } catch (error) {
+        //     console.log(error);
+        //     return res.status(500).end();
         // }
-        try {
-
-        redisStore.get(req.body.sessionID, (error, session) => {
-            if (error) console.log(error);
-
-            if (session) next();
-            else res.status(401).end();
-        });
-
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
-        }
-    },
-
-    store (req, res, next) {
-        // TODO: treat a lot of sessions request on redis
-        try {
-
-            passport.authenticate('local', (err, user, info) => {
-                if (err) return next(err);
-                
-                
-                if (!user) {
-                    return res.status(401).end();
-                }
-
-                else {
-                    req.logIn(user, (err) => {
-                        if (err) return next(err);
-                        return res.status(200).json({ sessionID: req.session.id, user: user.username });
-                    });
-                } 
-            })(req, res, next);
-
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
-        }
     },
 }

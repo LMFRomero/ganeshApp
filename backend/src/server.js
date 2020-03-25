@@ -12,28 +12,29 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const passaportConfig = require('./services/passaport');
 
-const store = require('./services/redis-store');
+const cookieParser = require('cookie-parser');
 
+
+const store = require('./services/redis-store');
 require('dotenv').config();
 
 const redisClient = redis.createClient();
 app = express();
-app.use(cors());
+app.set('trustproxy', true)
+app.use(cookieParser(`${process.env.REDIS_SECRET}`));
 
-
-app.options(`*`, (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", req.headers.origin); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+app.use(cors({
+    credentials: true,
+    origin: 'http://192.168.0.13:3000'
+}));
 
 app.use(express.static('public'));
 
 app.use(session({
-    resave: false,
+    resave: true,
     name: "ganeshSession",
     saveUninitialized: false,
-    cookie: { domain:`192.168.0.13`, secure: false, httpOnly: false, sameSite: `none`, maxAge: 3600000 }, //TODO: change secure to true
+    cookie: { domain:`192.168.0.86`, secure: false, httpOnly: true, sameSite: 'none', maxAge: 3600000 }, //TODO: change secure to true
     secret: `${process.env.REDIS_SECRET}`,
     store: store,
 }));
@@ -49,6 +50,7 @@ mongoose.connect(`${process.env.GANESH_CLUSTER}`, {
     useUnifiedTopology: true,
     useCreateIndex: true,
 });
+
 
 redisClient.on('error', (err) => {
     console.log('Redis error: ', err);

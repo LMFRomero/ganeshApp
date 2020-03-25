@@ -45,8 +45,8 @@ module.exports = {
 
         let user = await SafeFindOne(User, { "email": email });
 
-        if (!user) {
-            return null;
+        if (user === -1) {
+            return -1;
         }
 
         let passwordHash = user.password;
