@@ -25,7 +25,7 @@ app.use(cookieParser(`${process.env.REDIS_SECRET}`));
 
 app.use(cors({
     credentials: true,
-    origin: 'http://192.168.0.13:3000'
+    origin: 'http://ganeshfront.ddns.net:3000'
 }));
 
 app.use(express.static('public'));
@@ -34,7 +34,7 @@ app.use(session({
     resave: true,
     name: "ganeshSession",
     saveUninitialized: false,
-    cookie: { domain:`192.168.0.86`, secure: false, httpOnly: true, sameSite: 'none', maxAge: 3600000 }, //TODO: change secure to true
+    cookie: { domain:`143.107.252.110`, secure: false, httpOnly: true, sameSite: 'none', maxAge: 3600000 }, //TODO: change secure to true
     secret: `${process.env.REDIS_SECRET}`,
     store: store,
 }));

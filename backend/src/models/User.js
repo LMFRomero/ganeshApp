@@ -8,12 +8,19 @@ const UserSchema = new mongoose.Schema({
     NUSP: Number,
     anoIngressoUSP: Number,
     anoIngressoGanesh: Number,
-    privilege: Number,
+
     meetings: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Meeting'
-    }]
-    
+    }],
+
+    roleInt: Number,
+    globalPermission: {
+        materialPerms: Number,
+        meetingsPerms: Number,
+        presentationPerms: Number,
+        accoutPerms: Number,
+    }
 });
 
 module.exports = mongoose.model('User', UserSchema);
