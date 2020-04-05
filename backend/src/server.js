@@ -13,6 +13,7 @@ const passport = require('passport');
 const passaportConfig = require('./services/passaport');
 
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 
 const store = require('./services/redis-store');
@@ -28,7 +29,8 @@ app.use(cors({
     origin: 'http://ganeshfront.ddns.net:3000'
 }));
 
-app.use(express.static('public'));
+const assetsPath = path.join(__dirname, './public');
+app.use(express.static(assetsPath));
 
 app.use(session({
     resave: true,
