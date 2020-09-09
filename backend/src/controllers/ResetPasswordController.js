@@ -3,7 +3,8 @@ const User = require('../models/User');
 const mongoose = require('mongoose');
 const transporter = require('../services/nodemailer-auth');
 const bCrypt = require('../services/hashes');
-const { SafeFindOne, SafeCreateObj, SafeDeleteOne, SafeUpdateOne, SafeFindById } = require('../services/safe-exec');
+const crypto = require('crypto');
+const { SafeFindOne, SafeCreateObj, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeFind } = require('../services/safe-exec');
 
 module.exports = {
     async store (req, res) {
@@ -21,13 +22,15 @@ module.exports = {
             await SafeDeleteOne(ResetPassword, { name: user._id });
         }
 
-        try {
+        let resetToken = crypto.randomBytes(20).toString('hex');
 
-            const resetUser = await SafeCreateObj(ResetPassword, { name: user._id });
+        try {
+            console.log(resetToken);
+            const resetUser = await SafeCreateObj(ResetPassword, { name: user._id, token: resetToken });
 
             if (!resetUser) {
                 return res.status(500).end();
-            }
+            }   
 
             const mailOptions = {
                 from: {
@@ -36,16 +39,16 @@ module.exports = {
                 },
                 to: email,
                 subject: 'Link para reset de senha',
-                text: `Se você não solicitou este email, sua conta pode estar em risco. Caso você tenha solicitado, utilize o link a seguir para resetar sua senha: http://${process.env.APP_IP}/reset-password/` + resetUser.id
+                text: `Se você não solicitou este email, sua conta pode estar em risco. Caso você tenha solicitado, utilize o link a seguir para resetar sua senha: http://${process.env.APP_IP}/reset-password/` + resetToken,
             };
 
-            transporter.sendMail(mailOptions, function(error, info){
+            transporter.sendMail(mailOptions, function(error, info) {
                 if (error) {
                     console.log(error);
                     return res.status(400).end();
                 }
 
-                return res.status(200).json({ id: resetUser.id });
+                return res.status(200).end();
             });
 
         } catch (error) {
@@ -56,25 +59,26 @@ module.exports = {
     },
 
     async update (req, res) {
-        const resetID = req.body.resetID;
+        const resetToken = req.params.token;
 
-        if (!resetID) {
-            return res.status(401).end();
+        if (!resetToken) {
+            return res.status(400).end();
         }
-        
-        console.log(resetID);
 
-        const tmpReset = await SafeFindById(ResetPassword, resetID);
-
-        console.log(tmpReset);
+        const tmpReset = await SafeFindOne(ResetPassword, { token : resetToken });
 
         if (!tmpReset) {
-            return res.status(400).end();
+            return res.status(404).end();
         }
 
         const passwordHash = bCrypt.createHash(req.body.password);
 
-        await SafeUpdateOne(User, { "_id": tmpReset.name }, { $set: { password: passwordHash } }); 
+        let user = await SafeFindById(User, { "_id": tmpReset.name } ); 
+
+        user.password = passwordHash;
+        user.save();
+
+        await SafeDeleteOne(ResetPassword, { token: resetToken });
         
         return res.status(200).end();
     },

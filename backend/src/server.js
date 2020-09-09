@@ -36,7 +36,7 @@ app.use(session({
     resave: true,
     name: "ganeshSession",
     saveUninitialized: false,
-    cookie: { domain:`143.107.252.110`, secure: false, httpOnly: true, sameSite: 'none', maxAge: 3600000 }, //TODO: change secure to true
+    cookie: {secure: false, httpOnly: true, sameSite: 'none', maxAge: 3600000 }, //TODO: change secure to true
     secret: `${process.env.REDIS_SECRET}`,
     store: store,
 }));

@@ -5,9 +5,9 @@ const UserSchema = new mongoose.Schema({
     password: String,
     name: String,
     username: String,
-    NUSP: Number,
-    anoIngressoUSP: Number,
-    anoIngressoGanesh: Number,
+    collegeID: Number,
+    yearJoinCollege: Number,
+    yearJoinGanesh: Number,
 
     meetings: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -15,12 +15,6 @@ const UserSchema = new mongoose.Schema({
     }],
 
     roleInt: Number,
-    globalPermission: {
-        materialPerms: Number,
-        meetingsPerms: Number,
-        presentationPerms: Number,
-        accoutPerms: Number,
-    }
 });
 
 module.exports = mongoose.model('User', UserSchema);

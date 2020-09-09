@@ -26,7 +26,7 @@ routes.delete('/meeting/:id', SessionController.isAuth, MeetingController.destro
 routes.get('/meeting', SessionController.isAuth, MeetingController.show);
 
 routes.post('/forgot-password', ResetPasswordController.store);
-routes.post('/reset-password', ResetPasswordController.update);
+routes.post('/reset-password/:token', ResetPasswordController.update);
 
 
 

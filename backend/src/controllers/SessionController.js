@@ -6,6 +6,7 @@ const redisStore = require('../services/redis-store');
 const express = require('express');
 
 const passport = require('passport');
+const mypassport = require('../services/passaport');
 require('../services/passaport')(passport);
 
 /**
@@ -20,7 +21,6 @@ module.exports = {
      * @param {Response} res 
      */
     destroy (req, res) {
-
         if (req.isAuthenticated()) 
             req.logOut();
                 
@@ -39,18 +39,5 @@ module.exports = {
         if (req.isAuthenticated()) {
             return next();
         } else res.status(401).end();
-        // try {
-
-        // redisStore.get(req.body.sessionID, (error, session) => {
-        //     if (error) console.log(error);
-
-        //     if (session) next();
-        //     else res.status(401).end();
-        // });
-
-        // } catch (error) {
-        //     console.log(error);
-        //     return res.status(500).end();
-        // }
     },
 }
