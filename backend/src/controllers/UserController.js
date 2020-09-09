@@ -24,13 +24,16 @@ module.exports = {
 
         let user = await SafeFindOne(User, { email: newEmail });
         if (user) return res.status(409).json( {"message": "user already exists"} );
-
         user = await SafeFindOne(User, { name: name });
         if (user) return res.status(409).json( {"message": "name already in use"} );
-
         user = await SafeFindOne(User, { username: username });
         if (user) return res.status(409).json( {"message": "username already in use"} );
-
+        user = await SafeFindOne(RequestUser, { email: newEmail });
+        if (user) return res.status(409).json( {"message": "user already exists"} );
+        user = await SafeFindOne(RequestUser, { name: name });
+        if (user) return res.status(409).json( {"message": "name already in use"} );
+        user = await SafeFindOne(RequestUser, { username: username });
+        if (user) return res.status(409).json( {"message": "username already in use"} );
         let passwordHash = bCrypt.createHash(password);
 
         user = await SafeCreateObj(User, {email: newEmail, password: passwordHash, name: name, username: username, collegeID: collegeID, yearJoinCollege: yearCollege, yearJoinGanesh: yearGanesh, privilege: 0});
