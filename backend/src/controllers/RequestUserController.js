@@ -15,7 +15,7 @@ module.exports = {
         let yearCollege = parseInt(req.body.yearJoinCollege);
         let yearGanesh = parseInt(req.body.yearJoinGanesh);
         if (!newEmail || !password || !collegeID || !name || !username || !yearCollege || !yearGanesh) {
-            return res.status(400).json({ message: "Missing Information"}).end();
+            return res.status(400).json({ message: "Missing Information"});
         }
 
         if (isNaN(yearCollege) || isNaN(yearGanesh) || isNaN(collegeID)) {
@@ -49,9 +49,9 @@ module.exports = {
         return res.status(200).json(users);
     },
 
-    async promote (req, res) {
+    async update (req, res) {
         if (!req.body || !req.body.email) {
-            return res.status(404).end();
+            return res.status(400).end();
         }
 
         let user = await SafeFindOne(RequestUser, {email: req.body.email});
@@ -64,6 +64,16 @@ module.exports = {
 
         if (req.body.role == "member") await setGlobalRole(newUser._id, "member");
         else await setGlobalRole(newUser._id, "collaborator");
+
+        return res.status(200).end();
+    },
+
+    async destroy (req, res) {
+        if (!req.body || !req.body.email) {
+            return res.status(400).end();
+        }
+
+        await SafeDeleteOne(RequestUser, { email: req.body.email });
 
         return res.status(200).end();
     }

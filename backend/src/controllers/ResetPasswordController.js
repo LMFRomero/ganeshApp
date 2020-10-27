@@ -71,12 +71,21 @@ module.exports = {
             return res.status(404).end();
         }
 
-        const passwordHash = bCrypt.createHash(req.body.password);
+        let password = req.body.password
+        if (!password)
+            return res.status(400).end()
+
+        const passwordHash = bCrypt.createHash(password);
 
         let user = await SafeFindById(User, { "_id": tmpReset.name } ); 
 
         user.password = passwordHash;
-        user.save();
+        try {
+            user.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
 
         await SafeDeleteOne(ResetPassword, { token: resetToken });
         
