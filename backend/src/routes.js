@@ -6,6 +6,7 @@ const MeetingController = require('./controllers/MeetingController');
 const ResetPasswordController = require('./controllers/ResetPasswordController');
 const RequestUserController = require('./controllers/RequestUserController');
 const privilegeMan = require('./services/privilege');
+const FrontController = require('./controllers/FrontController');
 const passport = require('passport');
 const { Router } = require('express');
 const routes = express.Router();
@@ -33,6 +34,14 @@ routes.post('/resetPassword/:token', ResetPasswordController.update);
 
 routes.post('/promote/:username', privilegeMan.canChangeRole, privilegeMan.changeRole);
 routes.post('/rootPromote/:username', privilegeMan.changeRole);
+
+routes.post('/front', privilegeMan.canManageFront, FrontController.store);
+routes.put('/front/:frontName', privilegeMan.canManageFront, FrontController.update);
+routes.delete('/front/:frontName', privilegeMan.canManageFront, FrontController.destroy);
+routes.post('/front/addUser/:frontName', privilegeMan.canManageFront, FrontController.addUser);
+routes.post('/front/removeUser/:frontName', privilegeMan.canManageFront, FrontController.removeUser);
+routes.post('/front/addMeeting/:frontName', privilegeMan.canManageFront, FrontController.addMeeting);
+routes.post('/front/removeMeeting/:frontName', privilegeMan.canManageFront, FrontController.removeMeeting);
 
 
 

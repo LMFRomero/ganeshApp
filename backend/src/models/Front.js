@@ -8,11 +8,13 @@ const frontSchema = new mongoose.Schema ({
     },
     members: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        unique: true
     }],
     meetings: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Meeting'
+        ref: 'Meeting',
+        unique: true
     }],
 });
 

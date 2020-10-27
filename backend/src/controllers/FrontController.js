@@ -22,10 +22,10 @@ module.exports = {
         if (!req.session || !req.session.passport || !req.session.passport.user)
             return res.status(401).end();
 
-        if (!req.body || !req.body.name)
+        if (!req.body || !req.params.frontName)
             return res.status(400).end();
 
-        let front = await SafeFindOne(Front, { name: req.body.name });
+        let front = await SafeFindOne(Front, { name: req.params.frontName });
         if (!front)
             return res.status(404).end();
 
@@ -46,7 +46,7 @@ module.exports = {
             }
         }
 
-        let ans = await SafeDeleteOne(Front, { name: req.body.name });
+        let ans = await SafeDeleteOne(Front, { name: req.params.frontName });
         if (!ans)
             return res.status(404).end();
         
@@ -57,10 +57,10 @@ module.exports = {
         if (!req.session || !req.session.passport || !req.session.passport.user)
             return res.status(401).end();
 
-        if (!req.body || !req.body.name)
+        if (!req.body || !req.body.name || !req.params.frontName)
             return res.status(400).end();
 
-        let front = await SafeFindOne(Front, { name: req.body.name });
+        let front = await SafeFindOne(Front, { name: req.params.frontName });
         if (!front)
             return res.status(404).end();
 

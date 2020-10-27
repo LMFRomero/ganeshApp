@@ -97,5 +97,19 @@ module.exports = {
             return res.status(403).end();
 
         next();
+    },
+
+    async canManageFront (req, res, next) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
+        let user = await SafeFindById(User, req.session.passport.user.id);
+        if (!user)
+            return res.status(401).end();
+
+        if (user.roleInt > 30)
+            return res.status(403).end();
+
+        next();
     }
 }
