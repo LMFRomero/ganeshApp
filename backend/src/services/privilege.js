@@ -2,10 +2,36 @@ const User = require('../models/User');
 const Front = require('../models/Front');
 
 const roles = require('../utils/roles');
-const perms = require('../utils/perms');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec'); 
+const { getGlobalTemplate } = require('../utils/roles');
 
 module.exports = {
+    async changeRole (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+        
+        if (!req.params.username || !req.body || !req.body.role)
+            return res.status(400).end();
+
+        let user = await SafeFindOne(User, { username: req.params.username });
+        if (!user)
+            return res.status(400).end();
+        
+        let template = getGlobalTemplate(req.body.role);
+        if (!template)
+            return res.status(400).end();
+
+        user.roleInt = template.roleInt;
+        try {
+            user.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
+
+        return res.status(200).end();
+    },
+
     async setGlobalRole (id, role) {
         const user = await SafeFindById(User, id);
         if (!user) return null;
@@ -25,7 +51,51 @@ module.exports = {
         return true;
     },
 
-    async hasPerm (req, res, next) {
-        let id
+    async canAcceptRequestToJoin (req, res, next) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+        
+        if (!req.params.id)
+            return res.status(400).end();
+
+        let user = await SafeFindById(User, req.session.passport.user.id);
+        if (!user)
+            return res.status(401).end();
+        
+        if (user.roleInt >= 30)
+            return res.status(403).end();
+        
+        next();
+    },
+
+    async canChangeRole (req, res, next) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
+        if (!req.params.username || !req.body || !req.body.role)
+            return res.status(400).end();
+
+        let user = await SafeFindById(User, req.session.passport.user.id);
+        if (!user)
+            return res.status(401).end();
+
+        if (user.roleInt > 21)
+            return res.status(403).end();
+
+        let changedUser = await SafeFindOne(User, { username: req.params.username} );
+        if (!changedUser)
+            return res.status(400).end();
+
+        if (changedUser.roleInt <= user.roleInt)
+            return res.status(403).end();
+
+        newRoleInt = getGlobalTemplate(req.body.role).roleInt;
+        if (!newRoleInt)
+            return res.status(400).end();
+        
+        if (newRoleInt <= user.roleInt)
+            return res.status(403).end();
+
+        next();
     }
 }
