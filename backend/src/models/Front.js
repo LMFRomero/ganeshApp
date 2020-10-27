@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const frontSchema = new mongoose.Schema ({
-    name: String,
+    name: {
+        type: String,
+        unique: true,
+        required: true
+    },
     members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
