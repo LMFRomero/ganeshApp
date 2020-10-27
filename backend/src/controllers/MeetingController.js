@@ -52,7 +52,7 @@ module.exports = {
         return res.status(200).end();
     },
     
-    async update (req, res) {
+    async checkPresence (req, res) {
         //this function set presence of a member in a given meeting
         if (!req.session || !req.session.passaport || !req.session.passaport.user) {
             return res.status(401).end();
@@ -84,10 +84,20 @@ module.exports = {
         }
 
         meeting.members.push(user._id);
-        await meeting.save();
+        try {
+            meeting.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
 
         user.meetings.push(req.params.id);
-        await user.save();
+        try {
+            user.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
 
         return res.status(200).end();
     },
@@ -106,7 +116,7 @@ module.exports = {
         return res.status(200).end();
     },
 
-    async changeMeeting (req, res) {
+    async update (req, res) {
         if (!req.session || !req.session.passport || !req.session.passport.user) {
             return res.status(401).end();
         }
