@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js > server.log"
   },
   "dependencies": {
     "bcrypt-nodejs": "^0.0.3",
