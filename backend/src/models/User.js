@@ -1,17 +1,48 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    email: String,
-    password: String,
-    name: String,
-    username: String,
-    collegeID: Number,
-    yearJoinCollege: Number,
-    yearJoinGanesh: Number,
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    password: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    name: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    collegeID: {
+        type: Number,
+        unique: true,
+        required: true
+    },
+    yearJoinCollege: {
+        type: Number,
+        required: true
+    },
+    yearJoinGanesh: {
+        type: Number,
+        required: true
+    },
 
     meetings: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Meeting'
+    }],
+
+    fronts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Front'
     }],
 
     roleInt: Number,
