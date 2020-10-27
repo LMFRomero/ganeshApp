@@ -105,3 +105,6 @@ dist
 
 # Makefile
 makefile
+
+#redis
+*.rdb
