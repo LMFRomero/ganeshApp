@@ -6,7 +6,11 @@ const resetPasswordSchema = new mongoose.Schema ({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    token: String,
+    token: {
+        type: String,
+        unique: true,
+        required: true
+    }
 });
 
 resetPasswordSchema.plugin(ttl, { ttl: 3600*1000 });
