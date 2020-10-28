@@ -2,12 +2,16 @@ import React, {useState} from 'react';
 
 import { useHistory, Link } from 'react-router-dom';
 import { sendLogin } from 'src/services/api';
+import { AxiosError } from 'axios';
+
+import AxiosErrorToast from 'src/components/Toast/AxiosErrorToast';
 
 export default function LoginForm(props : object) {
     let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
     let history = useState(useHistory())[0];
 
+    let errorToastRef = React.createRef<AxiosErrorToast>();
 
     async function submitLogin(event: React.FormEvent) {
         event.preventDefault();
@@ -17,12 +21,11 @@ export default function LoginForm(props : object) {
 
         if (response.type === 'Success') {
             history.push('/');   
-            setEmail('');
-            setPassword('');
         } else {
-            //POPUP TOAST
+            console.log('try to show toast')
+            const error = response.error as AxiosError;
+            errorToastRef.current?.showAxiosError(error);
         }
-        
     }
 
     return (
@@ -43,6 +46,12 @@ export default function LoginForm(props : object) {
                     <Link className="nav-link" to="/forgot-password">Esqueci a senha</Link>
                 </li>
             </ul>
+            <AxiosErrorToast 
+                id="connectionError"
+                title="Erro no login"
+                delay={3000}
+                ref={errorToastRef}
+                />
         </React.Fragment>
     );
 }
