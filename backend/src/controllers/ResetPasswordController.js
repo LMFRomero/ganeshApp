@@ -81,7 +81,7 @@ module.exports = {
 
         user.password = passwordHash;
         try {
-            user.save();
+            await user.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();

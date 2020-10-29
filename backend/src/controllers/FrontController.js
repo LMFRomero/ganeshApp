@@ -3,11 +3,12 @@ const User = require('../models/User');
 const Meeting = require('../models/Meeting');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
 
+
 module.exports = {
     async store (req, res) {
         if (!req.session || !req.session.passport || !req.session.passport.user)
             return res.status(401).end();
-
+        
         if (!req.body || !req.body.name)
             return res.status(400).end();
 
@@ -40,7 +41,7 @@ module.exports = {
                 user.fronts.splice(index, 1);
             
             try {
-                user.save();
+                await user.save();
             } catch (error) {
                 console.log(error);
             }
@@ -65,8 +66,10 @@ module.exports = {
             return res.status(404).end();
 
         front.name = req.body.name;
+        front.imgStr = req.body.imgStr;
+
         try {
-            front.save();
+            await front.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();
@@ -96,8 +99,8 @@ module.exports = {
             front.members.push(user._id);
 
         try {
-            user.save();
-            front.save();
+            await user.save();
+            await front.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();
@@ -132,8 +135,8 @@ module.exports = {
 
             
         try {
-            user.save();
-            front.save();
+            await user.save();
+            await front.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();
@@ -161,8 +164,8 @@ module.exports = {
         front.meetings.push(meeting._id);
 
         try {
-            meeting.save();
-            front.save();
+            await meeting.save();
+            await front.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();
@@ -193,8 +196,8 @@ module.exports = {
             front.meetings.splice(index, 1);
 
         try {
-            meeting.save();
-            front.save();
+            await meeting.save();
+            await front.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();

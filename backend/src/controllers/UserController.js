@@ -37,7 +37,7 @@ module.exports = {
         if (user) return res.status(409).json( {"message": "username already in use"} );
         let passwordHash = bCrypt.createHash(password);
 
-        user = await SafeCreateObj(User, {email: newEmail, password: passwordHash, name: name, username: username, collegeID: collegeID, yearJoinCollege: yearCollege, yearJoinGanesh: yearGanesh, privilege: 0});
+        user = await SafeCreateObj(User, {email: newEmail, password: passwordHash, name: name, username: username, collegeID: collegeID, yearJoinCollege: yearCollege, yearJoinGanesh: yearGanesh });
 
         if (!user) return res.status(500).end();
 

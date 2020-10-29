@@ -85,7 +85,7 @@ module.exports = {
 
         meeting.members.push(user._id);
         try {
-            meeting.save();
+            await meeting.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();
@@ -93,7 +93,7 @@ module.exports = {
 
         user.meetings.push(req.params.id);
         try {
-            user.save();
+            await user.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();

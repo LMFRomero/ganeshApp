@@ -23,7 +23,7 @@ module.exports = {
 
         user.roleInt = template.roleInt;
         try {
-            user.save();
+            await user.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();
@@ -42,7 +42,7 @@ module.exports = {
         user.roleInt = roleTemplate.roleInt;
 
         try {
-            user.save();
+            await user.save();
         } catch (error) {
             console.log(error);
             return 500;
