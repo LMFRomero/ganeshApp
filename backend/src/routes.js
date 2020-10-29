@@ -5,8 +5,10 @@ const SessionController = require('./controllers/SessionController');
 const MeetingController = require('./controllers/MeetingController');
 const ResetPasswordController = require('./controllers/ResetPasswordController');
 const RequestUserController = require('./controllers/RequestUserController');
-const privilegeMan = require('./services/privilege');
 const FrontController = require('./controllers/FrontController');
+
+const privilegeMan = require('./services/privilege');
+
 const passport = require('passport');
 const { Router } = require('express');
 const routes = express.Router();

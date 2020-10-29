@@ -7,21 +7,21 @@ const timeout = require('connect-timeout');
 const session = require('express-session');
 const myStore = require('./services/redis-store');
 const redis = require('redis');
+const redisClient = redis.createClient();
 
-const bodyParser = require('body-parser');
 const passport = require('passport');
 const passaportConfig = require('./services/passaport');
 
 const cookieParser = require('cookie-parser');
 const path = require('path');
-
+const multer = require('multer');
 
 require('dotenv').config();
 
-const redisClient = redis.createClient();
 app = express();
 app.set('trustproxy', true)
 app.use(cookieParser(`${process.env.REDIS_SECRET}`));
+app.use(multer().array());
 
 app.use(cors({
     credentials: true,
@@ -39,11 +39,7 @@ app.use(session({
     secret: `${process.env.REDIS_SECRET}`,
     store: myStore,
 }));
-
-app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(passport.initialize());
-
 app.use(passport.session());
 
 mongoose.connect(`${process.env.GANESH_CLUSTER}`, {
