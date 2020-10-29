@@ -39,10 +39,10 @@ export default function LoginForm(props : object) {
                 </div>
             </form>
             <ul className="d-sm-flex nav justify-content-between mt-2 mt-sm-4 ml-n3 mr-n3 w-xl-50">
-                <li className="nav-item text-left col-12 col-sm-5 p-0 m-0 pl-xl-2">
+                <li className="nav-item text-left col-100 col-sm-50 p-0 m-0 pl-xl-2">
                     <Link className="nav-link active" to='/register'>Criar conta</Link>
                 </li>
-                <li className="nav-item text-left text-sm-right col-12 col-sm-7 p-0 m-0 pr-xl-2">
+                <li className="nav-item text-left text-sm-right col-100 col-sm-50 p-0 m-0 pr-xl-2">
                     <Link className="nav-link" to="/forgot-password">Esqueci a senha</Link>
                 </li>
             </ul>

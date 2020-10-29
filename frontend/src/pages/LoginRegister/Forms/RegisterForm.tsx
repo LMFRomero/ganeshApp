@@ -131,7 +131,7 @@ export default function RegisterForm(props: object) {
                 </div>
             </form>
             <ul className="d-sm-flex nav justify-content-between mt-2 mt-sm-4 ml-n3 mr-n3 w-xl-50">
-                <li className="nav-item text-left col-12 p-0 m-0 pl-xl-2">
+                <li className="nav-item text-left col-100 p-0 m-0 pl-xl-2">
                     <Link className="nav-link active" to='/login'>Já sou membro</Link>
                 </li>
             </ul>
