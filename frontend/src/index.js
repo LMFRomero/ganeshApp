@@ -4,11 +4,10 @@ import './index.css';
 import App from './App.tsx';
 import * as serviceWorker from './serviceWorker';
 
-import 'bootstrap/dist/css/bootstrap.css';
-
-import 'bootstrap';
-import 'bootstrap/js/dist/util';
-import 'bootstrap/js/dist/alert';
+import './assets/bootstrap/dist/css/bootstrap.css';
+import './assets/bootstrap/dist/js/bootstrap.js';
+import './assets/bootstrap/dist/js/dist/util';
+import './assets/bootstrap/dist/js/dist/alert';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
