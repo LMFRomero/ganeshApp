@@ -6,6 +6,11 @@ const frontSchema = new mongoose.Schema ({
         unique: true,
         required: true
     },
+    imgStr: {
+        type: String,
+        sparse: true,
+        unique: true
+    },
     members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
