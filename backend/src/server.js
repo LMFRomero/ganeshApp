@@ -7,7 +7,6 @@ const timeout = require('connect-timeout');
 const session = require('express-session');
 const myStore = require('./services/redis-store');
 const redis = require('redis');
-const redisClient = redis.createClient();
 
 const passport = require('passport');
 const passaportConfig = require('./services/passaport');

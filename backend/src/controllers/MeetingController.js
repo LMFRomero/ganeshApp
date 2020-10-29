@@ -1,8 +1,11 @@
-const redisStore = require('../services/redis-store');
+const redis = require('redis');
+const redisClient = redis.createClient();
 const Meeting = require('../models/Meeting');
 const User = require('../models/User');
 const transporter = require('../services/nodemailer-auth');
+
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
+
 
 
 module.exports = {
