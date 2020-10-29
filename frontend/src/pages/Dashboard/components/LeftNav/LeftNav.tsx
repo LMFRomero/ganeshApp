@@ -14,14 +14,14 @@ export default function LeftNav(props: {onChange: (event: MouseEvent, text:strin
 
     return (
         <ul className="list-group w-100">
-            <img className="dash-left-nav-logo" src={Logo}/>
+            <img className="dash-left-nav-logo" src={Logo} alt="Ganesh Logo"/>
             <Button className="dash-left-nav-btn" text="Frentes" onClick={handleLeftNavBtnClick}/>
             <Button className="dash-left-nav-btn" text="Gerenciar Reuniões" onClick={handleLeftNavBtnClick}/>
             <Button className="dash-left-nav-btn" text="Meu Perfil" onClick={handleLeftNavBtnClick}/> 
-            <Category text="Coordenação" onClick={handleLeftNavBtnClick}> 
-                <Button className="dash-left-nav-btn" text="Gerenciar usuários" onClick={handleLeftNavBtnClick}/>
-                <Button className="dash-left-nav-btn" text="Gerenciar Solicitações" onClick={handleLeftNavBtnClick}/>
-                <Button className="dash-left-nav-btn" text="Relatório de Presença" onClick={handleLeftNavBtnClick}/>
+            <Category className="dash-left-nav-cat disabled" text="Coordenação" onClick={handleLeftNavBtnClick}> 
+                <Button className="dash-left-nav-btn ml-2" text="Gerenciar usuários" onClick={handleLeftNavBtnClick}/>
+                <Button className="dash-left-nav-btn ml-2" text="Gerenciar Solicitações" onClick={handleLeftNavBtnClick}/>
+                <Button className="dash-left-nav-btn ml-2" text="Relatório de Presença" onClick={handleLeftNavBtnClick}/>
             </Category>
         </ul>
     );

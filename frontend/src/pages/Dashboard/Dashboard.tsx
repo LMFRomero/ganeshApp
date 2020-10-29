@@ -6,7 +6,7 @@ import {sendLogout} from '../../services/api';
 
 import LeftNav from './components/LeftNav/LeftNav';
 import CentralPanel from './components/CentralPanel/CentralPanel';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 export default function Dashboard() {
     const [currentTab, setcurrentTab] = useState('Feed Geral');
@@ -26,11 +26,11 @@ export default function Dashboard() {
         <React.Fragment>
             <div className="row no-gutters dash-box">
                 {/* PAINEL ESQUERDO */}
-                <div className="col-3 col-md-4 p-0 dash-left-panel">
+                <div className="col-100 col-sm-30 col-md-25 p-0 dash-left-panel">
                     <LeftNav onChange={onLeftNavChange}/>
                 </div>
                 {/* PAINEL CENTRAL */}
-                <div className="col-9 col-md-8 dash-center-panel">
+                <div className="d-none d-sm-block col-sm-70 col-md-75 dash-center-panel">
                     <div className="dash-feed mx-2 mx-md-5 mt-3">
                         <CentralPanel currTab={currentTab}/>
                     </div>

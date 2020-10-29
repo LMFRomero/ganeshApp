@@ -5,6 +5,7 @@
 
 .dash-left-panel {
     background-color: rgba(255, 255, 255, 0.6);
+    overflow: hidden;
 }
 
 .dash-right-panel {
@@ -19,6 +20,12 @@
     margin: 3% auto;
 }
 
-.dash-left-nav-btn {
-    font-size: 1.6em;
+.dash-left-nav-btn, .dash-left-nav-cat {
+    color: black !important;
+    font-size: 1.3rem;
+    padding: 0;
+}
+
+.dash-left-nav-cat {
+    color: black !important;
 }
