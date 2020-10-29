@@ -7,6 +7,9 @@ const { setGlobalRole } = require('../services/privilege');
 
 module.exports = {
     async store (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
         let newEmail = (req.body.email).toString();
         let password = (req.body.password).toString();
         let collegeID = parseInt(req.body.collegeID);
@@ -45,11 +48,17 @@ module.exports = {
     },
 
     async show (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
         let users = await SafeFind(RequestUser, {});
         return res.status(200).json(users);
     },
 
     async update (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
         if (!req.body || !req.body.email) {
             return res.status(400).end();
         }
@@ -69,6 +78,9 @@ module.exports = {
     },
 
     async destroy (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+            
         if (!req.body || !req.body.email) {
             return res.status(400).end();
         }

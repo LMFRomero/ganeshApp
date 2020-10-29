@@ -79,19 +79,21 @@ module.exports = {
         if (!req.session || !req.session.passport || !req.session.passport.user)
             return res.status(401).end();
 
-        if (!req.params.frontName)
+        if (!req.params.frontName || !req.body || !req.body.name)
             return res.status(400).end();
 
         let front = await SafeFindOne(Front, { name: req.params.frontName });
         if (!front)
             return res.status(404).end();
 
-        let user = SafeFindById(User, req.session.passport.user.id);
+        let user = await SafeFindOne(User, { name: req.body.name });
         if (!user)
             return res.status(404).end();
 
-        user.fronts.push_back(front._id);
-        front.members.push_back(user._id);
+        if (user.fronts.indexOf(front._id) == -1)
+            user.fronts.push(front._id);
+        if (front.members.indexOf(user._id) == -1)
+            front.members.push(user._id);
 
         try {
             user.save();
@@ -104,20 +106,21 @@ module.exports = {
         return res.status(200).end();
     },
 
-    async removeUser (res, req) {
+    async removeUser (req, res) {
         if (!req.session || !req.session.passport || !req.session.passport.user)
         return res.status(401).end();
 
-        if (!req.params.frontName)
+        if (!req.params.frontName || !req.body || !req.body.name)
             return res.status(400).end();
 
         let front = await SafeFindOne(Front, { name: req.params.frontName });
         if (!front)
             return res.status(404).end();
 
-        let user = SafeFindById(User, req.session.passport.user.id);
+        let user = await SafeFindOne(User, { name: req.body.name });
         if (!user)
             return res.status(404).end();
+
 
         let index = user.fronts.indexOf(front._id);
         if (index > -1)
@@ -127,6 +130,7 @@ module.exports = {
         if (index > -1)
             front.members.splice(index, 1);
 
+            
         try {
             user.save();
             front.save();
@@ -142,19 +146,19 @@ module.exports = {
         if (!req.session || !req.session.passport || !req.session.passport.user)
             return res.status(401).end();
 
-        if (!req.body || !req.body.meeting || !req.params.frontName)
+        if (!req.body || !req.body.meetingId || !req.params.frontName)
             return res.status(400).end();
 
         let front = await SafeFindOne(Front, { name: req.params.frontName });
         if (!front)
             return res.status(404).end();
 
-        let meeting = SafeFindById(Meeting, req.body.meeting);
+        let meeting = await SafeFindById(Meeting, req.body.meetingId);
         if (!meeting)
             return res.status(404).end();
 
         meeting.front = front._id;
-        front.meetings.push_back(meeting._id);
+        front.meetings.push(meeting._id);
 
         try {
             meeting.save();
@@ -171,14 +175,14 @@ module.exports = {
         if (!req.session || !req.session.passport || !req.session.passport.user)
         return res.status(401).end();
 
-        if (!req.body || !req.body.meeting || !req.params.frontName)
+        if (!req.body || !req.body.meetingId || !req.params.frontName)
             return res.status(400).end();
 
         let front = await SafeFindOne(Front, { name: req.params.frontName });
         if (!front)
             return res.status(404).end();
 
-        let meeting = SafeFindById(Meeting, req.body.meeting);
+        let meeting = await SafeFindById(Meeting, req.body.meetingId);
         if (!meeting)
             return res.status(404).end();
 

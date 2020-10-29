@@ -51,12 +51,9 @@ module.exports = {
         return true;
     },
 
-    async canAcceptRequestToJoin (req, res, next) {
+    async canManageMembers (req, res, next) {
         if (!req.session || !req.session.passport || !req.session.passport.user)
             return res.status(401).end();
-        
-        if (!req.params.id)
-            return res.status(400).end();
 
         let user = await SafeFindById(User, req.session.passport.user.id);
         if (!user)
@@ -108,6 +105,19 @@ module.exports = {
             return res.status(401).end();
 
         if (user.roleInt > 30)
+            return res.status(403).end();
+
+        next();
+    },
+
+    async isSelf (req, res, next) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
+        if (!req.body || !req.body.name)
+            return res.status(400).end();
+
+        if (req.session.passport.user.name != req.body.name)
             return res.status(403).end();
 
         next();

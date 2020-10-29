@@ -5,7 +5,7 @@ const routes = require('./routes');
 const timeout = require('connect-timeout');
 
 const session = require('express-session');
-const redisStore = require('connect-redis')(session);
+const myStore = require('./services/redis-store');
 const redis = require('redis');
 
 const bodyParser = require('body-parser');
@@ -16,7 +16,6 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 
 
-const store = require('./services/redis-store');
 require('dotenv').config();
 
 const redisClient = redis.createClient();
@@ -33,12 +32,12 @@ const assetsPath = path.join(__dirname, './public');
 app.use(express.static(assetsPath));
 
 app.use(session({
-    resave: true,
+    resave: false,
     name: "ganeshSession",
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {secure: false, httpOnly: true, sameSite: 'none', maxAge: 3600000 }, //TODO: change secure to true
     secret: `${process.env.REDIS_SECRET}`,
-    store: store,
+    store: myStore,
 }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -53,15 +52,9 @@ mongoose.connect(`${process.env.GANESH_CLUSTER}`, {
     useCreateIndex: true,
 });
 
-
-redisClient.on('error', (err) => {
-    console.log('Redis error: ', err);
-});
-
 app.use(timeout('10s'));
 app.use(express.json());
 app.use(routes);
-
 
 function haltOnTimedout (req, res, next) {
     if (!req.timedout) next();
