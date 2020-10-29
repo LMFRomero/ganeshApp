@@ -10,10 +10,13 @@ type RootRedirectState = {
     animationEnded: Boolean
 }
 
+//This class is used to determine where the route '/' should go
 export default class RootRedirect extends React.Component<{}, RootRedirectState>{
     animationTimeout?: NodeJS.Timeout;
     constructor(props: RouteComponentProps) {
         super(props);
+
+        //Initial conditions
         this.state = {
             backendResponded: false,
             sessionValid: false,
@@ -26,13 +29,16 @@ export default class RootRedirect extends React.Component<{}, RootRedirectState>
     }
 
     componentDidMount() {
+        //Starts a async task to validate currentSession.sessionID with backend
         this.validateSession();
     }
     
     async validateSession() {
+        //Checks if there is a sessionID and if it's still valid from backend
         const safeRes = await sendValidate();
         const sessionValid = safeRes.type === 'Success';
 
+        //Update state with validity of the session and backendResponded = true
         this.setState({
             sessionValid,
             backendResponded: true
@@ -49,10 +55,12 @@ export default class RootRedirect extends React.Component<{}, RootRedirectState>
 
 
     componentWillUnmount() {
+        //Before unmonting component, cancel animationTimeout handler. Problems with video getting stuck would appear otherwise
         clearTimeout(this.animationTimeout as NodeJS.Timeout);
     }
 
     render() { 
+        //Determines which component should be rendered based on current conditions
         return (
             <React.Fragment>
                 {
