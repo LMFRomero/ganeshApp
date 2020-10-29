@@ -24,25 +24,9 @@ export default function Dashboard() {
 
     return (
         <React.Fragment>
-            <div className="row no-gutters dash-nav">
-                <div className="col-12">
-                    <nav className="navbar navbar-expand-lg ">
-                        <div className="dropdown">
-                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Marucs
-                            </button>
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <Link className="dropdown-item" to="/">Perfil</Link>
-                                <Link className="dropdown-item" to="/">Configurações</Link>
-                                <Link className="dropdown-item" to="/logout">Desconectar</Link>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </div>
             <div className="row no-gutters dash-box">
                 {/* PAINEL ESQUERDO */}
-                <div className="d-none d-md-flex col-2 p-0 dash-left-panel">
+                <div className="col-3 col-md-4 p-0 dash-left-panel">
                     <LeftNav onChange={onLeftNavChange}/>
                 </div>
                 {/* PAINEL CENTRAL */}
@@ -50,10 +34,6 @@ export default function Dashboard() {
                     <div className="dash-feed mx-2 mx-md-5 mt-3">
                         <CentralPanel currTab={currentTab}/>
                     </div>
-                </div>
-                {/* PAINEL DIREITO */}
-                <div className="col-3 col-md-2 dash-right-panel">
-                    <button onClick={logout}>Logout</button>
                 </div>
             </div>
         </React.Fragment>

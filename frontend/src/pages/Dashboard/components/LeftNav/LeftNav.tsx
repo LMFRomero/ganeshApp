@@ -2,6 +2,8 @@ import React, { MouseEvent } from 'react';
 
 import $ from 'jquery';
 import Button from './components/Button';
+import Category from './components/Category';
+import Logo from '../../../../assets/avatar.png';
 
 export default function LeftNav(props: {onChange: (event: MouseEvent, text:string) => void }) {
     function handleLeftNavBtnClick(event: MouseEvent, text: string) {
@@ -12,11 +14,15 @@ export default function LeftNav(props: {onChange: (event: MouseEvent, text:strin
 
     return (
         <ul className="list-group w-100">
-            <Button text="Feed Geral" onClick={handleLeftNavBtnClick}/>
-            <Button text="Materiais" onClick={handleLeftNavBtnClick}/>
-            <Button text="Reuniões" onClick={handleLeftNavBtnClick}/>
-            <Button text="Apresentações" onClick={handleLeftNavBtnClick}/>
-            <Button text="Gerenciar Membros" onClick={handleLeftNavBtnClick}/>
+            <img className="dash-left-nav-logo" src={Logo}/>
+            <Button className="dash-left-nav-btn" text="Frentes" onClick={handleLeftNavBtnClick}/>
+            <Button className="dash-left-nav-btn" text="Gerenciar Reuniões" onClick={handleLeftNavBtnClick}/>
+            <Button className="dash-left-nav-btn" text="Meu Perfil" onClick={handleLeftNavBtnClick}/> 
+            <Category text="Coordenação" onClick={handleLeftNavBtnClick}> 
+                <Button className="dash-left-nav-btn" text="Gerenciar usuários" onClick={handleLeftNavBtnClick}/>
+                <Button className="dash-left-nav-btn" text="Gerenciar Solicitações" onClick={handleLeftNavBtnClick}/>
+                <Button className="dash-left-nav-btn" text="Relatório de Presença" onClick={handleLeftNavBtnClick}/>
+            </Category>
         </ul>
     );
 }

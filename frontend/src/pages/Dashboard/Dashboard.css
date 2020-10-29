@@ -1,11 +1,6 @@
-.dash-nav {
-    min-height: 7vh;
-    background-color: red;
-}
-
 .dash-box {
-    min-height: 93vh;
-    background-image: url('../../assets/background.jpg');
+    min-height: 100vh;
+    /* background-image: url('../../assets/background.jpg'); */
 }
 
 .dash-left-panel {
@@ -17,4 +12,13 @@
 }
 
 .dash-center-panel {
+}
+
+.dash-left-nav-logo {
+    width: 50%;
+    margin: 3% auto;
+}
+
+.dash-left-nav-btn {
+    font-size: 1.6em;
 }
