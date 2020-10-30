@@ -36,10 +36,10 @@ routes.post('/promote/:username', SessionController.isAuth, privilegeMan.canChan
 
 //meetings
 routes.post('/meeting', SessionController.isAuth, MeetingController.store);
-routes.put('/meeting/change/:id', SessionController.isAuth, MeetingController.update);
-routes.put('/meeting/:id', SessionController.isAuth, MeetingController.checkPresence);
+routes.put('/meeting/:id', SessionController.isAuth, MeetingController.update);
 routes.delete('/meeting/:id', SessionController.isAuth, MeetingController.destroy);
 routes.get('/meeting', SessionController.isAuth, MeetingController.show);
+routes.put('/meeting/:id', SessionController.isAuth, MeetingController.checkPresence);
 
 //fronts
 routes.post('/front', SessionController.isAuth, privilegeMan.canManageFront, FrontController.store);
