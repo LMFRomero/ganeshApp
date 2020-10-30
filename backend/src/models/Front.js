@@ -3,24 +3,22 @@ const mongoose = require('mongoose');
 const frontSchema = new mongoose.Schema ({
     name: {
         type: String,
-        unique: true,
         required: true
     },
     imgStr: {
-        type: String,
-        sparse: true,
-        unique: true
+        type: String
     },
     members: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        unique: true
+        ref: 'User'
     }],
     meetings: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Meeting',
-        unique: true
+        ref: 'Meeting'
     }],
+    deleted: {
+        type: Boolean
+    }
 });
 
 module.exports = mongoose.model('Front', frontSchema);

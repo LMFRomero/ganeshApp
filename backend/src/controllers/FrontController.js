@@ -12,7 +12,11 @@ module.exports = {
         if (!req.body || !req.body.name)
             return res.status(400).end();
 
-        let front = await SafeCreateObj(Front, { name: req.body.name });
+        let front = await SafeFindOne(Front, { name: req.body.name });
+        if (front)
+            return res.status(400).end();
+
+        front = await SafeCreateObj(Front, { name: req.body.name, deleted: false });
         if (!front)
             return res.status(500).end();
         
@@ -30,7 +34,11 @@ module.exports = {
         if (!front)
             return res.status(404).end();
 
-        for (let i = 0; i < front.members.length; i++) {
+        if (front.deleted)
+            return res.status(200).end();
+
+        let size = front.members.length;
+        for (let i = 0; i < size; i++) {
             let userId = front.members[i];
             let user = await SafeFindById(User, userId);
             if (!user)
@@ -44,12 +52,18 @@ module.exports = {
                 await user.save();
             } catch (error) {
                 console.log(error);
+                return res.status(500).end();
             }
         }
 
-        let ans = await SafeDeleteOne(Front, { name: req.params.frontName });
-        if (!ans)
-            return res.status(404).end();
+        front.deleted = true;
+
+        try {
+            await front.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
         
         return res.status(200).end();
     },
