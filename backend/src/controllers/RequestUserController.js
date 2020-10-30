@@ -7,9 +7,6 @@ const { setGlobalRole } = require('../services/privilege');
 
 module.exports = {
     async store (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
-
         let newEmail = (req.body.email).toString();
         let password = (req.body.password).toString();
         let collegeID = parseInt(req.body.collegeID);
