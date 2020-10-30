@@ -2,6 +2,7 @@ const redis = require('redis');
 const redisClient = redis.createClient();
 const Meeting = require('../models/Meeting');
 const User = require('../models/User');
+const Front = require('../models/Front');
 const transporter = require('../services/nodemailer-auth');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
@@ -11,50 +12,169 @@ const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, 
 module.exports = {
     //this function will store new Meetings into the database
     async store (req, res) {
-
         //verify if there is a body and if there is a session assigned to that request
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
             return res.status(401).end();
-        }
 
         const passportUser = req.session.passport.user;
         
         //find the user that will be defined as creator of the meeting request
         const user = await SafeFindById(User, passportUser.id);
-
-        if (!user) {
+        if (!user)
             return res.status(401).end();
-        }
 
         //get the attributes of the meeting from the front
         const { title, front, room } = req.body;
         const creator = user._id;
-        const date = new Date(req.body.date);
+        let date = req.body.date;
         const now = new Date();
-
+        
         //parse body params
-        if (Object.prototype.toString.call(date) !== '[object Date]') {
-            return res.status(400).end();
+        if (!title || !front || isNaN(room) || !date)
+            return res.status(400).json({ message: "Missing information"});
+        
+        try {
+                date = new Date(date);
+                if (Object.prototype.toString.call(date) !== "[object Date]" || date == "Invalid Date")
+                    return res.status(400).json({ meeting: "Invalid date" });
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: "Invalid date" });
         }
 
-        if (!title || !front || !abstract || isNaN(duration) || isNaN(room)) {
-            return res.status(400).end();
-        }
+        if (now > date)
+            return res.status(400).json({ message: "Date not allowed" });
+        
+        let front_obj = await SafeFindOne(Front, { name: front });
+        if (!front_obj)
+            return res.status(400).json({ message: "Invalid front" });
 
-        if (now > date) {
-            return res.status(400).json({ message: "Data Invalida" });
-        }
+        let tmp = await SafeFindOne(Meeting, { title: title });
+        if (tmp)
+            return res.status(400).json({ message: "Meeting already exists" });
 
-        // //create a meeting in database
-        let meeting = await SafeCreateObj(Meeting, {title, front, room, date, creator, "members": [] });
-
-        if (!meeting) {
+        // create a meeting in database
+        let meeting = await SafeCreateObj(Meeting, {title: title, front: front_obj._id, room: room, date: date, creator: creator });
+        if (!meeting)
+            return res.status(500).end();
+            
+        front_obj.meetings.push(meeting._id);
+        
+        try {
+            await front_obj.save()
+        } catch (error) {
+            console.log(error)
             return res.status(500).end();
         }
 
         return res.status(200).end();
     },
     
+    async update (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
+        if (!req.body || !req.params.id)
+            return res.status(400).end();
+
+        const { title, front, room } = req.body;
+        let date = req.body.date;
+
+        if (!title || !front || !date || isNaN (room))
+            return res.status(400).json({ message: "Missing information" });
+
+        try {
+            date = new Date(date);
+            if (Object.prototype.toString.call(date) !== "[object Date]" || date == "Invalid Date")
+                return res.status(400).json({ meeting: "Invalid date" });
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: "Invalid date" });
+        }
+
+        let meeting = await SafeFindById(Meeting, req.params.id);
+        if (!meeting)
+            return res.status(404).json({ message: "Meeting not found" });
+
+        let nextFront = await SafeFindOne(Front, { name: front });
+        if (!nextFront)
+            return res.status(404).json({ message: "New front not found" });
+
+        let previousFront = await SafeFindById(Front, meeting.front);
+        if (!previousFront)
+            return res.status(404).json({ message: "Previous front not found" });
+
+        let index = previousFront.meetings.indexOf(meeting._id);
+        if (index > -1)
+            previousFront.meetings.splice(index, 1);
+
+        nextFront.meetings.push(meeting._id);
+
+        meeting.title = title;
+        meeting.date = date;
+        meeting.room = room;
+        meeting.front = nextFront._id;
+
+        try {
+            await meeting.save();
+            await nextFront.save();
+            await previousFront.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
+
+        return res.status(200).end();
+    },
+
+    async destroy (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
+        if (!req.params.id)
+            return res.status(400).end();
+
+        let meeting = await SafeFindById(Meeting, req.params.id);
+        if (!meeting)
+            return res.status(404).end();
+
+        let size = meeting.members.length;
+        for (let i = 0; i < size; i++) {
+            let user = await SafeFindById(User, meeting.members[i]);
+            if (!user)
+                continue;
+
+            let index = user.meetings.indexOf(meeting._id);
+            if (index > -1)
+                user.meetings.splice(index, 1);
+
+            try {
+                await user.save();
+            } catch (error) {
+                console.log(error);
+                return res.status(500).end();
+            }
+        }
+
+        let front = await SafeFindById(Front, meeting.front);
+        if (!front)
+            return res.status(404).end();
+
+        let index = front.meetings.indexOf(meeting._id);
+        if (index > -1)
+            front.meetings.splice(index, 1);
+
+        try {
+            await front.save();
+            await SafeDeleteOne(Meeting, { _id: meeting._id });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
+        
+        return res.status(200).end();
+    },
+
     async checkPresence (req, res) {
         //this function set presence of a member in a given meeting
         if (!req.session || !req.session.passaport || !req.session.passaport.user) {
@@ -105,40 +225,7 @@ module.exports = {
         return res.status(200).end();
     },
 
-    async destroy (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
-            return res.status(401).end();
-        }
 
-        if (!req.params.id) {
-            return res.status(400).end();
-        }
-
-        await SafeDeleteOne(Meeting, { "_id": req.params.id});
-        
-        return res.status(200).end();
-    },
-
-    async update (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
-            return res.status(401).end();
-        }
-
-        const { title, front} = req.body;
-        const date = new Date(req.body.date);
-
-        if (!req.params.id || !title || !front) {
-            return res.status(400).end();
-        }
-
-        if (isNaN(room)) return res.status(400).end();
-
-        if (Object.prototype.toString.call(date) !== '[object Date]') return res.status(400).end();
-
-        await SafeUpdateOne(Meeting, { "_id": req.params.id }, { $set: { title, room, front, date} });
-
-        return res.status(200).end();
-    },
 
     async show (req, res) {
         const now = new Date();

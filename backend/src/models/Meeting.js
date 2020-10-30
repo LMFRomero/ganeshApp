@@ -2,7 +2,10 @@ const { mongo } = require('mongoose');
 const mongoose = require('mongoose');
 
 const meetingSchema = new mongoose.Schema({
-    title: String,
+    title: {
+        type: String,
+        required: true
+    },
     date: Date,
     room: Number,
     front: {
@@ -15,8 +18,7 @@ const meetingSchema = new mongoose.Schema({
     },
     members: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        unique: true
+        ref: 'User'
     }]
 });
 
