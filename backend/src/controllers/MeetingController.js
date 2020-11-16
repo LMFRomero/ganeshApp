@@ -56,7 +56,7 @@ module.exports = {
             return res.status(400).json({ message: "Meeting already exists" });
 
         // create a meeting in database
-        let meeting = await SafeCreateObj(Meeting, {title: title, front: front_obj._id, room: room, date: date, creator: creator, duration: duration });
+        let meeting = await SafeCreateObj(Meeting, {title: title, front: front_obj._id, room: room, frequencyCode: -1, date: date, creator: creator, duration: duration });
         if (!meeting)
             return res.status(500).end();
             
@@ -253,13 +253,9 @@ module.exports = {
             if (!meeting)
                 return res.status(400).end();
 
-            console.log(req.body.name)
-
             const user = await SafeFindOne(User, { name: req.body.name });
             if (!user)
                 return res.status(400).end();
-
-            console.log(1)
 
             meeting.members.push(user._id);
             user.meetings.push(meeting._id);
@@ -283,9 +279,13 @@ module.exports = {
         if (!req.params || !req.params.id)
             return res.status(400).end();
 
+        let meeting = await SafeFindById(Meeting, req.params.id);
+        if (!meeting)
+            return res.status(404).end();
+
         let code = getRandomInt(9000)+1000;
         //TODO: while true until unused code
-        frequencyClient.exists(code, (err, reply) => {
+        frequencyClient.exists(code, async (err, reply) => {
             if (err) {
                 console.log(err);
                 return res.status(500).end();
@@ -294,6 +294,16 @@ module.exports = {
             if (!reply) {
                 frequencyClient.set(code, req.params.id);
                 frequencyClient.expire(code, 60 * 60 * 12);
+
+                meeting.frequencyCode = code;
+
+                try {
+                    await meeting.save();
+                } catch (error) {
+                    console.log(error);
+                    return res.status(500).end();
+                }
+
                 return res.status(200).end();
             }
 
