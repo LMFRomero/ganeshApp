@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const bCrypt = require('../services/hashes');
 const session = require('express-session');
-const redisStore = require('../services/redis-store');
+const sessionStore = require('../services/redis-store');
 const express = require('express');
 
 const passport = require('passport');

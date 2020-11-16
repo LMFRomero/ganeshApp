@@ -1,5 +1,4 @@
-const redis = require('redis');
-const redisClient = redis.createClient();
+const { frequencyClient } = require('../services/redis-store');
 const Meeting = require('../models/Meeting');
 const User = require('../models/User');
 const Front = require('../models/Front');
@@ -7,7 +6,9 @@ const transporter = require('../services/nodemailer-auth');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
 
-
+function getRandomInt (max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
 
 module.exports = {
     //this function will store new Meetings into the database
@@ -24,19 +25,20 @@ module.exports = {
             return res.status(401).end();
 
         //get the attributes of the meeting from the front
-        const { title, front, room } = req.body;
+        const { title, front, room, duration } = req.body;
         const creator = user._id;
         let date = req.body.date;
-        const now = new Date();
+        let now = new Date();
+        now.setHours(now.getHours()-3);
         
         //parse body params
-        if (!title || !front || isNaN(room) || !date)
+        if (!title || !front || isNaN(room) || !date || isNaN(duration))
             return res.status(400).json({ message: "Missing information"});
         
         try {
-                date = new Date(date);
-                if (Object.prototype.toString.call(date) !== "[object Date]" || date == "Invalid Date")
-                    return res.status(400).json({ meeting: "Invalid date" });
+            date = new Date(date);
+            if (Object.prototype.toString.call(date) !== "[object Date]" || date == "Invalid Date")
+                return res.status(400).json({ meeting: "Invalid date" });
         } catch (error) {
             console.log(error);
             return res.status(400).json({ message: "Invalid date" });
@@ -54,7 +56,7 @@ module.exports = {
             return res.status(400).json({ message: "Meeting already exists" });
 
         // create a meeting in database
-        let meeting = await SafeCreateObj(Meeting, {title: title, front: front_obj._id, room: room, date: date, creator: creator });
+        let meeting = await SafeCreateObj(Meeting, {title: title, front: front_obj._id, room: room, date: date, creator: creator, duration: duration });
         if (!meeting)
             return res.status(500).end();
             
@@ -77,10 +79,10 @@ module.exports = {
         if (!req.body || !req.params.id)
             return res.status(400).end();
 
-        const { title, front, room } = req.body;
+        const { title, front, room, duration } = req.body;
         let date = req.body.date;
 
-        if (!title || !front || !date || isNaN (room))
+        if (!title || !front || !date || isNaN(room) || isNaN(duration))
             return res.status(400).json({ message: "Missing information" });
 
         try {
@@ -92,33 +94,46 @@ module.exports = {
             return res.status(400).json({ message: "Invalid date" });
         }
 
+        let now = new Date();
+        now.setHours(now.getHours()-3);
+        if (now > date)
+            return res.status(400).json({ message: "Date not allowed" });
+
+
         let meeting = await SafeFindById(Meeting, req.params.id);
         if (!meeting)
             return res.status(404).json({ message: "Meeting not found" });
-
-        let nextFront = await SafeFindOne(Front, { name: front });
-        if (!nextFront)
-            return res.status(404).json({ message: "New front not found" });
 
         let previousFront = await SafeFindById(Front, meeting.front);
         if (!previousFront)
             return res.status(404).json({ message: "Previous front not found" });
 
-        let index = previousFront.meetings.indexOf(meeting._id);
-        if (index > -1)
-            previousFront.meetings.splice(index, 1);
+        let different = (previousFront.name != front);
+        let nextFront = null;
+        if (different) {
+            nextFront = await SafeFindOne(Front, { name: front });
+            if (!nextFront)
+                return res.status(404).json({ message: "New front not found" });
 
-        nextFront.meetings.push(meeting._id);
+            let index = previousFront.meetings.indexOf(meeting._id);
+            if (index > -1)
+                previousFront.meetings.splice(index, 1);
+    
+            nextFront.meetings.push(meeting._id);
+            meeting.front = nextFront._id;
+        }
 
         meeting.title = title;
         meeting.date = date;
         meeting.room = room;
-        meeting.front = nextFront._id;
+        meeting.duration = duration;
 
         try {
             await meeting.save();
-            await nextFront.save();
-            await previousFront.save();
+            if (different) {
+                await nextFront.save();
+                await previousFront.save();
+            }
         } catch (error) {
             console.log(error);
             return res.status(500).end();
@@ -175,62 +190,117 @@ module.exports = {
         return res.status(200).end();
     },
 
-    async checkPresence (req, res) {
-        //this function set presence of a member in a given meeting
-        if (!req.session || !req.session.passaport || !req.session.passaport.user) {
-            return res.status(401).end();
-        }
-
-        //find whether the given meeting exists or not
-        const meeting = await SafeFindById(Meeting, req.params.id);
-
-        if (!meeting) {
-            return res.status(400).end();
-        }
-
-        //check if the presence can be set by comparing the dates (check if the meeting is taking place or note)
-        const now = new Date();
-        const meetingStart = new Date(meeting.date);
-        let meetingFinish = meetingStart;
-        meetingFinish.setHours(23);
-        meetingFinish.setMinutes(59);
-        meetingFinish.setSeconds(59);
-
-        if (now < meetingStart || now > meetingFinish) {
-            return res.status(400).end();
-        }
-
-        const user = await SafeFindById(User, session.passport.user.id);
-
-        if (!user) {
-            return res.status(401).end();
-        }
-
-        meeting.members.push(user._id);
-        try {
-            await meeting.save();
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
-        }
-
-        user.meetings.push(req.params.id);
-        try {
-            await user.save();
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
-        }
-
-        return res.status(200).end();
-    },
-
-
-
     async show (req, res) {
         const now = new Date();
         const objects = await SafeFind(Meeting, { date: { $gt: now } });
 
         return res.status(200).json(objects);
     },
+
+    async checkTime (req, res, next) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
+        if (!req.params || !req.params.code)
+            return res.status(400);
+
+        frequencyClient.get(req.params.code, async (err, reply) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).end();
+            }
+
+            if (!reply)
+                return res.status(404).end();
+
+            let now = new Date();
+            now.setHours(now.getHours()-3);
+
+            const meeting = await SafeFindById(Meeting, reply);
+            if (!meeting)
+                return res.status(404).end();
+
+            const start = new Date(meeting.date);
+            const finish = new Date(meeting.date);
+            finish.setHours(finish.getHours()+meeting.duration);
+
+            if (now > finish || now < start)
+                return res.status(400).end();
+
+            next();
+        });
+        
+        return res.status(400).end();
+    },
+
+    async checkMemberFrequency (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
+        if (!req.params || !req.params.code || !req.body || !req.body.name)
+            return res.status(400).end();
+            
+        frequencyClient.get(req.params.code, async (err, reply) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).end();
+            }
+
+            if (!reply)
+                return res.status(404).end();
+
+            const meeting = await SafeFindById(Meeting, reply);
+            if (!meeting)
+                return res.status(400).end();
+
+            console.log(req.body.name)
+
+            const user = await SafeFindOne(User, { name: req.body.name });
+            if (!user)
+                return res.status(400).end();
+
+            console.log(1)
+
+            meeting.members.push(user._id);
+            user.meetings.push(meeting._id);
+
+            try {
+                await user.save();
+                await meeting.save();
+            } catch (error) {
+                console.log(error);
+                return res.status(500).end();
+            }
+
+            return res.status(200).end();
+        });
+    },
+
+    async generateMeetingCode (req, res) {
+        if (!req.session || !req.session.passport || !req.session.passport.user)
+            return res.status(401).end();
+
+        if (!req.params || !req.params.id)
+            return res.status(400).end();
+
+        let code = getRandomInt(9000)+1000;
+        //TODO: while true until unused code
+        frequencyClient.exists(code, (err, reply) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).end();
+            }
+
+            if (!reply) {
+                frequencyClient.set(code, req.params.id);
+                frequencyClient.expire(code, 60 * 60 * 12);
+                return res.status(200).end();
+            }
+
+            else {
+                return res.status(500).end();
+            }
+        })
+
+    }
 }

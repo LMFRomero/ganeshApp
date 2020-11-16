@@ -8,6 +8,8 @@ const meetingSchema = new mongoose.Schema({
     },
     date: Date,
     room: Number,
+    duration: Number,
+    frequencyCode: Number,
     front: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Front'

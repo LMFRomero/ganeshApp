@@ -39,7 +39,9 @@ routes.post('/meeting', SessionController.isAuth, MeetingController.store);
 routes.put('/meeting/:id', SessionController.isAuth, MeetingController.update);
 routes.delete('/meeting/:id', SessionController.isAuth, MeetingController.destroy);
 routes.get('/meeting', SessionController.isAuth, MeetingController.show);
-routes.put('/meeting/:id', SessionController.isAuth, MeetingController.checkPresence);
+routes.post('/meeting/generate/:id', SessionController.isAuth, MeetingController.generateMeetingCode)
+routes.post('/meeting/:code', SessionController.isAuth, MeetingController.checkTime, MeetingController.checkMemberFrequency);
+
 
 //fronts
 routes.post('/front', SessionController.isAuth, privilegeMan.canManageFront, FrontController.store);
