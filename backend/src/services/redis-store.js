@@ -1,13 +1,36 @@
 const session = require('express-session');
-const redisStore = require('connect-redis')(session);
 const redis = require('redis');
+const redisStore = require('connect-redis')(session);
 
-const redisClient = redis.createClient();
+const sessionClient = redis.createClient({
+    db: 0,
+    host: 'redis',
+    port: '6379'
+});
 
-redisClient.on('error', (err) => {
+sessionClient.on('connect', () => {
+    console.log('Session connected!');
+});
+
+sessionClient.on('error', (err) => {
     console.log('Redis error: ', err);
 });
 
-const store = new redisStore({ host: 'localhost', port: 6789, client: redisClient, ttl: 3600 });
+const frequencyClient = redis.createClient({
+    db: 1,
+    host: 'redis',
+    port: '6379'
+});
 
-module.exports = store;
+frequencyClient.on('connect', () => {
+    console.log('Frequency connected!');
+});
+
+frequencyClient.on('error', (err) => {
+    console.log('Redis error: ', err);
+});
+
+module.exports = {
+    sessionStore: new redisStore({ client: sessionClient, ttl: 3600 }),
+    frequencyClient
+}

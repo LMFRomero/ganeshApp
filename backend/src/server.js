@@ -5,8 +5,7 @@ const routes = require('./routes');
 const timeout = require('connect-timeout');
 
 const session = require('express-session');
-const myStore = require('./services/redis-store');
-const redis = require('redis');
+const redis = require('./services/redis-store');
 
 const passport = require('passport');
 const passaportConfig = require('./services/passaport');
@@ -36,7 +35,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {secure: false, httpOnly: true, sameSite: 'none', maxAge: 3600000 }, //TODO: change secure to true
     secret: `${process.env.REDIS_SECRET}`,
-    store: myStore,
+    store: redis.sessionStore,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
