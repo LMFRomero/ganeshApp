@@ -76,12 +76,15 @@ module.exports = {
         if (!user)
             return res.status(401).end();
 
-        if (user.roleInt > 21)
+        if (user.roleInt > 30)
             return res.status(403).end();
 
         let changedUser = await SafeFindOne(User, { username: req.params.username} );
         if (!changedUser)
             return res.status(400).end();
+
+        if (user.roleInt > 20 && changedUser.roleInt < 30)
+            return res.status(403).end();
 
         if (changedUser.roleInt <= user.roleInt)
             return res.status(403).end();
