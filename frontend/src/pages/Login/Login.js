@@ -27,7 +27,7 @@ function Login(){
               </Button>
 
               <Typography align="center">
-                <RouterLink>Esqueceu a senha? Clique aqui.</RouterLink>
+                <RouterLink to="/recuperar-senha">Esqueceu a senha? Clique aqui.</RouterLink>
               </Typography>
 
               <OrDivider/>

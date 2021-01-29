@@ -1,12 +1,14 @@
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, useParams} from 'react-router-dom'
 
 
 /* Rotas - Unauthenticated User*/
 import Home from './pages/Home/Home'
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword'
 
 function AppRoutes() {
+
     return(
       <main className="MainComponent">
           <Switch>
@@ -15,6 +17,9 @@ function AppRoutes() {
             <Route exact path="/" component={Home}/>
             <Route path="/fazer-login" component={Login}/>
             <Route path="/criar-conta" component={Register}/>
+            <Route path="/recuperar-senha/:recoverToken" component={ForgotPassword}/>
+            <Route path="/recuperar-senha" component={ForgotPassword}/>
+            
 
 
             {/* Página 404 */}

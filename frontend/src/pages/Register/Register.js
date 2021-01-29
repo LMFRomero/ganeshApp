@@ -14,8 +14,8 @@ function Register(){
           <Grid container spacing={6} justify="center">
             
             <Grid className="RegisterSection" item xs={12} sm={6} md={4}>
-              <Typography variant="h6">
-                Dados Pessoais
+              <Typography variant="h5">
+                <strong>Dados Pessoais</strong>
               </Typography>
 
               <TextField variant="outlined" fullWidth label="Nome completo" required/>
@@ -51,8 +51,8 @@ function Register(){
 
 
             <Grid className="RegisterSection" item xs={12} sm={6} md={4}>
-              <Typography variant="h6">
-                Dados de Acesso
+              <Typography variant="h5">
+                <strong>Dados de Acesso</strong>
               </Typography>
 
               <TextField variant="outlined" fullWidth label="E-mail" required/>
@@ -61,7 +61,7 @@ function Register(){
 
               <TextField variant="outlined" fullWidth label="Confirmar senha" type="password" required/>
               
-              <FormControlLabel label="Pretendo participar do PinG 2021" 
+              <FormControlLabel label="Pretendo participar do PInG 2021" 
                 control={
                   <Checkbox color="primary" name="PingParticipant" />
               }/>
