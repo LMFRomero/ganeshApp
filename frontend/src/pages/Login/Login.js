@@ -13,7 +13,7 @@ function Login(){
         <Grid container spacing={6} justify="center">
           <Grid item xs={12}>
 
-            <form>
+            <form classname="LoginForm">
               <Typography variant="h5" align="center">
                 <strong>Entrar no Ganesh App</strong>
               </Typography>

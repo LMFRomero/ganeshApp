@@ -1,0 +1,24 @@
+.RegisterPage {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding-top: 1.6em;
+    padding-bottom: 1.6em;
+}
+
+.RegisterPage .RegisterSection > * {
+    margin-top: 0.6em;
+    margin-bottom: 0;
+}
+
+.RegisterPage .RegisterSection > *:first-child {
+    margin-top: 0;
+}
+
+.RegisterPage .BtnEntrar {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 300px;
+    
+}
