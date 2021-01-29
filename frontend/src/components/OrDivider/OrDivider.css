@@ -1,0 +1,25 @@
+.OrDivider {
+    display: block;
+    position: relative;
+    max-width: 3.6em;
+    margin: 0.6em auto !important;
+    background-color: #fafafa;
+}
+
+.OrDivider .BackLine {
+    display: block;
+    position: absolute;
+    top: 50%;
+    width:  150px;
+    height: 1px;
+    background-color: #ccc;
+    z-index: -1;
+}
+
+.OrDivider .BackLine.LeftLine {
+    left:50%;
+}
+
+.OrDivider .BackLine.RightLine {
+    right:50%;
+}

@@ -1,0 +1,22 @@
+.HomePage {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.HomePage .HomeLogo img { 
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    max-height: 300px;
+}
+
+.HomePage .HomeWelcome .BtnEntrar,
+.HomePage .HomeWelcome .BtnCadastrar {
+    width: 300px;
+}
+
+.HomePage .HomeWelcome .BtnEntrar { 
+    margin-top: 1.2em;
+}
+

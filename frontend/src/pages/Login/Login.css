@@ -1,0 +1,19 @@
+.LoginPage {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.LoginPage form {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.LoginPage form > * {
+    margin-top: 0.6em;
+    margin-bottom: 0;
+}
+
+.LoginPage form > *:first-child {
+    margin-top: 0;
+}
