@@ -11,12 +11,12 @@
     max-height: 300px;
 }
 
-.HomePage .HomeWelcome .BtnEntrar,
-.HomePage .HomeWelcome .BtnCadastrar {
+.HomePage .HomeWelcome .BtnLogin,
+.HomePage .HomeWelcome .BtnRegister {
     width: 300px;
 }
 
-.HomePage .HomeWelcome .BtnEntrar { 
+.HomePage .HomeWelcome .BtnLogin { 
     margin-top: 1.2em;
 }
 

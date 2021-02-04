@@ -15,7 +15,7 @@ function AppRoutes() {
 
             {/* Rotas - Unauthenticated User*/}
             <Route exact path="/" component={Home}/>
-            <Route path="/fazer-login" component={Login}/>
+            <Route path="/login" component={Login}/>
             <Route path="/criar-conta" component={Register}/>
             <Route path="/recuperar-senha/:recoverToken" component={ForgotPassword}/>
             <Route path="/recuperar-senha" component={ForgotPassword}/>

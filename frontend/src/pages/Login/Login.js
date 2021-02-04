@@ -11,9 +11,10 @@ function Login(){
     <Box className="LoginPage" flexGrow={1}>
       <Container fixed>
         <Grid container spacing={6} justify="center">
-          <Grid item xs={12}>
 
+          <Grid item xs={12}>
             <form classname="LoginForm">
+              
               <Typography variant="h5" align="center">
                 <strong>Entrar no Ganesh App</strong>
               </Typography>
@@ -36,10 +37,10 @@ function Login(){
                 component={RouterLink} to="/criar-conta">
                 <strong>Criar nova conta</strong>
               </Button>
-
+              
             </form>
-
           </Grid>
+
         </Grid>
       </Container>
     </Box>

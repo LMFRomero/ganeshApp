@@ -19,7 +19,6 @@ function Home(){
           
           {/* Form Selection Buttons */}
           <Grid item xs={12} md={5} justify="center" className="HomeWelcome" >
-            
             <Typography variant="h5" align="center">
               <strong>Bem vindo ao Ganesh App!</strong>
             </Typography>
@@ -29,8 +28,8 @@ function Home(){
             </Typography>
 
             <Typography align="center">
-              <Button className="BtnEntrar" variant="contained" size="large" color="primary" 
-                component={RouterLink} to="/fazer-login">
+              <Button className="BtnLogin" variant="contained" size="large" color="primary" 
+                component={RouterLink} to="/login">
                 <strong>Entrar no sistema</strong>
               </Button>
             </Typography>
@@ -38,13 +37,13 @@ function Home(){
             <OrDivider/>
 
             <Typography align="center">
-              <Button className="BtnCadastrar" variant="contained" size="large" color="secondary"
+              <Button className="BtnRegister" variant="contained" size="large" color="secondary"
                 component={RouterLink} to="/criar-conta">
                 <strong>Criar nova conta</strong>
               </Button>
             </Typography>
-
           </Grid>
+          
         </Grid>
       </Container>
     </Box>

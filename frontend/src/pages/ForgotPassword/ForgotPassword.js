@@ -54,8 +54,8 @@ function ForgotPassword(){
     <Box className="ForgotPasswordPage" flexGrow={1}>
       <Container fixed>
         <Grid container spacing={6} justify="center">
-          <Grid item xs={12} md={4}>
 
+          <Grid item xs={12} md={4}>
             <form classname="ForgotPasswordForm">
               
               {/* Show the form based on the URL parameter */}
@@ -64,12 +64,13 @@ function ForgotPassword(){
               <OrDivider/>
 
               <Button variant="contained" size="large" fullWidth color="primary"
-                component={RouterLink} to="/fazer-login">
+                component={RouterLink} to="/login">
                 <strong>Voltar ao login</strong>
               </Button>
-            </form>
 
+            </form>
           </Grid>
+
         </Grid>
       </Container>
     </Box>

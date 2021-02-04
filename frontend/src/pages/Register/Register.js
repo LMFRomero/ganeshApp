@@ -23,8 +23,8 @@ function Register(){
               <TextField variant="outlined" fullWidth label="Apelido ou Primeiro Nome" required/>
               
               <FormControl variant="outlined" fullWidth>
-                <InputLabel id="LabelCurso">Curso atual</InputLabel>
-                <Select labelId="LabelCurso" label="Curso atual">
+                <InputLabel id="LabelCourse">Curso atual</InputLabel>
+                <Select labelId="LabelCourse" label="Curso atual">
                   <MenuItem value="BCC">Ciências da Computação </MenuItem>
                   <MenuItem value="EngComp">Engenharia da Computação</MenuItem>
                   <MenuItem value="BSI">Sistemas de Informação</MenuItem>
@@ -34,8 +34,8 @@ function Register(){
               </FormControl>
 
               <FormControl variant="outlined" fullWidth>
-                <InputLabel id="LabelCurso">Instituição</InputLabel>
-                <Select labelId="LabelCurso" label="Instituição">
+                <InputLabel id="LabelInstitute">Instituição</InputLabel>
+                <Select labelId="LabelInstitute" label="Instituição">
                   <MenuItem value="ICMC">USP - ICMC</MenuItem>
                   <MenuItem value="EESC">USP - EESC</MenuItem>
                   <MenuItem value="IFSC">USP - IFSC</MenuItem>
@@ -49,7 +49,6 @@ function Register(){
               <TextField variant="outlined" fullWidth label="Número USP"/>
             </Grid>
 
-
             <Grid className="RegisterSection" item xs={12} sm={6} md={4}>
               <Typography variant="h5">
                 <strong>Dados de Acesso</strong>
@@ -61,7 +60,7 @@ function Register(){
 
               <TextField variant="outlined" fullWidth label="Confirmar senha" type="password" required/>
               
-              <FormControlLabel label="Pretendo participar do PInG 2021" 
+              <FormControlLabel label="Pretendo participar do Ping 2021" 
                 control={
                   <Checkbox color="primary" name="PingParticipant" />
               }/>
@@ -69,14 +68,13 @@ function Register(){
               <Button variant="contained" size="large" fullWidth color="secondary">
                 <strong>Criar Conta</strong>
               </Button>
-
             </Grid>
 
             <Grid item xs={12}>
               <OrDivider/>
 
-              <Button className="BtnEntrar" variant="contained" size="large" fullWidth color="primary"
-                component={RouterLink} to="/fazer-login">
+              <Button className="BtnLogin" variant="contained" size="large" fullWidth color="primary"
+                component={RouterLink} to="/login">
                 <strong>Já possuo uma conta</strong>
               </Button>
             </Grid>
