@@ -1,7 +1,9 @@
 import { Box } from '@material-ui/core'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
+/* General Components */
 import Header from './components/Header/Header'
+import PageNotFound from './pages/PageNotFound/PageNotFound'
 
 /* Routes - Unauthenticated User*/
 import Home from './pages/Home/Home'
@@ -42,7 +44,7 @@ function AppRoutes() {
             <PrivateRoute path="/teste" component={Register}/>
 
             {/* Página 404 */}
-            {/* <Route path="*"/> */}
+            <Route path="*" component={PageNotFound}/>
           </Switch>
       </Box>
     )
