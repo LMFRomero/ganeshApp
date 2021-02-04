@@ -7,8 +7,8 @@
 
 .App a { text-decoration: none; }
 
-/* Main */
-.MainComponent {
+/* Router Component */
+.RouterComponent {
     display: flex;
     flex-direction: column;
     flex-grow: 1; /*Force full-width*/

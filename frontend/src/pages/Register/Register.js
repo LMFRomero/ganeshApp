@@ -8,7 +8,7 @@ import OrDivider from '../../components/OrDivider/OrDivider'
 
 function Register(){
   return(
-    <Box className="RegisterPage" flexGrow={1}>
+    <Box className="RegisterPage" flexGrow={1} component="main">
       <Container fixed>
         <form classname="RegisterForm">
           <Grid container spacing={6} justify="center">

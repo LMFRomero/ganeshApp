@@ -51,7 +51,7 @@ function ForgotPassword(){
   }
 
   return(
-    <Box className="ForgotPasswordPage" flexGrow={1}>
+    <Box className="ForgotPasswordPage" flexGrow={1} component="main">
       <Container fixed>
         <Grid container spacing={6} justify="center">
 
