@@ -13,3 +13,13 @@
     flex-direction: column;
     flex-grow: 1; /*Force full-width*/
 }
+
+.RouterComponent.HaveMenu {
+    padding-left: 240px;
+}
+
+@media screen and (max-width: 600px) {
+    .RouterComponent.HaveMenu {
+        padding-left: 0;
+    }
+}

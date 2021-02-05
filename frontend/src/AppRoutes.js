@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 
 /* General Components */
 import Header from './components/Header/Header'
@@ -30,24 +30,28 @@ function PrivateRoute({component: RenderComponent, ...rest}) {
 
 function AppRoutes() {
 
-    return(
-      <Box className="RouterComponent">
-          <Switch>
+  // List of all private paths to add the HaveMenu class in <Box>
+  const privatePaths = ['/teste']
+  const currentLocation = useLocation();
+  
+  return(
+    <Box className={`RouterComponent ${ privatePaths.find((v) => v == currentLocation.pathname) ? "HaveMenu" : ""}`}>
+        <Switch>
 
-            {/* Rotas - Unauthenticated User*/}
-            <Route exact path="/" component={Home}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/criar-conta" component={Register}/>
-            <Route path="/recuperar-senha/:recoverToken" component={ForgotPassword}/>
-            <Route path="/recuperar-senha" component={ForgotPassword}/>
-            
-            <PrivateRoute path="/teste" component={Register}/>
+          {/* Rotas - Unauthenticated User*/}
+          <Route exact path="/" component={Home}/>
+          <Route path="/login"  component={Login}/>
+          <Route path="/criar-conta" component={Register}/>
+          <Route path="/recuperar-senha/:recoverToken" component={ForgotPassword}/>
+          <Route path="/recuperar-senha" component={ForgotPassword}/>
+          
+          <PrivateRoute path="/teste" component={Register}/>
 
-            {/* Página 404 */}
-            <Route path="*" component={PageNotFound}/>
-          </Switch>
-      </Box>
-    )
-  }
+          {/* Página 404 */}
+          <Route path="*" component={PageNotFound}/>
+        </Switch>
+    </Box>
+  )
+}
   
 export default AppRoutes

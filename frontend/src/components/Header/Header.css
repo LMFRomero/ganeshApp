@@ -1,0 +1,10 @@
+.SideMenu > .MuiDrawer-paperAnchorLeft {
+    width: 240px;
+}
+
+.SideMenu .DrawerContent img {
+    max-width: 200px;
+    display: block;
+    margin: auto;
+    padding: 16px;
+}
