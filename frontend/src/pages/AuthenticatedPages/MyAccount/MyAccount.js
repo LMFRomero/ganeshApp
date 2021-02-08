@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Button, Typography } from '@material-ui/core'
+import { Box, Container, Grid, Button, Typography, Table, TableBody, TableRow, TableCell } from '@material-ui/core'
 import { TextField, InputLabel, Select, MenuItem, FormControl, Checkbox, FormControlLabel } from '@material-ui/core'
 import './MyAccount.css'
 
@@ -62,13 +62,21 @@ function MyAccount(){
                 <strong>Informações da Conta</strong>
               </Typography>
               
-              <Typography>
-                  <strong>Situação da conta: </strong>  Registro aprovado. <br/>
-                  <strong>Título da conta:</strong>     Membro ativo
-              </Typography>
+              <Table size="small">
+                <TableBody>
+                  <TableRow>
+                      <TableCell padding="none"><strong>Situação da conta:</strong></TableCell>
+                      <TableCell>Cadastro aprovado</TableCell>
+                  </TableRow>
+                  <TableRow>
+                      <TableCell padding="none"><strong>Título da conta:</strong></TableCell>
+                      <TableCell>Membro ativo</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
             
               <Typography>
-              <Button variant="contained" size="large" fullWidth color="primary">
+              <Button variant="contained" size="medium" fullWidth color="primary">
                 <strong>Excluir cadastro</strong>
               </Button>
               </Typography>

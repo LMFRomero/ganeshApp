@@ -15,9 +15,9 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GaneshLogo from '../../assets/images/GaneshLogo.png'
 
 const menuItems = [
-    { text: "Timeline",     link: "/timeline",     icon: () => <ScheduleIcon/> },
-    { text: "Frentes",      link: "/frentes",      icon: () => <GroupIcon/> },
+    { text: "Reuniões",     link: "/reunioes",     icon: () => <ScheduleIcon/> },
     { text: "Comunicados",  link: "/comunicados",  icon: () => <AnnouncementIcon/> },
+    { text: "Frentes",      link: "/frentes",      icon: () => <GroupIcon/> },
     { text: "Minha Conta",  link: "/minha-conta",  icon: () => <PersonIcon/> },
     { text: "Sair",         link: "/logout",       icon: () => <ExitToAppIcon/> },
 ]

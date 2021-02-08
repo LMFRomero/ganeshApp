@@ -1,6 +1,9 @@
 import { Box, Container, Grid, Button, Typography, Card, CardHeader, Avatar, CardContent, Divider, Table, TableBody, TableRow, TableCell, CardActions } from '@material-ui/core'
 import './MeetingCard.css'
 
+import AddSharpIcon from '@material-ui/icons/AddSharp';
+import CheckSharpIcon from '@material-ui/icons/CheckSharp';
+
 function MeetingCard(props){
     return(
       <Card className="MeetingCard" elevation={2}>
@@ -36,11 +39,11 @@ function MeetingCard(props){
       </CardContent>
 
       <CardActions >
-        <Button color="secondary" variant="outlined">
+        <Button color="secondary" variant="contained" size="medium" startIcon={<CheckSharpIcon/>}>
             Marcar Presença
         </Button>
-        <Button color="primary" variant="contained">
-            Mais Informações
+        <Button color="primary" variant="contained" size="medium" startIcon={<AddSharpIcon/>}>
+            Detalhes
         </Button>
       </CardActions>
 

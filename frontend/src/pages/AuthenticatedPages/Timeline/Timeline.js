@@ -10,10 +10,10 @@ function Timeline(){
         <Container fixed>
             <Grid container spacing={3} justify="center">
   
-              <Grid item xs={12} sm={12} md={8}>
-                <Typography variant="subtitle1">
-                  <Button  size="small" variant="outlined" color="primary">Definir filtros</Button>
-                </Typography>
+              <Grid item container xs={12} sm={12} md={8} justify="flex-end">
+                <Button  size="small" variant="outlined" color="primary">Definir filtros</Button>
+                &nbsp;
+                <Button  size="small" variant="outlined" color="secondary">Criar Reunião</Button>
               </Grid>
 
               <Grid item xs={12} sm={12} md={8}>

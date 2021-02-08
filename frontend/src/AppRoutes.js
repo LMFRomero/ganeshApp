@@ -35,7 +35,7 @@ function PrivateRoute({component: RenderComponent, ...rest}) {
 function AppRoutes() {
 
   // List of all private paths to add the HaveMenu class in <Box>
-  const privatePaths = ['/timeline', '/minha-conta']
+  const privatePaths = ['/reunioes', '/comunicados', '/minha-conta']
   const currentLocation = useLocation();
   
   return(
@@ -50,7 +50,8 @@ function AppRoutes() {
           <Route path="/recuperar-senha" component={ForgotPassword}/>
           
           {/* Rotas - Authenticated User*/}
-          <PrivateRoute path="/timeline" component={Timeline}/>
+          <PrivateRoute path="/reunioes" component={Timeline}/>
+          <PrivateRoute path="/comunicados" component={Timeline}/>
           <PrivateRoute path="/minha-conta" component={MyAccount}/>
 
           {/* Página 404 */}
