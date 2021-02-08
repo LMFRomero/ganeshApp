@@ -1,0 +1,8 @@
+.MeetingCard {
+    /* border-top: solid 6px #00e676; Black-theme */
+    border-top: solid 6px #00a152; /*White-theme*/
+}
+
+.MeetingCard .MuiCardActions-root {
+    justify-content: end;
+}

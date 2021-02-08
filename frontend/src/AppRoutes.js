@@ -12,6 +12,7 @@ import Register from './pages/UnauthenticatedPages/Register/Register'
 import ForgotPassword from './pages/UnauthenticatedPages/ForgotPassword/ForgotPassword'
 
 /* Routes - Authenticated User*/
+import Timeline from './pages/AuthenticatedPages/Timeline/Timeline'
 import MyAccount from './pages/AuthenticatedPages/MyAccount/MyAccount'
 
 function PrivateRoute({component: RenderComponent, ...rest}) {
@@ -34,7 +35,7 @@ function PrivateRoute({component: RenderComponent, ...rest}) {
 function AppRoutes() {
 
   // List of all private paths to add the HaveMenu class in <Box>
-  const privatePaths = ['/minha-conta']
+  const privatePaths = ['/timeline', '/minha-conta']
   const currentLocation = useLocation();
   
   return(
@@ -49,6 +50,7 @@ function AppRoutes() {
           <Route path="/recuperar-senha" component={ForgotPassword}/>
           
           {/* Rotas - Authenticated User*/}
+          <PrivateRoute path="/timeline" component={Timeline}/>
           <PrivateRoute path="/minha-conta" component={MyAccount}/>
 
           {/* Página 404 */}
