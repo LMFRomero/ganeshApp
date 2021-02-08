@@ -4,7 +4,7 @@ import './ForgotPassword.css'
 
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
-import OrDivider from '../../components/OrDivider/OrDivider'
+import OrDivider from '../../../components/OrDivider/OrDivider'
 
 
 function ForgotPassword(){

@@ -4,7 +4,7 @@ import './Register.css'
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import OrDivider from '../../components/OrDivider/OrDivider'
+import OrDivider from '../../../components/OrDivider/OrDivider'
 
 function Register(){
   return(
@@ -13,7 +13,7 @@ function Register(){
         <form classname="RegisterForm">
           <Grid container spacing={6} justify="center">
             
-            <Grid className="RegisterSection" item xs={12} sm={6} md={4}>
+            <Grid className="FormSection" item xs={12} sm={6} md={4}>
               <Typography variant="h5">
                 <strong>Dados Pessoais</strong>
               </Typography>
@@ -49,7 +49,7 @@ function Register(){
               <TextField variant="outlined" fullWidth label="Número USP"/>
             </Grid>
 
-            <Grid className="RegisterSection" item xs={12} sm={6} md={4}>
+            <Grid className="FormSection" item xs={12} sm={6} md={4}>
               <Typography variant="h5">
                 <strong>Dados de Acesso</strong>
               </Typography>

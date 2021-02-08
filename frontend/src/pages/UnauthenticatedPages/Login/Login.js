@@ -4,7 +4,7 @@ import './Login.css'
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import OrDivider from '../../components/OrDivider/OrDivider'
+import OrDivider from '../../../components/OrDivider/OrDivider'
 
 function Login(){
   return(

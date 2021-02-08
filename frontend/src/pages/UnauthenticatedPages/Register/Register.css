@@ -6,15 +6,6 @@
     padding-bottom: 1.6em;
 }
 
-.RegisterPage .RegisterSection > * {
-    margin-top: 0.6em;
-    margin-bottom: 0;
-}
-
-.RegisterPage .RegisterSection > *:first-child {
-    margin-top: 0;
-}
-
 .RegisterPage .BtnLogin {
     display: flex;
     margin-left: auto;

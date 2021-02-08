@@ -3,8 +3,8 @@ import './Home.css'
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import GaneshLogo from '../../assets/images/GaneshLogo.png'
-import OrDivider from '../../components/OrDivider/OrDivider'
+import GaneshLogo from '../../../assets/images/GaneshLogo.png'
+import OrDivider from '../../../components/OrDivider/OrDivider'
 
 function Home(){
   return(
