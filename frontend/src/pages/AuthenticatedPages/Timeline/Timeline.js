@@ -1,6 +1,8 @@
 import { Box, Container, Grid, Button, Typography, Card, CardHeader, Avatar, CardContent, Divider } from '@material-ui/core'
 import './Timeline.css'
 
+import { Link as RouterLink } from 'react-router-dom';
+
 import AnnounceCard from '../../../components/AnnounceCard/AnnounceCard'
 import MeetingCard from '../../../components/MeetingCard/MeetingCard'
 
@@ -13,7 +15,11 @@ function Timeline(){
               <Grid item container xs={12} sm={12} md={8} justify="flex-end">
                 <Button  size="small" variant="outlined" color="primary">Definir filtros</Button>
                 &nbsp;
-                <Button  size="small" variant="outlined" color="secondary">Criar Reunião</Button>
+                <Button  size="small" variant="outlined" color="secondary" 
+                  component={RouterLink} to="/criar-reuniao">Criar Reunião</Button>
+                &nbsp;
+                <Button  size="small" variant="outlined" color="secondary"
+                  component={RouterLink} to="/criar-comunicado">Criar Comunicado</Button>
               </Grid>
 
               <Grid item xs={12} sm={12} md={8}>

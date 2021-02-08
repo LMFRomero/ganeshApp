@@ -14,6 +14,10 @@ import ForgotPassword from './pages/UnauthenticatedPages/ForgotPassword/ForgotPa
 /* Routes - Authenticated User*/
 import Timeline from './pages/AuthenticatedPages/Timeline/Timeline'
 import MyAccount from './pages/AuthenticatedPages/MyAccount/MyAccount'
+import RegisterMeeting from './pages/AuthenticatedPages/RegisterMeeting/RegisterMeeting'
+
+/* Routes - Coordinator Pages*/
+import RegisterAnnounce from './pages/CoordinatorPages/RegisterAnnounce/RegisterAnnounce'
 
 function PrivateRoute({component: RenderComponent, ...rest}) {
   const isAuthenticated = () => true
@@ -35,7 +39,7 @@ function PrivateRoute({component: RenderComponent, ...rest}) {
 function AppRoutes() {
 
   // List of all private paths to add the HaveMenu class in <Box>
-  const privatePaths = ['/reunioes', '/comunicados', '/minha-conta']
+  const privatePaths = ['/reunioes', '/comunicados', '/minha-conta', '/criar-reuniao', '/criar-comunicado']
   const currentLocation = useLocation();
   
   return(
@@ -51,8 +55,12 @@ function AppRoutes() {
           
           {/* Rotas - Authenticated User*/}
           <PrivateRoute path="/reunioes" component={Timeline}/>
-          <PrivateRoute path="/comunicados" component={Timeline}/>
-          <PrivateRoute path="/minha-conta" component={MyAccount}/>
+          <PrivateRoute path="/comunicados"   component={Timeline}/>
+          <PrivateRoute path="/minha-conta"   component={MyAccount}/>
+          <PrivateRoute path="/criar-reuniao" component={RegisterMeeting}/>
+
+          {/* Routes - Coordinator Pages*/}
+          <PrivateRoute path="/criar-comunicado" component={RegisterAnnounce}/>
 
           {/* Página 404 */}
           <Route path="*" component={PageNotFound}/>
