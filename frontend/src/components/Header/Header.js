@@ -15,11 +15,11 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GaneshLogo from '../../assets/images/GaneshLogo.png'
 
 const menuItems = [
-    { text: "Timeline",     link: "/timeline",  icon: () => <ScheduleIcon/> },
-    { text: "Frentes",      link: "/timeline",  icon: () => <GroupIcon/> },
-    { text: "Comunicados",  link: "/timeline",  icon: () => <AnnouncementIcon/> },
-    { text: "Minha Conta",  link: "/timeline",  icon: () => <PersonIcon/> },
-    { text: "Sair",         link: "/timeline",  icon: () => <ExitToAppIcon/> },
+    { text: "Timeline",     link: "/timeline",     icon: () => <ScheduleIcon/> },
+    { text: "Frentes",      link: "/frentes",      icon: () => <GroupIcon/> },
+    { text: "Comunicados",  link: "/comunicados",  icon: () => <AnnouncementIcon/> },
+    { text: "Minha Conta",  link: "/minha-conta",  icon: () => <PersonIcon/> },
+    { text: "Sair",         link: "/logout",       icon: () => <ExitToAppIcon/> },
 ]
 
 function Header() {
