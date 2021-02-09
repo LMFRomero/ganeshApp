@@ -6,22 +6,29 @@ import { Link as RouterLink } from 'react-router-dom';
 import AnnounceCard from '../../../components/AnnounceCard/AnnounceCard'
 import MeetingCard from '../../../components/MeetingCard/MeetingCard'
 
-function Timeline(){
+// Variants: "meetings" and "announces"
+function Timeline(props){
     return(
       <Box className="TimelinePage" flexGrow={1} component="main">
         <Container fixed>
             <Grid container spacing={3} justify="center">
   
               <Grid item container xs={12} sm={12} md={8} justify="flex-end">
-                <Button  size="small" variant="outlined" color="primary">Definir filtros</Button>
-                &nbsp;
+                {/* <Button  size="small" variant="outlined" color="primary">Definir filtros</Button>
+                &nbsp; */}
+
+                { props.variant === "meetings" &&
                 <Button  size="small" variant="outlined" color="secondary" 
                   component={RouterLink} to="/criar-reuniao">Criar Reunião</Button>
-                &nbsp;
+                }
+
+                { props.variant === "announces" &&
                 <Button  size="small" variant="outlined" color="secondary"
                   component={RouterLink} to="/criar-comunicado">Criar Comunicado</Button>
+                }
               </Grid>
-
+              
+              { props.variant === "announces" &&
               <Grid item xs={12} sm={12} md={8}>
                 <AnnounceCard avatar="P" author="Pedro Guerra (Coordenador Geral)"
                     dateHour="6 de fevereiro de 2020, 13h37"
@@ -38,7 +45,9 @@ function Timeline(){
                         </>
                     }/>
               </Grid>
-
+              }
+              
+              { props.variant === "meetings" &&
               <Grid item xs={12} sm={12} md={8}>
                 <MeetingCard avatar="G" author="Gabriel Van Loon (Membro)"
                     dateHour="2 de fevereiro de 2020, 13h37"
@@ -52,6 +61,7 @@ function Timeline(){
                     />
 
               </Grid>
+              }
   
             </Grid>
         </Container>

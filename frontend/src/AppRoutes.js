@@ -21,7 +21,7 @@ import EditMeeting from './pages/AuthenticatedPages/EditMeeting/EditMeeting'
 /* Routes - Coordinator Pages*/
 import RegisterAnnounce from './pages/CoordinatorPages/RegisterAnnounce/RegisterAnnounce'
 
-function PrivateRoute({component: RenderComponent, ...rest}) {
+function PrivateRoute({children, component: RenderComponent, ...rest}) {
   const isAuthenticated = () => true
 
   return (
@@ -29,7 +29,7 @@ function PrivateRoute({component: RenderComponent, ...rest}) {
       isAuthenticated() ? (
         <>
           <Header/>
-          <RenderComponent {...props}/>
+          { children }
         </>
       ) : (
         <Redirect to="/" />
@@ -57,15 +57,15 @@ function AppRoutes() {
           <Route path="/recuperar-senha" component={ForgotPassword}/>
           
           {/* Rotas - Authenticated User*/}
-          <PrivateRoute path="/reunioes" component={Timeline}/>
-          <PrivateRoute path="/comunicados"   component={Timeline}/>
-          <PrivateRoute path="/minha-conta"   component={MyAccount}/>
-          <PrivateRoute path="/criar-reuniao" component={RegisterMeeting}/>
-          <PrivateRoute path="/reuniao/:meetingId" component={Meeting}/>
-          <PrivateRoute path="/editar-reuniao/:meetingId" component={EditMeeting}/>
-
+          <PrivateRoute path="/reunioes"><Timeline variant="meetings"/></PrivateRoute>
+          <PrivateRoute path="/comunicados"><Timeline variant="announces"/></PrivateRoute>
+          <PrivateRoute path="/minha-conta"><MyAccount/></PrivateRoute>
+          <PrivateRoute path="/criar-reuniao"><RegisterMeeting/></PrivateRoute>
+          <PrivateRoute path="/reuniao/:meetingId"><Meeting/></PrivateRoute>
+          <PrivateRoute path="/editar-reuniao/:meetingId"><EditMeeting/></PrivateRoute>
+          
           {/* Routes - Coordinator Pages*/}
-          <PrivateRoute path="/criar-comunicado" component={RegisterAnnounce}/>
+          <PrivateRoute path="/criar-comunicado"><RegisterAnnounce/></PrivateRoute>
 
           {/* Página 404 */}
           <Route path="*" component={PageNotFound}/>
