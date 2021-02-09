@@ -1,0 +1,18 @@
+.FrontCard {
+    /* border-top: solid 6px #d500f9; Black-theme */
+    border-top: solid 6px #df2c62; /*White-theme*/
+}
+
+.FrontCard .MuiCardActions-root {
+    justify-content: flex-end;
+}
+
+.FrontCard .FrontParticipants {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+.FrontCard .FrontParticipants .MuiAvatar-circle {
+    margin:  0.175em;
+}
