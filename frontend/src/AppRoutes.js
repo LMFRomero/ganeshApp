@@ -20,6 +20,7 @@ import EditMeeting from './pages/AuthenticatedPages/EditMeeting/EditMeeting'
 
 /* Routes - Coordinator Pages*/
 import RegisterAnnounce from './pages/CoordinatorPages/RegisterAnnounce/RegisterAnnounce'
+import EditAnnounce from './pages/CoordinatorPages/EditAnnounce/EditAnnounce'
 
 function PrivateRoute({children, component: RenderComponent, ...rest}) {
   const isAuthenticated = () => true
@@ -42,7 +43,7 @@ function AppRoutes() {
 
   // List of all private paths to add the HaveMenu class in <Box>
   const privatePaths = ['/reunioes', '/comunicados', '/minha-conta', 
-    '/criar-reuniao', '/editar-reuniao/', '/criar-comunicado', '/reuniao/']
+    '/reuniao/', '/criar-reuniao', '/editar-reuniao/', '/criar-comunicado', '/editar-comunicado/']
   const currentLocation = useLocation();
   
   return(
@@ -66,6 +67,7 @@ function AppRoutes() {
           
           {/* Routes - Coordinator Pages*/}
           <PrivateRoute path="/criar-comunicado"><RegisterAnnounce/></PrivateRoute>
+          <PrivateRoute path="/editar-comunicado/:announceId"><EditAnnounce/></PrivateRoute>
 
           {/* Página 404 */}
           <Route path="*" component={PageNotFound}/>
