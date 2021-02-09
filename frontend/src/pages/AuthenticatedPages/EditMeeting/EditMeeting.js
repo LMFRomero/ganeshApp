@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Button, Typography } from '@material-ui/core'
+import { Box, Container, Grid, Typography } from '@material-ui/core'
 import './EditMeeting.css'
 
 import FormMeeting from '../../../components/FormMeeting/FormMeeting'

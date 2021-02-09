@@ -1,4 +1,5 @@
-import { Box, Button, Typography, Card, CardHeader, Avatar, CardContent, Divider, Table, TableBody, TableRow, TableCell, CardActions, IconButton } from '@material-ui/core'
+import { Box, Button, Typography, Card, CardHeader, Avatar, CardContent, 
+  Divider, Table, TableBody, TableRow, TableCell, CardActions, IconButton } from '@material-ui/core'
 import './MeetingCard.css'
 
 import { Link as RouterLink } from 'react-router-dom';

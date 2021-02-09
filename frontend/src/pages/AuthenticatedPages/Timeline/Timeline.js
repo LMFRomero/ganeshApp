@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Button, Typography, Card, CardHeader, Avatar, CardContent, Divider } from '@material-ui/core'
+import { Box, Container, Grid, Button } from '@material-ui/core'
 import './Timeline.css'
 
 import { Link as RouterLink } from 'react-router-dom';
@@ -36,7 +36,7 @@ function Timeline(props){
                     content={
                         <>
                         Bom dia bom dia. Passando aqui hoje pra pedir para vocês por favor preencherem esse  
-                        <a href="#"> formulário de intenção de continuação no Ganesh em 2021</a>. Ele é tanto  
+                        <a href="#form-link"> formulário de intenção de continuação no Ganesh em 2021</a>. Ele é tanto  
                         quem pretende ficar quanto para quem pretende sair. O principal motivo para isso é ajudar a gente a 
                         reorganizar a lista de membros, porque com a transição para "ead" as coisas ficaram 
                         meio confusas.

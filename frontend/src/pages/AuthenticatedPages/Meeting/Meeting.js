@@ -1,9 +1,6 @@
-import { Box, Container, Grid, Button, Typography, Card, CardHeader, Avatar, CardContent, Divider } from '@material-ui/core'
+import { Box, Container, Grid } from '@material-ui/core'
 import './Meeting.css'
 
-import { Link as RouterLink } from 'react-router-dom';
-
-import AnnounceCard from '../../../components/AnnounceCard/AnnounceCard'
 import MeetingCard from '../../../components/MeetingCard/MeetingCard'
 
 const presentMembers = [

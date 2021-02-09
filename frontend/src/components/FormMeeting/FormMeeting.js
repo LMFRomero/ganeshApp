@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Button, Typography, Table, TableBody, TableRow, TableCell } from '@material-ui/core'
+import { Grid, Button } from '@material-ui/core'
 import { TextField, InputLabel, Select, MenuItem, FormControl, Checkbox, FormControlLabel } from '@material-ui/core'
 
 // Variants: "register" and "edit"

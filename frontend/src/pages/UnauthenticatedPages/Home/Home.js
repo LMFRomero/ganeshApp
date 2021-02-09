@@ -14,7 +14,7 @@ function Home(){
           
           {/* Logo - Ganesh App */}
           <Grid item xs={12} md={5} className="HomeLogo">
-            <img src={GaneshLogo}/>
+            <img src={GaneshLogo} alt="Logo do Ganesh - Grupo de Extensão do ICMC"/>
           </Grid>
           
           {/* Form Selection Buttons */}

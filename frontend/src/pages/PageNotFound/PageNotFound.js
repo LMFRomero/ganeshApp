@@ -10,7 +10,8 @@ function PageNotFound(){
         <Grid container spacing={6} justify="center">
           
           <Grid item xs={12} md={5}>
-            <img src={GaneshLogo} style={{maxWidth: 200, display: "block", margin: "0 auto"}}/>
+            <img src={GaneshLogo} alt="Logo do Ganesh - Grupo de Extensão do ICMC" 
+              style={{maxWidth: 200, display: "block", margin: "0 auto"}}/>
           </Grid>
 
           <Grid item xs={12}>

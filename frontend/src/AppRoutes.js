@@ -47,7 +47,7 @@ function AppRoutes() {
   const currentLocation = useLocation();
   
   return(
-    <Box className={`RouterComponent ${ privatePaths.find((v) => currentLocation.pathname.indexOf(v) == 0) ? "HaveMenu" : ""}`}>
+    <Box className={`RouterComponent ${ privatePaths.find((v) => currentLocation.pathname.indexOf(v) === 0) ? "HaveMenu" : ""}`}>
         <Switch>
 
           {/* Routes - Unauthenticated User*/}

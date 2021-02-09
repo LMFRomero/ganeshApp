@@ -35,7 +35,7 @@ function Header() {
   const drawerContent = () => {
     return (
       <Box className="DrawerContent">
-        <img src={GaneshLogo}/>
+        <img src={GaneshLogo} alt="Logo do Ganesh - Grupo de Extensão do ICMC"/>
         
         <Divider/>
         
