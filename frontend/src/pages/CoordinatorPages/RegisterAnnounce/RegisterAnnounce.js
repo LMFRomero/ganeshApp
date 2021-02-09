@@ -8,11 +8,11 @@ function RegisterAnnounce(){
       <Container fixed>
           <Grid container spacing={3} justify="center">
 
-            <Grid item xs={8}>
-                <Typography variant="h3">Criar comunicado</Typography>
+            <Grid item xs={12} md={8}>
+                <Typography variant="h3">Criar Comunicado</Typography>
             </Grid>
 
-            <Grid component="form" className="FormSection" item xs={8}>
+            <Grid item component="form" className="FormSection" xs={12} md={8}>
               <TextField variant="outlined" fullWidth label="Título" required/>
 
               <TextField variant="outlined" fullWidth label="Conteúdo" required
