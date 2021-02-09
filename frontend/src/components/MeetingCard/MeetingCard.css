@@ -1,8 +1,55 @@
+/* General Configurations */
 .MeetingCard {
     /* border-top: solid 6px #00e676; Black-theme */
     border-top: solid 6px #00a152; /*White-theme*/
 }
 
 .MeetingCard .MuiCardActions-root {
-    justify-content: end;
+    justify-content: flex-end;
+}
+
+/* Card - Large Version*/
+.MeetingCard-large .MeetingContent {
+    margin-top: 1.2em;
+}
+
+.MeetingCard-large .MuiCardContent-root {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+}
+
+/* Meeting Card Large- Left Side */
+.MeetingCard-large .MuiCardContent-root  .MeetingInfo { 
+    flex-grow: 1;
+    max-width: 600px;
+    padding-right: 16px;
+}
+
+/* Meeting Card Large - Right Side */
+.MeetingCard-large .MuiCardContent-root .MeetingPresents {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    min-width: 150px;
+}
+
+.MeetingCard-large .MuiCardContent-root .MeetingPresents .MuiAvatar-circle {
+    margin:  0.175em;
+}
+
+/* Meeting Card Large - Mobile Reconfigurations */
+@media screen and (max-width:  600px) {
+    .MeetingCard-large .MuiCardContent-root {
+        flex-flow: column nowrap;
+    }
+    
+    .MeetingCard-large .MuiCardContent-root  .MeetingInfo {
+        padding-right: 0;
+        max-width: none;
+    }
+
+    .MeetingCard-large .MuiCardContent-root .MeetingPresents {
+        min-width: none;
+    }
 }

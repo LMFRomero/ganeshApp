@@ -68,7 +68,7 @@ function Header() {
 
 
         {/* Desktop permanent menu */}
-        <Hidden smUp implementation="css">
+        <Hidden mdUp implementation="css">
           <Drawer className="SideMenu" anchor="left" 
               open={drawerVisible} onClose={toggleDrawer(false)}>
                 {drawerContent()}
@@ -76,7 +76,7 @@ function Header() {
         </Hidden>
 
         {/* Mobile Temporary menu */}
-        <Hidden xsDown implementation="css">
+        <Hidden smDown implementation="css">
           <Drawer className="SideMenu" anchor="left" variant="permanent"
               open={drawerVisible} onClose={toggleDrawer(false)}>
                 {drawerContent()}
