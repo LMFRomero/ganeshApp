@@ -1,19 +1,19 @@
 import { Box, Container, Grid, Button, Typography } from '@material-ui/core'
-import './RegisterMeeting.css'
+import './EditMeeting.css'
 
 import FormMeeting from '../../../components/FormMeeting/FormMeeting'
 
-function RegisterMeeting(){
+function EditMeeting(){
   return(
-    <Box className="RegisterMeetingPage" flexGrow={1} component="main">
+    <Box className="EditMeetingPage" flexGrow={1} component="main">
       <Container fixed>
           <Grid container spacing={3} justify="center" component="form">
 
             <Grid item xs={12}>
-                <Typography variant="h3">Criar reunião</Typography>
+                <Typography variant="h3">Editar Reunião</Typography>
             </Grid>
             
-            <FormMeeting variant="register"/>
+            <FormMeeting variant="edit"/>
 
           </Grid>
       </Container>
@@ -21,4 +21,4 @@ function RegisterMeeting(){
   )
 }
 
-export default RegisterMeeting
+export default EditMeeting

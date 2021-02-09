@@ -14,8 +14,9 @@ import ForgotPassword from './pages/UnauthenticatedPages/ForgotPassword/ForgotPa
 /* Routes - Authenticated User*/
 import Timeline from './pages/AuthenticatedPages/Timeline/Timeline'
 import MyAccount from './pages/AuthenticatedPages/MyAccount/MyAccount'
-import RegisterMeeting from './pages/AuthenticatedPages/RegisterMeeting/RegisterMeeting'
 import Meeting from './pages/AuthenticatedPages/Meeting/Meeting'
+import RegisterMeeting from './pages/AuthenticatedPages/RegisterMeeting/RegisterMeeting'
+import EditMeeting from './pages/AuthenticatedPages/EditMeeting/EditMeeting'
 
 /* Routes - Coordinator Pages*/
 import RegisterAnnounce from './pages/CoordinatorPages/RegisterAnnounce/RegisterAnnounce'
@@ -41,11 +42,11 @@ function AppRoutes() {
 
   // List of all private paths to add the HaveMenu class in <Box>
   const privatePaths = ['/reunioes', '/comunicados', '/minha-conta', 
-    '/criar-reuniao', '/criar-comunicado', '/reuniao/']
+    '/criar-reuniao', '/editar-reuniao/', '/criar-comunicado', '/reuniao/']
   const currentLocation = useLocation();
   
   return(
-    <Box className={`RouterComponent ${ privatePaths.find((v) => currentLocation.pathname.indexOf(v) > -1) ? "HaveMenu" : ""}`}>
+    <Box className={`RouterComponent ${ privatePaths.find((v) => currentLocation.pathname.indexOf(v) == 0) ? "HaveMenu" : ""}`}>
         <Switch>
 
           {/* Routes - Unauthenticated User*/}
@@ -61,6 +62,7 @@ function AppRoutes() {
           <PrivateRoute path="/minha-conta"   component={MyAccount}/>
           <PrivateRoute path="/criar-reuniao" component={RegisterMeeting}/>
           <PrivateRoute path="/reuniao/:meetingId" component={Meeting}/>
+          <PrivateRoute path="/editar-reuniao/:meetingId" component={EditMeeting}/>
 
           {/* Routes - Coordinator Pages*/}
           <PrivateRoute path="/criar-comunicado" component={RegisterAnnounce}/>

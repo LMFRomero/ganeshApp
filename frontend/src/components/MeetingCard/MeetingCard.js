@@ -12,7 +12,7 @@ function MeetingCard(props){
 
   const renderActionIcon = () => {
     if(props.variant === "large") { return (
-        <IconButton aria-label="settings">
+        <IconButton aria-label="settings" component={RouterLink} to="/editar-reuniao/abc">
           <EditIcon/>
         </IconButton>
     )} else return <></>
