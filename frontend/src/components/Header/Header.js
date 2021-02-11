@@ -7,20 +7,29 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu';
 import ScheduleIcon from '@material-ui/icons/Schedule';
-import GroupIcon from '@material-ui/icons/Group';
+import FlagIcon from '@material-ui/icons/Flag';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import PersonIcon from '@material-ui/icons/Person';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import GroupIcon from '@material-ui/icons/Group';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import GaneshLogo from '../../assets/images/GaneshLogo.png'
 
 const menuItems = [
-    { text: "Reuniões",     link: "/reunioes",     icon: () => <ScheduleIcon/> },
-    { text: "Comunicados",  link: "/comunicados",  icon: () => <AnnouncementIcon/> },
-    { text: "Frentes",      link: "/frentes",      icon: () => <GroupIcon/> },
-    { text: "Minha Conta",  link: "/minha-conta",  icon: () => <PersonIcon/> },
-    { text: "Sair",         link: "/logout",       icon: () => <ExitToAppIcon/> },
+  { text: "Reuniões",     link: "/reunioes",      icon: () => <ScheduleIcon/> },
+  { text: "Comunicados",  link: "/comunicados",   icon: () => <AnnouncementIcon/> },
+  { text: "Frentes",      link: "/frentes",       icon: () => <FlagIcon/> },
+  { text: "Minha Conta",  link: "/minha-conta",   icon: () => <PersonIcon/> },
 ]
+
+const menuItemsCoordinators = [
+  { text: "Solicitações", link: "/solicitacoes",  icon: () => <PersonAddIcon/> },
+  { text: "Usuários",     link: "/usuarios",      icon: () => <GroupIcon/> },
+]
+
+const exitItem = { text: "Sair", link: "/logout", icon: () => <ExitToAppIcon/> }
+
 
 function Header() {
 
@@ -32,6 +41,15 @@ function Header() {
     setDrawerVisible(open)
   };
 
+  const renderListItem = (item) => {
+    return(
+      <ListItem button onClick={toggleDrawer(false)} key={item.text} component={RouterLink} to={item.link}>
+          <ListItemIcon> { item.icon() }</ListItemIcon>
+          <ListItemText primary={ item.text } />
+      </ListItem>
+    )
+  }
+
   const drawerContent = () => {
     return (
       <Box className="DrawerContent">
@@ -40,13 +58,11 @@ function Header() {
         <Divider/>
         
         <List>
-          { menuItems.map((item, index) => (
-              <ListItem button onClick={toggleDrawer(false)} key={item.text} component={RouterLink} to={item.link}>
-                  <ListItemIcon> { item.icon() }</ListItemIcon>
-                  <ListItemText primary={ item.text } />
-              </ListItem>
-          ))}
+          { menuItems.map((item, index) => renderListItem(item)) }
+          { menuItemsCoordinators.map((item, index) => renderListItem(item)) }
+          { renderListItem(exitItem) }
         </List>
+
       </Box>
     )
   }
