@@ -1,13 +1,13 @@
 import { Box, Container, Grid, Typography } from '@material-ui/core'
-import './MyAccount.css'
+import './UserAccount.css'
 
 import FormUserData from '../../../components/FormUserData/FormUserData'
 import FormAccountData from '../../../components/FormAccountData/FormAccountData'
 import FormChangePassword from '../../../components/FormChangePassword/FormChangePassword'
 
-function MyAccount(){
+function UserAccount(){
   return(
-    <Box className="MyAccountPage" flexGrow={1} component="main">
+    <Box className="UserAccountPage" flexGrow={1} component="main">
       <Container fixed>
           <Grid container spacing={3} justify="center">
 
@@ -15,11 +15,11 @@ function MyAccount(){
                 <Typography variant="h3">Minha conta</Typography>
             </Grid>
 
-            <FormUserData variant="normal"/>
+            <FormUserData variant="coorditator"/>
 
             <Grid className="FormSection" item xs={12} sm={12} md={6}>
-              <FormAccountData variant="normal"/>
-              <FormChangePassword variant="normal"/>
+              <FormAccountData variant="coorditator"/>
+              <FormChangePassword variant="coorditator"/>
             </Grid>
 
           </Grid>
@@ -28,4 +28,4 @@ function MyAccount(){
   )
 }
 
-export default MyAccount
+export default UserAccount
