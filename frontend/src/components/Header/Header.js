@@ -6,6 +6,7 @@ import { AppBar, Box, Divider, Drawer, Hidden, IconButton, Toolbar, Typography }
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import FlagIcon from '@material-ui/icons/Flag';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
@@ -30,8 +31,7 @@ const menuItemsCoordinators = [
 
 const exitItem = { text: "Sair", link: "/logout", icon: () => <ExitToAppIcon/> }
 
-
-function Header() {
+function Header(props) {
 
   const [ drawerVisible, setDrawerVisible ] = useState(false)
 
@@ -76,12 +76,25 @@ function Header() {
               <MenuIcon />
             </IconButton>
 
-            <Typography variant="h6">
+            <Typography variant="h6" style={{flexGrow: 1 }}>
               Ganesh App
             </Typography>
+
+            {/* darkTheme={props.darkTheme} handleTheme={props.handleTheme} */}
+            {props.darkTheme && 
+            <IconButton color="inherit" aria-label="menu" onClick={() => props.handleTheme(false)}>
+              <Brightness4Icon />
+            </IconButton>
+            }
+
+            {!props.darkTheme && 
+            <IconButton color="inherit" aria-label="menu" onClick={() => props.handleTheme(true)}>
+              <MenuIcon />
+            </IconButton>
+            }
+
           </Toolbar>
         </AppBar>
-
 
         {/* Desktop permanent menu */}
         <Hidden mdUp implementation="css">

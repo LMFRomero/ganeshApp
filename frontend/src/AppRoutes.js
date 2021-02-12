@@ -28,24 +28,7 @@ import UserAccount from './pages/CoordinatorPages/UserAccount/UserAccount'
 import Users from './pages/CoordinatorPages/Users/Users'
 import Requests from './pages/CoordinatorPages/Requests/Requests'
 
-function PrivateRoute({children, component: RenderComponent, ...rest}) {
-  const isAuthenticated = () => true
-
-  return (
-    <Route {...rest} render={( props => 
-      isAuthenticated() ? (
-        <>
-          <Header/>
-          { children }
-        </>
-      ) : (
-        <Redirect to="/" />
-      )
-    )}/>
-  )
-}
-
-function AppRoutes() {
+function AppRoutes(props) {
 
   // List of all private paths to add the HaveMenu class in <Box>
   const privatePaths = ['/minha-conta', '/reunioes', '/reuniao/', '/criar-reuniao', '/editar-reuniao/', 
@@ -53,6 +36,23 @@ function AppRoutes() {
     '/frentes', '/criar-frente', '/editar-frente/', '/usuarios', '/solicitacoes']
   const currentLocation = useLocation();
   
+  function PrivateRoute({children, component: RenderComponent, ...rest}) {
+    const isAuthenticated = () => true
+  
+    return (
+      <Route {...rest} render={( p => 
+        isAuthenticated() ? (
+          <>
+            <Header darkTheme={props.darkTheme} handleTheme={props.handleTheme}/>
+            { children }
+          </>
+        ) : (
+          <Redirect to="/" />
+        )
+      )}/>
+    )
+  }
+
   return(
     <Box className={`RouterComponent ${ privatePaths.find((v) => currentLocation.pathname.indexOf(v) === 0) ? "HaveMenu" : ""}`}>
       <Switch>
