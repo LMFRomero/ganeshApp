@@ -5,8 +5,8 @@ import './Users.css'
 import { Link as RouterLink } from 'react-router-dom';
 
 import EditIcon from '@material-ui/icons/Edit';
-import HappyFaceIcon from '@material-ui/icons/InsertEmoticon';
-import SadFaceIcon from '@material-ui/icons/SentimentDissatisfied';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const columns = [
   { field: 'id',       headerName: 'ID',       width: 100},
@@ -16,10 +16,10 @@ const columns = [
   { field: 'joinYear', headerName: 'Ingresso', width: 140},
   { field: 'active',   headerName: 'Ativo',    width: 120, 
     renderCell: (params) => ( 
-      <IconButton>
-        { params.value === true  && <HappyFaceIcon/>}
-        { params.value === false && <SadFaceIcon/>}
-      </IconButton>
+      <>
+        { params.value === true  && <CheckIcon/>}
+        { params.value === false && <ClearIcon/>}
+      </>
     )},
   { field: 'linkPath', headerName: 'Editar', width: 120, 
     renderCell: (params) => ( 
