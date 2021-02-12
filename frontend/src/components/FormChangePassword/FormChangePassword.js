@@ -9,11 +9,11 @@ function FormChangePassword(props){
         <strong>Alterar Senha</strong>
       </Typography>
       
-      <TextField variant="outlined" fullWidth label="Senha atual" type="password" required/>
+      <TextField variant="filled" fullWidth label="Senha atual" type="password" required/>
 
-      <TextField variant="outlined" fullWidth label="Nova senha" type="password" required/>
+      <TextField variant="filled" fullWidth label="Nova senha" type="password" required/>
 
-      <TextField variant="outlined" fullWidth label="Confirmar nova senha" type="password" required/>
+      <TextField variant="filled" fullWidth label="Confirmar nova senha" type="password" required/>
       
       <Button variant="contained" size="large" fullWidth color="secondary">
         <strong>Confirmar alteração</strong>

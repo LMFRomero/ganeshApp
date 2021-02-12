@@ -4,6 +4,7 @@ import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 /* General Components */
 import Header from './components/Header/Header'
 import PageNotFound from './pages/PageNotFound/PageNotFound'
+import DefaultForm from './pages/DefaultForm/DefaultForm'
 
 /* Routes - Unauthenticated User*/
 import Home from './pages/UnauthenticatedPages/Home/Home'
@@ -15,15 +16,9 @@ import ForgotPassword from './pages/UnauthenticatedPages/ForgotPassword/ForgotPa
 import Timeline from './pages/AuthenticatedPages/Timeline/Timeline'
 import MyAccount from './pages/AuthenticatedPages/MyAccount/MyAccount'
 import Meeting from './pages/AuthenticatedPages/Meeting/Meeting'
-import RegisterMeeting from './pages/AuthenticatedPages/RegisterMeeting/RegisterMeeting'
-import EditMeeting from './pages/AuthenticatedPages/EditMeeting/EditMeeting'
 import Fronts from './pages/AuthenticatedPages/Fronts/Fronts'
 
 /* Routes - Coordinator Pages*/
-import RegisterAnnounce from './pages/CoordinatorPages/RegisterAnnounce/RegisterAnnounce'
-import EditAnnounce from './pages/CoordinatorPages/EditAnnounce/EditAnnounce'
-import RegisterFront from './pages/CoordinatorPages/RegisterFront/RegisterFront'
-import EditFront from './pages/CoordinatorPages/EditFront/EditFront'
 import UserAccount from './pages/CoordinatorPages/UserAccount/UserAccount'
 import Users from './pages/CoordinatorPages/Users/Users'
 import Requests from './pages/CoordinatorPages/Requests/Requests'
@@ -68,16 +63,16 @@ function AppRoutes(props) {
         <PrivateRoute path="/reunioes"><Timeline variant="meetings"/></PrivateRoute>
         <PrivateRoute path="/comunicados"><Timeline variant="announces"/></PrivateRoute>
         <PrivateRoute path="/minha-conta"><MyAccount/></PrivateRoute>
-        <PrivateRoute path="/criar-reuniao"><RegisterMeeting/></PrivateRoute>
+        <PrivateRoute path="/criar-reuniao"><DefaultForm variant="register-meeting"/></PrivateRoute>
+        <PrivateRoute path="/editar-reuniao/:meetingId"><DefaultForm variant="edit-meeting"/></PrivateRoute>
         <PrivateRoute path="/reuniao/:meetingId"><Meeting/></PrivateRoute>
-        <PrivateRoute path="/editar-reuniao/:meetingId"><EditMeeting/></PrivateRoute>
         <PrivateRoute path="/frentes"><Fronts/></PrivateRoute>
         
         {/* Routes - Coordinator Pages*/}
-        <PrivateRoute path="/criar-comunicado"><RegisterAnnounce/></PrivateRoute>
-        <PrivateRoute path="/editar-comunicado/:announceId"><EditAnnounce/></PrivateRoute>
-        <PrivateRoute path="/criar-frente"><RegisterFront/></PrivateRoute>
-        <PrivateRoute path="/editar-frente/:frontId"><EditFront/></PrivateRoute>
+        <PrivateRoute path="/criar-comunicado"><DefaultForm variant="register-announce"/></PrivateRoute>
+        <PrivateRoute path="/editar-comunicado/:announceId"><DefaultForm variant="edit-announce"/></PrivateRoute>
+        <PrivateRoute path="/criar-frente"><DefaultForm variant="register-front"/></PrivateRoute>
+        <PrivateRoute path="/editar-frente/:frontId"><DefaultForm variant="edit-front"/></PrivateRoute>
         <PrivateRoute path="/usuario/:userId"><UserAccount/></PrivateRoute>
         <PrivateRoute path="/usuarios"><Users/></PrivateRoute>
         <PrivateRoute path="/solicitacoes"><Requests/></PrivateRoute>

@@ -17,7 +17,7 @@ function App() {
   }, [darkTheme])
 
   return (
-    <div className="App">
+    <div className={`App ${(darkTheme)?'Dark':'Light'}-Theme`}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>

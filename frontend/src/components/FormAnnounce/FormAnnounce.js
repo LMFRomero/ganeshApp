@@ -6,9 +6,9 @@ function FormAnnounce(props){
   return(
     <>
       <Grid item component="form" className="FormSection" xs={12} md={8}>
-        <TextField variant="outlined" fullWidth label="Título" required/>
+        <TextField variant="filled" fullWidth label="Título" required/>
 
-        <TextField variant="outlined" fullWidth label="Conteúdo" required
+        <TextField variant="filled" fullWidth label="Conteúdo" required
         multiline rows={4}/>
 
         <FormControlLabel label="Visível apenas para membros ativos." 
@@ -17,13 +17,13 @@ function FormAnnounce(props){
         }/>
 
         { props.variant === "register" &&  
-        <Button variant="contained" size="large" fullWidth color="primary">
+        <Button variant="contained" size="large" fullWidth color="secondary">
           <strong>Publicar Comunicado</strong>
         </Button>
         }
 
         { props.variant === "edit" &&
-        <Button variant="contained" size="large" fullWidth color="primary">
+        <Button variant="contained" size="large" fullWidth color="secondary">
           <strong>Salvar Alterações</strong>
         </Button>
         }

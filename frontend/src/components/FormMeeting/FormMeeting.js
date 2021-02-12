@@ -6,14 +6,14 @@ function FormMeeting(props){
   return(
     <>
       <Grid className="FormSection" item xs={12} md={6}>
-        <TextField variant="outlined" fullWidth label="Título" required/>
+        <TextField variant="filled" fullWidth label="Título" required/>
         
-        <TextField variant="outlined" fullWidth label="Conteúdo" required
+        <TextField variant="filled" fullWidth label="Conteúdo" required
           multiline rows={11}/>
       </Grid>
 
       <Grid className="FormSection" item xs={12} md={6}>
-        <FormControl variant="outlined" fullWidth>
+        <FormControl variant="filled" fullWidth>
           <InputLabel id="LabelFront">Frente</InputLabel>
           <Select labelId="LabelFront" label="Frente">
             <MenuItem value="Cripto">Criptografia</MenuItem>
@@ -25,13 +25,13 @@ function FormMeeting(props){
           </Select>
         </FormControl>
 
-        <TextField variant="outlined" fullWidth type="date"required
+        <TextField variant="filled" fullWidth type="date"required
           label="Data" InputLabelProps={{ shrink: true}}/>
         
-        <TextField variant="outlined" fullWidth type="time" required
+        <TextField variant="filled" fullWidth type="time" required
           label="Horário" InputLabelProps={{ shrink: true}}/>
         
-        <TextField variant="outlined" fullWidth label="Local" required/>
+        <TextField variant="filled" fullWidth label="Local" required/>
         
         <FormControlLabel label="Visível apenas para membros ativos." 
           control={
@@ -39,13 +39,13 @@ function FormMeeting(props){
         }/>
         
         { props.variant === "register" &&  
-        <Button variant="contained" size="large" fullWidth color="primary">
+        <Button variant="contained" size="large" fullWidth color="secondary">
           <strong>Publicar reunião</strong>
         </Button>
         }
 
         { props.variant === "edit" &&
-        <Button variant="contained" size="large" fullWidth color="primary">
+        <Button variant="contained" size="large" fullWidth color="secondary">
           <strong>Salvar Alterações</strong>
         </Button>
         }

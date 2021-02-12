@@ -6,7 +6,8 @@ import { AppBar, Box, Divider, Drawer, Hidden, IconButton, Toolbar, Typography }
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu';
-import Brightness4Icon from '@material-ui/icons/Brightness4';
+import SunIcon from '@material-ui/icons/WbSunny';
+import MoonIcon from '@material-ui/icons/NightsStay';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import FlagIcon from '@material-ui/icons/Flag';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
@@ -83,13 +84,13 @@ function Header(props) {
             {/* darkTheme={props.darkTheme} handleTheme={props.handleTheme} */}
             {props.darkTheme && 
             <IconButton color="inherit" aria-label="menu" onClick={() => props.handleTheme(false)}>
-              <Brightness4Icon />
+              <MoonIcon />
             </IconButton>
             }
 
             {!props.darkTheme && 
             <IconButton color="inherit" aria-label="menu" onClick={() => props.handleTheme(true)}>
-              <MenuIcon />
+              <SunIcon />
             </IconButton>
             }
 

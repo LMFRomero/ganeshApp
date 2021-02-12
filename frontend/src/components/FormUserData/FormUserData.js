@@ -9,16 +9,16 @@ function FormUserData(props){
       <strong>Editar Dados Pessoais</strong>
       </Typography>
 
-      <TextField variant="outlined" fullWidth label="Nome completo" required
+      <TextField variant="filled" fullWidth label="Nome completo" required
       value="Gabriel Van Loon Bodê da Costa Dourado Fuentes Rojas"/>
 
-      <TextField variant="outlined" fullWidth label="Apelido ou Primeiro Nome" required
+      <TextField variant="filled" fullWidth label="Apelido ou Primeiro Nome" required
       value="Gabriel Van Loon"/>
       
-      <TextField variant="outlined" fullWidth label="E-mail" required
+      <TextField variant="filled" fullWidth label="E-mail" required
       value="gabrielvanloon@usp.br"/>
       
-      <FormControl variant="outlined" fullWidth>
+      <FormControl variant="filled" fullWidth>
       <InputLabel id="LabelCourse">Curso atual</InputLabel>
       <Select labelId="LabelCourse" label="Curso atual" value="BCC">
           <MenuItem value="BCC" selected>Ciências da Computação </MenuItem>
@@ -29,7 +29,7 @@ function FormUserData(props){
       </Select>
       </FormControl>
 
-      <FormControl variant="outlined" fullWidth>
+      <FormControl variant="filled" fullWidth>
       <InputLabel id="LabelInstitute">Instituição</InputLabel>
       <Select labelId="LabelInstitute" label="Instituição" value="ICMC">
           <MenuItem value="ICMC">USP - ICMC</MenuItem>
@@ -42,7 +42,7 @@ function FormUserData(props){
       </Select>
       </FormControl>
 
-      <TextField variant="outlined" fullWidth label="Número USP" value="12345679"/>
+      <TextField variant="filled" fullWidth label="Número USP" value="12345679"/>
 
       <Button variant="contained" size="large" fullWidth color="primary">
       <strong>Salvar alterações</strong>

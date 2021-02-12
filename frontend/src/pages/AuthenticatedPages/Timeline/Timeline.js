@@ -1,4 +1,5 @@
 import { Box, Container, Grid, Button } from '@material-ui/core'
+import AddSharpIcon from '@material-ui/icons/AddSharp';
 import './Timeline.css'
 
 import { Link as RouterLink } from 'react-router-dom';
@@ -14,16 +15,14 @@ function Timeline(props){
             <Grid container spacing={3} justify="center">
   
               <Grid item container xs={12} sm={12} md={8} justify="flex-end">
-                {/* <Button  size="small" variant="outlined" color="primary">Definir filtros</Button>
-                &nbsp; */}
 
                 { props.variant === "meetings" &&
-                <Button  size="small" variant="outlined" color="secondary" 
+                <Button variant="contained" color="secondary" startIcon={<AddSharpIcon/>}
                   component={RouterLink} to="/criar-reuniao">Criar Reunião</Button>
                 }
 
                 { props.variant === "announces" &&
-                <Button  size="small" variant="outlined" color="secondary"
+                <Button variant="contained" color="secondary" startIcon={<AddSharpIcon/>}
                   component={RouterLink} to="/criar-comunicado">Criar Comunicado</Button>
                 }
               </Grid>
