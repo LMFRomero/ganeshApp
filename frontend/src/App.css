@@ -24,8 +24,14 @@
     }
 }
 
-/* Form Configurations */
+/* Internal Pages Configurations */
+.RouterComponent.HaveMenu main {
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
 
+
+/* Form Configurations */
 .FormSection > * {
     margin-top: 1.2em!important;
     margin-bottom: 0!important;
