@@ -9,6 +9,7 @@ import { DarkTheme, LightTheme } from './Themes'
 
 function App() {
 
+  // @TODO: When Logged off set only darkTheme available
   const [darkTheme, handleTheme] = useState(localStorage.getItem('darkTheme') === "true")
   const theme = useMemo(() => createMuiTheme((darkTheme) ? DarkTheme : LightTheme), [darkTheme])
 

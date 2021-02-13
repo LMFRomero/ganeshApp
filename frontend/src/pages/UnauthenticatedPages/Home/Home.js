@@ -3,7 +3,7 @@ import './Home.css'
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import GaneshLogo from '../../../assets/images/GaneshLogo.png'
+import GaneshHomeImg from '../../../assets/images/Ganesh500x500.png'
 import OrDivider from '../../../components/OrDivider/OrDivider'
 
 function Home(){
@@ -14,7 +14,7 @@ function Home(){
           
           {/* Logo - Ganesh App */}
           <Grid item xs={12} md={5} className="HomeLogo">
-            <img src={GaneshLogo} alt="Logo do Ganesh - Grupo de Extensão do ICMC"/>
+            <img src={GaneshHomeImg} alt="Logo do Ganesh - Grupo de Extensão do ICMC"/>
           </Grid>
           
           {/* Form Selection Buttons */}
@@ -24,7 +24,7 @@ function Home(){
             </Typography>
             
             <Typography align="center">
-              Sistema para uso interno para membros e ex-membros, <br/> selecione uma das opção para continuar.
+              Sistema para uso interno para membros, <br/> selecione uma opção para continuar.
             </Typography>
 
             <Typography align="center">
@@ -38,7 +38,7 @@ function Home(){
 
             <Typography align="center">
               <Button className="BtnRegister" variant="contained" size="large" color="secondary"
-                component={RouterLink} to="/criar-conta">
+                component={RouterLink} to="/criar-conta" style={{marginTop: 0}}>
                 <strong>Criar nova conta</strong>
               </Button>
             </Typography>

@@ -14,7 +14,7 @@ function ForgotPassword(){
   const requestToken = () => {
     return(
       <>
-        <Typography variant="h5" align="center">
+        <Typography variant="h5" align="center" gutterBottom>
           <strong>Esqueceu sua senha?</strong>
         </Typography>
         
@@ -35,7 +35,7 @@ function ForgotPassword(){
   const changePassword = () => {
     return(
       <>
-        <Typography variant="h5" align="center">
+        <Typography variant="h5" align="center" gutterBottom>
           <strong>Cadastrar nova senha</strong>
         </Typography>
         

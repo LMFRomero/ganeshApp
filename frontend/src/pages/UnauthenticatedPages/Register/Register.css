@@ -4,6 +4,8 @@
     align-items: center;
     padding-top: 1.6em;
     padding-bottom: 1.6em;
+    background-image: url("../../../assets/images/Teclado1500x1000.jpg");
+    background-size: cover;
 }
 
 .RegisterPage .BtnLogin {

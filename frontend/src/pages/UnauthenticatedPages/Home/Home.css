@@ -2,6 +2,8 @@
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    background-image: url("../../../assets/images/Teclado1500x1000.jpg");
+    background-size: cover;
 }
 
 .HomePage .HomeLogo img { 
@@ -20,3 +22,8 @@
     margin-top: 1.2em;
 }
 
+@media screen and (max-width:  600px) {
+    .HomePage .HomeLogo img { 
+        max-height: 200px;
+    }
+}

@@ -49,7 +49,7 @@ function AppRoutes(props) {
   }
 
   return(
-    <Box className={`RouterComponent ${ privatePaths.find((v) => currentLocation.pathname.indexOf(v) === 0) ? "HaveMenu" : ""}`}>
+    <Box className={`RouterComponent ${ privatePaths.find((v) => currentLocation.pathname.indexOf(v) === 0) ? "HaveMenu" : "PublicPage"}`}>
       <Switch>
 
         {/* Routes - Unauthenticated User*/}

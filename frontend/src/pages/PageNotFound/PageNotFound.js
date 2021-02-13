@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from "@material-ui/core";
+import { Box, Container, Grid, Link, Typography } from "@material-ui/core";
 import { Link as RouterLink } from 'react-router-dom';
 
 import GaneshLogo from '../../assets/images/GaneshLogo.png'
@@ -17,7 +17,9 @@ function PageNotFound(){
           <Grid item xs={12}>
             <Typography variant="h2" align="center">404 - Página não encontrada</Typography>
             <Typography variant="h6" align="center">
-              <RouterLink to="/">Voltar para a página inicial</RouterLink>
+              <Link color="secondary" component={RouterLink} to="/reunioes">
+                Voltar para a página inicial
+              </Link>
             </Typography>
           </Grid>
 

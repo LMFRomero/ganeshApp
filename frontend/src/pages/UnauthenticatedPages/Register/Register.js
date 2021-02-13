@@ -65,16 +65,17 @@ function Register(){
                   <Checkbox color="primary" name="PingParticipant" />
               }/>
 
-              <Button variant="contained" size="large" fullWidth color="secondary">
+              <Button variant="contained" size="large" fullWidth color="secondary"
+                component={RouterLink} to="/reunioes">
                 <strong>Criar Conta</strong>
               </Button>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{paddingTop: 0}}>
               <OrDivider/>
 
               <Button className="BtnLogin" variant="contained" size="large" fullWidth color="primary"
-                component={RouterLink} to="/login">
+                component={RouterLink} to="/login" style={{marginTop: 0}}>
                 <strong>Já possuo uma conta</strong>
               </Button>
             </Grid>

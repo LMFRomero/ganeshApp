@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Button, Typography } from '@material-ui/core'
+import { Box, Container, Grid, Button, Typography, Link } from '@material-ui/core'
 import { TextField } from '@material-ui/core'
 import './Login.css'
 
@@ -23,12 +23,15 @@ function Login(){
               
               <TextField variant="outlined" fullWidth label="Senha" type="password" required/>
               
-              <Button variant="contained" size="large" fullWidth color="primary">
+              <Button variant="contained" size="large" fullWidth color="primary"
+                component={RouterLink} to="/reunioes">
                 <strong>Entrar</strong>
               </Button>
 
               <Typography align="center">
-                <RouterLink to="/recuperar-senha">Esqueceu a senha? Clique aqui.</RouterLink>
+                <Link className="ForgotLink" component={RouterLink} to="/recuperar-senha">
+                  Esqueceu a senha? Clique aqui.
+                </Link>
               </Typography>
 
               <OrDivider/>
