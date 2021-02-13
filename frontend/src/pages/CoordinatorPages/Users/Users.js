@@ -17,13 +17,13 @@ const columns = [
   { field: 'active',   headerName: 'Ativo',    width: 120, 
     renderCell: (params) => ( 
       <>
-        { params.value === true  && <CheckIcon/>}
-        { params.value === false && <ClearIcon/>}
+        { params.value === true  && <CheckIcon color="primary"/>}
+        { params.value === false && <ClearIcon color="secondary"/>}
       </>
     )},
   { field: 'linkPath', headerName: 'Editar', width: 120, 
     renderCell: (params) => ( 
-      <IconButton component={RouterLink} to={`/usuario/${params.value}`}>
+      <IconButton color="primary" component={RouterLink} to={`/usuario/${params.value}`}>
         <EditIcon/>
       </IconButton>
     )},

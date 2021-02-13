@@ -16,13 +16,13 @@ const columns = [
   { field: 'approve',   headerName: 'Opções',  width: 120, 
     renderCell: (params) => ( 
       <>
-        <IconButton><CheckIcon/></IconButton>
-        <IconButton><ClearIcon/></IconButton>
+        <IconButton color="primary"><CheckIcon/></IconButton>
+        <IconButton color="secondary"><ClearIcon/></IconButton>
       </>
     )},
   { field: 'linkPath', headerName: 'Editar', width: 120, 
     renderCell: (params) => ( 
-      <IconButton component={RouterLink} to={`/usuario/${params.value}`}>
+      <IconButton color="primary" component={RouterLink} to={`/usuario/${params.value}`}>
         <EditIcon/>
       </IconButton>
       

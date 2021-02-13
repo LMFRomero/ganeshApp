@@ -1,4 +1,5 @@
 import { Box, Container, Grid, Button } from '@material-ui/core'
+import AddSharpIcon from '@material-ui/icons/AddSharp';
 import './Fronts.css'
 
 import { Link as RouterLink } from 'react-router-dom';
@@ -30,7 +31,7 @@ function Fronts(props){
             <Grid container spacing={3} justify="center">
   
               <Grid item container xs={12} sm={12} md={8} justify="flex-end">
-                <Button  size="small" variant="outlined" color="secondary" 
+                <Button variant="contained" color="secondary" startIcon={<AddSharpIcon/>} 
                   component={RouterLink} to="/criar-frente">Criar Frente</Button>
               </Grid>
               
@@ -64,7 +65,7 @@ function Fronts(props){
               <Grid item xs={12} sm={12} md={8}>
                 <FrontCard 
                     avatar="G" 
-                    title="Ganesh - Reunião Geral"
+                    title="Reunião Geral"
                     type="Grupo de Extensão"
                     participants={frontMembers}
                     />

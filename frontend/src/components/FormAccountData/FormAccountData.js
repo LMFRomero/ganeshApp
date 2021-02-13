@@ -23,7 +23,7 @@ function FormAccountData(props){
       </Table>
     
       <Typography>
-      <Button variant="contained" size="medium" fullWidth color="primary">
+      <Button variant="contained" size="large" fullWidth color="primary">
         <strong>Excluir cadastro</strong>
       </Button>
       </Typography>

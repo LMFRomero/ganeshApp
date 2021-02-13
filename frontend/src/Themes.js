@@ -24,6 +24,12 @@ const themeGenerator = (isDark) => {
           color: '#ffffff',
           backgroundColor: '#00695f'
         }
+      },
+      MuiLink: { 
+        root: {
+          fontWeight: 'bold',
+          color: (isDark) ? '#33ab9f' : '#009688',
+        }
       }
     }
   }

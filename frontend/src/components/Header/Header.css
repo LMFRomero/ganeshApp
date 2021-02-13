@@ -1,3 +1,9 @@
+.HeaderLogo { 
+    max-width: 2rem;
+    margin-right: 8px;
+}
+
+
 .SideMenu > .MuiDrawer-paperAnchorLeft {
     width: 240px;
 }

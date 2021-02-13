@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import './Header.css'
 
 import { AppBar, Box, Divider, Drawer, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core'
@@ -16,7 +16,8 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import GroupIcon from '@material-ui/icons/Group';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import GaneshLogo from '../../assets/images/GaneshLogo.png'
+import GaneshSidebarImg from '../../assets/images/Ganesh500x500.png'
+import GaneshHeaderImg from '../../assets/images/GaneshBranco64x64.png'
 
 const menuItems = [
   { text: "Reuniões",     link: "/reunioes",      icon: () => <ScheduleIcon/> },
@@ -34,6 +35,7 @@ const exitItem = { text: "Sair", link: "/logout", icon: () => <ExitToAppIcon/> }
 
 function Header(props) {
 
+  const currentLocation = useLocation();
   const [ drawerVisible, setDrawerVisible ] = useState(false)
 
   const toggleDrawer = (open) => (event) => {
@@ -44,7 +46,9 @@ function Header(props) {
 
   const renderListItem = (item) => {
     return(
-      <ListItem button onClick={toggleDrawer(false)} key={item.text} component={RouterLink} to={item.link}>
+      <ListItem button onClick={toggleDrawer(false)} key={item.text} 
+        component={RouterLink} to={item.link}
+        selected={ currentLocation.pathname.indexOf(item.link) > -1 }>
           <ListItemIcon> { item.icon() }</ListItemIcon>
           <ListItemText primary={ item.text } />
       </ListItem>
@@ -54,7 +58,7 @@ function Header(props) {
   const drawerContent = () => {
     return (
       <Box className="DrawerContent">
-        <img src={GaneshLogo} alt="Logo do Ganesh - Grupo de Extensão do ICMC"/>
+        <img src={GaneshSidebarImg} alt="Logo do Ganesh - Grupo de Extensão do ICMC"/>
         
         <Divider/>
         
@@ -73,12 +77,13 @@ function Header(props) {
         {/* Header AppBar */}
         <AppBar className="HeaderComponent" position="sticky">
           <Toolbar>
-            <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
-              <MenuIcon />
-            </IconButton>
+            
+            <RouterLink to="/reunioes">
+              <img className="HeaderLogo" src={GaneshHeaderImg} alt="Ganesh - Grupo de Extensão USP ICMC"/>
+            </RouterLink>
 
             <Typography variant="h6" style={{flexGrow: 1 }}>
-              Ganesh App
+              Ganesh - ICMC
             </Typography>
 
             {/* darkTheme={props.darkTheme} handleTheme={props.handleTheme} */}
@@ -93,6 +98,12 @@ function Header(props) {
               <SunIcon />
             </IconButton>
             }
+
+            <Hidden mdUp implementation="css">
+              <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
+                <MenuIcon />
+              </IconButton>
+            </Hidden>
 
           </Toolbar>
         </AppBar>
