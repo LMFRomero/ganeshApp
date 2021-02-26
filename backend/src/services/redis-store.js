@@ -4,7 +4,7 @@ const redisStore = require('connect-redis')(session);
 
 const sessionClient = redis.createClient({
     db: 0,
-    host: 'redis',
+    host: `${process.env.REDIS_HOSTNAME}`,
     port: '6379'
 });
 
@@ -18,7 +18,7 @@ sessionClient.on('error', (err) => {
 
 const frequencyClient = redis.createClient({
     db: 1,
-    host: 'redis',
+    host: `${process.env.REDIS_HOSTNAME}`,
     port: '6379'
 });
 

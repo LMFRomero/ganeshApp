@@ -1,0 +1,38 @@
+version: "3"
+services:
+    ganeshapp_redis:
+        image: redis
+        ports:
+            - 6379:6379
+        container_name: ganeshappCache
+
+    ganeshapp_mongodb:
+        image: mongo
+        ports: 
+            - 27017:27017
+        container_name: ganeshappMongoDB
+
+    ganeshapp_node:
+        build: 
+            context: ./backend/
+            dockerfile: Dockerfile
+        ports:
+            - 3333:3333
+        container_name: ganeshappNode
+        depends_on:
+            - ganeshapp_redis
+            - ganeshapp_mongodb
+        environment:
+            - MONGODB_HOSTNAME=ganeshapp_mongodb
+            - REDIS_HOSTNAME=ganeshapp_redis
+            - REACT_HOSTNAME=ganeshapp_react
+
+    ganeshapp_react:
+        build: 
+            context: ./frontend/
+            dockerfile: Dockerfile
+        ports:
+            - 3000:3000
+        container_name: ganeshappReact
+        depends_on:
+            - ganeshapp_node

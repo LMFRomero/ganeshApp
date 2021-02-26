@@ -8,7 +8,7 @@ const session = require('express-session');
 const redis = require('./services/redis-store');
 
 const passport = require('passport');
-const passaportConfig = require('./services/passaport');
+const passportConfig = require('./services/passport');
 
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -23,14 +23,15 @@ app.use(multer().array());
 
 app.use(cors({
     credentials: true,
-    origin: 'http://ganeshfront.ddns.net:3000'
+    origin: [`http://${process.env.REACT_HOSTNAME}:3000`, 'http://localhost:3000'],
+    exposedHeaders: ["set-cookie"]
 }));
 
 const assetsPath = path.join(__dirname, './public');
 app.use(express.static(assetsPath));
 
 app.use(session({
-    resave: false,
+    resave: true,
     name: "ganeshSession",
     saveUninitialized: true,
     cookie: {secure: false, httpOnly: true, sameSite: 'none', maxAge: 3600000 }, //TODO: change secure to true
@@ -40,11 +41,16 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect(`${process.env.GANESH_CLUSTER}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-});
+try {
+    mongoose.connect(`mongodb://${process.env.MONGODB_HOSTNAME}:27017/ganeshapp`, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+    console.log("MongoDB Connected");    
+} catch (error) {
+    console.log("MongoDB Error");
+    console.log(error);
+}
 
 app.use(timeout('10s'));
 app.use(express.json());
