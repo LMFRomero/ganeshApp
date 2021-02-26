@@ -6,8 +6,8 @@ const sessionStore = require('../services/redis-store');
 const express = require('express');
 
 const passport = require('passport');
-const mypassport = require('../services/passaport');
-require('../services/passaport')(passport);
+const mypassport = require('../services/passport');
+require('../services/passport')(passport);
 
 /**
  * @typedef {express.Request} Request
