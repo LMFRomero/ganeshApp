@@ -11,9 +11,9 @@ import { authService } from '../../../services/authService'
 function Register(){
 
   const [submitDisabled, setSubmitDisabled] = useState(false)
-  const [formSuccess, setFormSuccess] = useState('')
-  const [formErrors, setFormErrors] = useState({})
-  const [formData, setFormData] = useState({
+  const [formSuccess, setFormSuccess]       = useState('')
+  const [formErrors, setFormErrors]         = useState({})
+  const [formData, setFormData]             = useState({
     name: '',
     course: 'BCC',
     otherCourse: '',
@@ -43,7 +43,7 @@ function Register(){
     }
 
     authService.register(formData)
-    .then(   function( ) { setFormSuccess("Cadastro criado com sucesso!") })
+    .then(   function( ) { setFormSuccess({message: "Cadastro criado com sucesso!" }) })
     .catch(  function(e) { setFormErrors(e) })     
     .finally(function( ) { setSubmitDisabled(false) })
   }
