@@ -5,7 +5,7 @@ export const authService = {
     logout,
     register,
     recoverLink,
-    resetPassword
+    resetPassword,
 }
 
 function login(email, password) {
@@ -27,9 +27,14 @@ function login(email, password) {
     })
 }
 
-function logout() { 
-    localStorage.removeItem("auth")
-    document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+function logout() {
+    return api.post('/logout')
+    .finally(() => { 
+        localStorage.removeItem("auth")
+        document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        return Promise.resolve();
+    })
 }
 
 function register(user) { 
@@ -46,6 +51,40 @@ function register(user) {
     })
 }
 
-function recoverLink() { }
+function recoverLink(email) { 
+    return api.post('/forgotPassword', {email})
+    .then((response) => { 
+        return Promise.resolve({message: "Link enviado para seu e-mail!"})
+    })
+    .catch( (error) => {
+        // Status Code out of range 2xx
+        if(error.response) {
+            return Promise.reject( 
+                error.response.data || { message: 'Ocorreu um no processamento da requisição!' }
+            )
+        }
+        // No response received OR error in request settings
+        return Promise.reject({ message:'Ocorreu um erro no envio!' })
+    })
+}
 
-function resetPassword() { }
+function resetPassword(password, token) { 
+    return api.post('/resetPassword/' + token, { password })
+    .then((response) => { 
+        return Promise.resolve({message: "Senha atualizada com sucesso!"})
+    })
+    .catch( (error) => {
+        // Status Code out of range 2xx
+        if(error.response) {
+            return Promise.reject( 
+                error.response.data || { message: 'Ocorreu um no processamento da requisição!' }
+            )
+        }
+        // No response received OR error in request settings
+        return Promise.reject({ message:'Ocorreu um erro no envio!' })
+    })
+}
+
+
+
+
