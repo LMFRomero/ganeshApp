@@ -17,7 +17,7 @@ const themeGenerator = (isDark) => {
         dark:  '#ab003c',
         contrastText: '#fff',
       },
-    },
+    }, // end palette
     overrides: {
       MuiAvatar: { 
         colorDefault: {
@@ -30,8 +30,23 @@ const themeGenerator = (isDark) => {
           fontWeight: 'bold',
           color: (isDark) ? '#33ab9f' : '#009688',
         }
+      },
+      MuiAlert: { 
+        standardSuccess: { 
+          color: "#ffffff",
+          backgroundColor: "#4caf50",
+          fontWeight: "500"
+        },
+        standardError: { 
+          color: "#ffffff",
+          backgroundColor: "#f44336",
+          fontWeight: "500",
+        },
+        icon: { 
+          color:'#ffffff !important'
+        }
       }
-    }
+    } // end overrides
   }
 }
 
