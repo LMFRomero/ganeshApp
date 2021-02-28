@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import './Header.css'
-
+import { useHistory, Link as RouterLink, useLocation } from 'react-router-dom';
 import { AppBar, Box, Divider, Drawer, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import './Header.css'
 
 import MenuIcon from '@material-ui/icons/Menu';
 import SunIcon from '@material-ui/icons/WbSunny';
@@ -18,6 +17,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import GaneshSidebarImg from '../../assets/images/Ganesh500x500.png'
 import GaneshHeaderImg from '../../assets/images/GaneshBranco64x64.png'
+
+import { authService } from '../../services/authService'
 
 const menuItems = [
   { text: "Reuniões",     link: "/reunioes",      icon: () => <ScheduleIcon/> },
@@ -35,8 +36,17 @@ const exitItem = { text: "Sair", link: "/logout", icon: () => <ExitToAppIcon/> }
 
 function Header(props) {
 
+  const history = useHistory()
   const currentLocation = useLocation();
   const [ drawerVisible, setDrawerVisible ] = useState(false)
+
+  const handleLogout = () => {
+    authService.logout()
+    .then(function() {
+      toggleDrawer(false)
+      history.push('/')
+    })
+  }
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) 
@@ -55,6 +65,15 @@ function Header(props) {
     )
   }
 
+  const renderLogoutItem = (item) => {
+    return(
+      <ListItem button onClick={handleLogout} key={item.text} >
+          <ListItemIcon> { item.icon() }</ListItemIcon>
+          <ListItemText primary={ item.text } />
+      </ListItem>
+    )
+  }
+
   const drawerContent = () => {
     return (
       <Box className="DrawerContent">
@@ -65,9 +84,8 @@ function Header(props) {
         <List>
           { menuItems.map((item, index) => renderListItem(item)) }
           { menuItemsCoordinators.map((item, index) => renderListItem(item)) }
-          { renderListItem(exitItem) }
+          { renderLogoutItem(exitItem) }
         </List>
-
       </Box>
     )
   }
