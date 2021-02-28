@@ -23,8 +23,8 @@ routes.post('/api/logout', SessionController.isAuth, SessionController.destroy);
 //new users management
 routes.post('/api/acceptUser', SessionController.isAuth, privilegeMan.canManageMembers, RequestUserController.update);
 routes.post('/api/rejectUser', SessionController.isAuth, privilegeMan.canManageMembers, RequestUserController.destroy);
-routes.post('/api/acceptUser/dev', SessionController.isAuth, RequestUserController.update);
-routes.post('/api/rejectUser/dev', SessionController.isAuth, RequestUserController.destroy);
+routes.post('/api/acceptUser/dev', RequestUserController.update);
+routes.post('/api/rejectUser/dev', RequestUserController.destroy);
 
 //reset password
 routes.post('/api/forgotPassword', ResetPasswordController.store);
