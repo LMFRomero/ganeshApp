@@ -11,18 +11,30 @@ const RequestUserSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-    name: {
-        type: String,
-        unique: true,
-        required: true
-    },
     username: {
         type: String,
         unique: true,
         required: true
     },
+    pingParticipant: {
+        type: Boolean,
+        required: true,
+    },
+
+    name: {
+        type: String,
+        required: true
+    },
+    institution: {
+        type: String,
+        required: true,
+    },
     collegeID: {
         type: Number,
+        required: true
+    },
+    course : {
+        type: Boolean,
         required: true
     },
     yearJoinCollege: {
