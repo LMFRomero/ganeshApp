@@ -17,7 +17,7 @@ const routes = express.Router();
 //register and login
 routes.post('/api/register', RequestUserController.store);
 routes.post('/api/validate', SessionController.isAuth, (req, res) => { res.status(200).end() });
-routes.post('/api/login', passport.authenticate('local'), (req, res) => res.status(200).end());
+routes.post('/api/login', passport.authenticate('local'), UserController.getLoginInfo);
 routes.post('/api/logout', SessionController.isAuth, SessionController.destroy);
 
 //new users management

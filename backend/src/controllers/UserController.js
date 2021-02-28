@@ -62,4 +62,19 @@ module.exports = {
         else
             return null;
     },
+
+    async getLoginInfo (req, res) {
+        let dbUser = await SafeFindOne (User, { email: req.body.email });
+        if (!dbUser) {
+            return res.status(400).json({ "email": "Email não encontrado" });
+        }
+
+        let user = {
+            "username": dbUser.username,
+            "title": dbUser.title,
+            "role": dbUser.roleInt,
+        };
+        
+        return res.status(200).json(user);
+    }
 }
