@@ -12,7 +12,7 @@ let roles = {
     },
 
     getRoleInt (role) {
-        if (role == 'pingParticipant')          return roles.globals.PingMember;
+        if (role == 'pingParticipant')          return roles.globals.pingParticipant;
         if (role == 'collaborator')             return roles.globals.collaborator;
         if (role == 'member')                   return roles.globals.member;
         if (role == 'generalCoordinator')       return roles.globals.generalCoordinator;
