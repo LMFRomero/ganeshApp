@@ -3,7 +3,7 @@ const User = require('../models/User');
 const bCrypt = require('../services/hashes');
 const { SafeFindOne, SafeCreateObj, SafeFind, SafeDeleteOne } = require('../services/safe-exec');
 const { session } = require('passport');
-const { setGlobalRole } = require('../services/privilege');
+const { getRoleInt, getTitle } = require('../utils/roles');
 
 module.exports = {
     async store (req, res) {
@@ -150,7 +150,7 @@ module.exports = {
         });
 
         if (!user) {
-            return res.status(500).end();
+            return res.status(500).json({ requestUser: "Não foi possível registrar o usuário" });
         }
 
         return res.status(201).end();
@@ -176,24 +176,46 @@ module.exports = {
         }
 
         let user = await SafeFindOne(RequestUser, {email: req.body.email});
-        if (!user) return res.status(404).end();
+        if (!user) {
+            return res.status(404).end();
+        }
+
+        let roleInt;
+        if (req.body.role == "pingParticipant" || req.body.role == "collaborator" || req.body.role == "member") {
+            roleInt = getRoleInt(req.body.role);
+        }
+        else {
+            return res.status(400).json({ role: "Função inválida" });
+        }
+
+        let title = getTitle(roleInt);
 
         let newUser = await SafeCreateObj(User, {
             email: user.email, 
-            password: user.password, 
-            name: user.name, 
             username: user.username, 
+            password: user.password,
+
+            name: user.name,
+            institution: user.institution,
+            course: user.course,
             collegeID: user.collegeID, 
             yearJoinCollege: user.yearJoinCollege, 
             yearJoinGanesh: user.yearJoinGanesh,
+
+            roleInt,
+            title,
+
+            isDeleted: false,
         });
-        if (!newUser) return res.status(500).end();
+        if (!newUser) {
+            return res.status(500).json({ user: "Não foi possível criar o usuário" });
+        }
+
+        const response = await SafeDeleteOne(RequestUser, { email: req.body.email });
+        if (!response) {
+            return res.status(500).json({ requestUser: "Não foi possível deletar o usuário registrado" });
+        }
         
-        await SafeDeleteOne(RequestUser, { email: req.body.email });
-
-        if (req.body.role == "member") await setGlobalRole(newUser._id, "member");
-        else await setGlobalRole(newUser._id, "collaborator");
-
         return res.status(200).end();
     },
 
@@ -206,8 +228,11 @@ module.exports = {
             return res.status(400).end();
         }
 
-        await SafeDeleteOne(RequestUser, { email: req.body.email });
-
+        const response = await SafeDeleteOne(RequestUser, { email: req.body.email });
+        if (!response) {
+            return res.status(500).json({ requestUser: "Não foi possível deletar o usuário registrado" });
+        }
+        
         return res.status(200).end();
     }
 }
