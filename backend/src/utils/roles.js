@@ -1,58 +1,42 @@
 let roles = {
     globals: {
-        root: {
-            roleInt: 0,
-            accountPerms: 31,
-        },
-
-        generalCoordinator: {
-            roleInt: 10,
-            accountPerms: 31,
-        }, 
-
-        viceGeneralCoordinator: {
-            roleInt: 11,
-            accountPerms: 31,
-        },
-
-        HRCoordinator: {
-            roleInt: 21,
-            accountPerms: 31,
-        },
-
-        secretary: {
-            roleInt: 22,
-            accountPerms: 31,
-        },
-
-        estudiesCoordinator: {
-            roleInt: 23,
-            accountPerms: 31,
-        },
-      
-        member: {
-            roleInt: 60,
-            accountPerms: 0,
-        },
-        
-        collaborator: {
-            roleInt: 80,
-            accountPerms: 0,
-        },
+        root: 0,
+        generalCoordinator: 10,
+        viceGeneralCoordinator: 11,
+        HRCoordinator: 21,
+        secretary: 22,
+        estudiesCoordinator: 23,
+        member: 60,
+        collaborator: 80,
+        PingMember: 100,
     },
 
-    getGlobalTemplate (role) {
-        if (role == 'collaborator') return roles.globals.collaborator;
-        if (role == 'member') return roles.globals.member;
-        if (role == 'generalCoordinator') return roles.globals.generalCoordinator;
-        if (role == 'viceGeneralCoordinator') return roles.globals.viceGeneralCoordinator;
-        if (role == 'HRCoordinator') return roles.globals.HRCoordinator;
-        if (role == 'estudiesCoordinator') return roles.globals.estudiesCoordinator;
-        if (role == 'secretary') return roles.globals.secretary;
-        if (role == 'root') return roles.globals.root;
+    getRoleInt (role) {
+        if (role == 'PingMember')               return roles.globals.PingMember;
+        if (role == 'collaborator')             return roles.globals.collaborator;
+        if (role == 'member')                   return roles.globals.member;
+        if (role == 'generalCoordinator')       return roles.globals.generalCoordinator;
+        if (role == 'viceGeneralCoordinator')   return roles.globals.viceGeneralCoordinator;
+        if (role == 'HRCoordinator')            return roles.globals.HRCoordinator;
+        if (role == 'estudiesCoordinator')      return roles.globals.estudiesCoordinator;
+        if (role == 'secretary')                return roles.globals.secretary;
+        if (role == 'root')                     return roles.globals.root;
         
+        return -1;
+    },
+
+    getTitle (roleInt) {
+        if (roleInt == roles.globals.PingMember)                return "Ingressante";
+        if (roleInt == roles.globals.generalCoordinator)        return "Coordenador Geral";
+        if (roleInt == roles.globals.viceGeneralCoordinator)    return "Vice Coordenador Geral";
+        if (roleInt == roles.globals.HRCoordinator)             return "Coordenador de Recursos Humanos";
+        if (roleInt == roles.globals.secretary)                 return "Secretário";
+        if (roleInt == roles.globals.estudiesCoordinator)       return "Coordenador de Estudos";
+        if (roleInt == roles.globals.member)                    return "Membro";
+        if (roleInt == roles.globals.collaborator)              return "Colaborador";
+
         return null;
-    },
+    }
 };
 
 module.exports = roles;
