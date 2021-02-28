@@ -6,18 +6,27 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
     password: {
         type: String,
         unique: true,
         required: true
     },
+
     name: {
         type: String,
         required: true
     },
-    username: {
+    institution: {
         type: String,
-        unique: true,
+        required: true,
+    },
+    course: {
+        type: String,
         required: true
     },
     collegeID: {
@@ -38,11 +47,11 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Meeting'
     }],
-
     fronts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Front'
     }],
+
     roleInt: {
         type: Number,
         required: true
@@ -51,6 +60,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    
     isDeleted: {
         type: Boolean,
         required: true
