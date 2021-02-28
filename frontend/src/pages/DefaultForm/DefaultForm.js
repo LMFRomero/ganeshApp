@@ -11,14 +11,14 @@ function DefaultForm(props){
 
     const options = {
         announce: { name: 'Comunicado', render: (v) => <FormAnnounce variant={v}/> },
-        meeting: {  name: 'Reunião',    render: (v) => <FormMeeting variant={v}/> },
-        front: {    name: 'Frente',     render: (v) => <FormFront variant={v}/> },
+        meeting:  { name: 'Reunião',    render: (v) => <FormMeeting variant={v}/> },
+        front:    { name: 'Frente',     render: (v) => <FormFront variant={v}/> },
     }
 
     const renderTitle = () => {
         return (
             <Typography variant="h3">
-                { (action == 'edit') ? 'Editar ' : 'Criar '}
+                { (action === 'edit') ? 'Editar ' : 'Criar '}
                 { options[subject].name }
             </Typography>
         )
