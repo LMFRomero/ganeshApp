@@ -197,20 +197,12 @@ module.exports = {
     },
 
     async show (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
-            return res.status(401).end();
-        }
-
         let users = await SafeFind(RequestUser, {});
 
         return res.status(200).json(users);
     },
 
     async update (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
-            return res.status(401).end();
-        }
-
         if (!req.body || !req.body.email) {
             return res.status(400).end();
         }
@@ -219,6 +211,7 @@ module.exports = {
         if (!user) {
             return res.status(404).end();
         }
+        
 
         let roleInt;
         if (req.body.role == "pingParticipant" || req.body.role == "collaborator" || req.body.role == "member") {
@@ -260,10 +253,6 @@ module.exports = {
     },
 
     async destroy (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
-            return res.status(401).end();
-        }
-            
         if (!req.body || !req.body.email) {
             return res.status(400).end();
         }
