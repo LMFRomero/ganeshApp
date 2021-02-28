@@ -140,13 +140,15 @@ module.exports = {
         user = await SafeCreateObj(RequestUser, {
             email, 
             password, 
-            name, 
             username, 
+            pingParticipant,
+            
+            name, 
             institution, 
-            collegeID, 
+            collegeID,
+            course, 
             yearJoinCollege, 
             yearJoinGanesh,
-            pingParticipant
         });
 
         if (!user) {
