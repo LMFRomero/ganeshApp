@@ -57,7 +57,7 @@ function ForgotPassword(){
         </Typography>
         
         <TextField type="email" variant="outlined" fullWidth label="E-mail" name="email" value={formData.email}
-          required inputProps={{maxlength:64}} error={formErrors.email} onChange={handleChange} />
+          required inputProps={{maxLength:64}} error={formErrors.email} onChange={handleChange} />
         
         <Typography variant="caption" align="left">
           Insira o e-mail utilizado no cadastro e te enviaremos um link 
@@ -80,10 +80,10 @@ function ForgotPassword(){
         </Typography>
         
         <TextField type="password" variant="outlined" fullWidth label="Senha" name="password" value={formData.password}
-          required inputProps={{maxlength:64}} error={formErrors.password} onChange={handleChange} />
+          required inputProps={{maxLength:64}} error={formErrors.password} onChange={handleChange} />
         
         <TextField type="password" variant="outlined" fullWidth label="Confirmar senha" name="repeatPassword" value={formData.repeatPassword}
-          required inputProps={{maxlength:64}} error={formErrors.repeatPassword} onChange={handleChange} />
+          required inputProps={{maxLength:64}} error={formErrors.repeatPassword} onChange={handleChange} />
 
         <Button variant="contained" size="large" fullWidth color="secondary"
           type="submit" disabled={submitDisabled}>
@@ -102,7 +102,7 @@ function ForgotPassword(){
             formErrors={formErrors} setFormErrors={setFormErrors}/>
 
           <Grid item xs={12} md={4}>
-            <form classname="ForgotPasswordForm" onSubmit={handleSubmit}>
+            <form className="ForgotPasswordForm" onSubmit={handleSubmit}>
 
               {/* Show the form based on the URL parameter */}
               { recoverToken ? changePassword() : requestToken() }

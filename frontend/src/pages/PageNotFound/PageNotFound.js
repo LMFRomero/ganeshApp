@@ -2,6 +2,7 @@ import { Box, Container, Grid, Link, Typography } from "@material-ui/core";
 import { Link as RouterLink } from 'react-router-dom';
 
 import GaneshLogo from '../../assets/images/GaneshLogo.png'
+import { authService } from '../../services/authService'
 
 function PageNotFound(){
   return(
@@ -15,9 +16,10 @@ function PageNotFound(){
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="h2" align="center">404 - Página não encontrada</Typography>
+            <Typography variant="h2" align="center" style={{color:"#fff"}}>404 - Página não encontrada</Typography>
             <Typography variant="h6" align="center">
-              <Link color="secondary" component={RouterLink} to="/reunioes">
+              <Link color="secondary" component={RouterLink}
+                to={authService.isAuthenticated() ? "/reunioes" : "/" }>
                 Voltar para a página inicial
               </Link>
             </Typography>
