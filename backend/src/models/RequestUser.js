@@ -34,7 +34,7 @@ const RequestUserSchema = new mongoose.Schema({
         required: true
     },
     course : {
-        type: Boolean,
+        type: String,
         required: true
     },
     yearJoinCollege: {
