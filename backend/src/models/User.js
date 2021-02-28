@@ -13,7 +13,6 @@ const UserSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        unique: true,
         required: true
     },
     username: {
@@ -44,8 +43,18 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Front'
     }],
-
-    roleInt: Number,
+    roleInt: {
+        type: Number,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('User', UserSchema);
