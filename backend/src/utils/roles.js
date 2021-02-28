@@ -8,11 +8,11 @@ let roles = {
         estudiesCoordinator: 23,
         member: 60,
         collaborator: 80,
-        PingMember: 100,
+        pingParticipant: 100,
     },
 
     getRoleInt (role) {
-        if (role == 'PingMember')               return roles.globals.PingMember;
+        if (role == 'pingParticipant')          return roles.globals.PingMember;
         if (role == 'collaborator')             return roles.globals.collaborator;
         if (role == 'member')                   return roles.globals.member;
         if (role == 'generalCoordinator')       return roles.globals.generalCoordinator;
@@ -26,7 +26,7 @@ let roles = {
     },
 
     getTitle (roleInt) {
-        if (roleInt == roles.globals.PingMember)                return "Ingressante";
+        if (roleInt == roles.globals.pingParticipant)           return "Ingressante";
         if (roleInt == roles.globals.generalCoordinator)        return "Coordenador Geral";
         if (roleInt == roles.globals.viceGeneralCoordinator)    return "Vice Coordenador Geral";
         if (roleInt == roles.globals.HRCoordinator)             return "Coordenador de Recursos Humanos";
