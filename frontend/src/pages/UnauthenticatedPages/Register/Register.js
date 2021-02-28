@@ -65,7 +65,7 @@ function Register(){
               <TextField variant="outlined" fullWidth label="Nome Completo" name="name" value={formData.name}
                 autoFocus required inputProps={{maxLength:64}} error={formErrors.name} onChange={handleChange} />
 
-              <TextField variant="outlined" fullWidth label="Número USP" name="collegeID" value={formData.collegeID}
+              <TextField variant="outlined" fullWidth label="Número de Matrícula" name="collegeID" value={formData.collegeID}
                 inputProps={{maxLength:12}} error={formErrors.collegeID} onChange={handleChange} />
               
               <FormControl variant="outlined" fullWidth error={formErrors.course}>
