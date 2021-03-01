@@ -3,7 +3,6 @@ const RequestUser = require('../models/RequestUser');
 const bCrypt = require('../services/hashes');
 const { SafeFindOne, SafeCreateObj, SafeFindById } = require('../services/safe-exec');
 const { setGlobalRole } = require('../services/privilege');
-const { parse } = require('dotenv/types');
 
 module.exports = {
     async store (req, res) {
@@ -116,7 +115,7 @@ module.exports = {
         else {
             yearJoinCollege = yearJoinCollege.toString();
         }
-        if (yearJoinCollege.lenght > 12) {
+        if (yearJoinCollege.length > 12) {
             return res.status(400).json({ yearJoinCollege: "O campo '111' só aceita no máximo 12 caracteres" });
         }
         else if (isNaN(yearJoinCollege)) {
@@ -145,7 +144,7 @@ module.exports = {
         else {
             collegeID = collegeID.toString();
         }
-        if (collegeID.lenght > 12) {
+        if (collegeID.length > 12) {
             return res.status(400).json({ collegeID: "O campo '333' só aceita no máximo 12 caracteres" });
         }
         else if (isNaN(collegeID)) {
@@ -225,10 +224,10 @@ module.exports = {
         let conflict1, conflict2;
 
         if (email && email != user.email) {
-            if (email.lenght > 64) {
+            if (email.length > 64) {
                 return res.status(400).json( { email: "O campo 'Email' só aceita no máximo 64 caracteres" });
             }
-            else if (email.lenght) {
+            else if (email.length) {
                 conflict1 = await SafeFindOne(User, { email });
                 conflict2 = await SafeFindOne(RequestUser, { email });
                 if (conflict1 || conflict2) {
@@ -242,7 +241,7 @@ module.exports = {
             if (username.length > 64) {
                 return res.status(400).json({ username: "O campo 'Apelido' só aceita no máximo 64 caracteres" });
             }
-            else if (username.lenght > 0) {
+            else if (username.length > 0) {
                 conflict1 = await SafeFindOne(User, { username });
                 conflict2 = await SafeFindOne(RequestUser, { username });
                 if (conflict1|| conflict2) {
@@ -256,18 +255,25 @@ module.exports = {
             if (password.length > 64) {
                 return res.status(400).json({ password: "O campo 'Senha' só aceita no máximo 64 caracteres" });
             }
-            else if (password.lenght > 0) {
+            else if (password.length > 0) {
                 password = bCrypt.createHash(password);
                 user.password = password;
             }
         }
 
+        console.log(name, user.name);
+        console.log(name ? true : false);
+        console.log((user.name != name));
+        console.log(name.length);
+
         if (name && name != user.name) {
             if (name.length > 64) {
                 return res.status(400).json({ name: "O campo 'Nome completo' é obrigatório" });
             }
-            else if (name.lenght > 0) {
+            else if (name.length > 0) {
+                console.log(name);
                 user.name = name;
+                console.log(user.name);
             }
         }
 
@@ -275,13 +281,13 @@ module.exports = {
             if (course.length > 64) {
                 return res.status(400).json({ course: "O campo 'Curso atual' só aceita no máximo 64 caracteres" });
             }
-            else if (course.lenght > 0) {
+            else if (course.length > 0) {
                 if (course == 'OUTRO') {
                         if (otherCourse && otherCourse != user.course) {
-                            if (otherCourse.lenght > 64) {
+                            if (otherCourse.length > 64) {
                                 return res.status(400).json({ otherCourse: "O campo 'Outro curso' só aceita no máximo 64 caracteres" });
                             }
-                            else if (otherCourse.lenght > 0) {
+                            else if (otherCourse.length > 0) {
                                 user.course = otherCourse;
                             }
                         }
@@ -296,13 +302,13 @@ module.exports = {
             if (institution.length > 64) {
                 return res.status(400).json({ institution: "O campo 'Instituição' só aceita no máximo 64 caracteres" });
             }
-            else if (institution.lenght > 0) {
+            else if (institution.length > 0) {
                 if (institution == 'OUTRA') {
                         if (otherInstitution && otherInstitution != user.institution) {
-                            if (otherInstitution.lenght > 64) {
+                            if (otherInstitution.length > 64) {
                                 return res.status(400).json({ otherInstitution: "O campo 'Outra instituição' só aceita no máximo 64 caracteres" });
                             }
-                            else if (otherInstitution.lenght > 0) {
+                            else if (otherInstitution.length > 0) {
                                 user.institution = otherInstitution;
                             }
                         }
@@ -315,7 +321,7 @@ module.exports = {
 
         //TODO: Change fieldname to align with frontend
         if (yearJoinCollege) {
-            if (yearJoinCollege.lenght > 12) {
+            if (yearJoinCollege.length > 12) {
                 return res.status(400).json({ yearJoinCollege: "O campo '111' só aceita no máximo 12 caracteres" });
             }
             else if (isNaN(yearJoinCollege) == false) {
@@ -325,7 +331,7 @@ module.exports = {
         
         //TODO: Change fieldname to align with frontend
         if (yearJoinGanesh) {
-            if (yearJoinGanesh.lenght > 12) {
+            if (yearJoinGanesh.length > 12) {
                 return res.status(400).json({ yearJoinGanesh: "O campo '222' só aceita no máximo 12 caracteres" });
             }
             else if (isNaN(yearJoinGanesh) == false) {
@@ -335,7 +341,7 @@ module.exports = {
 
         //TODO: Change fieldname to align with frontend
         if (collegeID) {
-            if (collegeID.lenght > 12) {
+            if (collegeID.length > 12) {
                 return res.status(400).json({ collegeID: "O campo '333' só aceita no máximo 12 caracteres" });
             }
             else if (isNaN(collegeID) == false) {

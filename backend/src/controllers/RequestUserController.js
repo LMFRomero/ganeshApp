@@ -122,7 +122,7 @@ module.exports = {
         else {
             yearJoinCollege = yearJoinCollege.toString();
         }
-        if (yearJoinCollege.lenght > 12) {
+        if (yearJoinCollege.length > 12) {
             return res.status(400).json({ yearJoinCollege: "O campo '111' só aceita no máximo 12 caracteres" });
         }
         else if (isNaN(yearJoinCollege)) {
@@ -151,7 +151,7 @@ module.exports = {
         else {
             collegeID = collegeID.toString();
         }
-        if (collegeID.lenght > 12) {
+        if (collegeID.length > 12) {
             return res.status(400).json({ collegeID: "O campo '333' só aceita no máximo 12 caracteres" });
         }
         else if (isNaN(collegeID)) {
