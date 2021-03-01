@@ -34,7 +34,12 @@ app.use(session({
     resave: true,
     name: "ganeshSession",
     saveUninitialized: true,
-    cookie: {secure: false, httpOnly: true, sameSite: 'strict', maxAge: 3600000 }, //TODO: change secure to true
+    cookie: {
+        secure: false, 
+        httpOnly: false, 
+        sameSite: 'strict', 
+        maxAge: 3600000 
+    }, //TODO: change secure to true
     secret: `${process.env.REDIS_SECRET}`,
     store: redis.sessionStore,
 }));
