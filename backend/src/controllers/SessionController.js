@@ -23,9 +23,7 @@ module.exports = {
     destroy (req, res) {
         if (req.isAuthenticated()) 
             req.logOut();
-                
-        res.cookie('ganeshSession', {expires: Date.now()})
-
+        
         return res.status(200).end();
     },
 
