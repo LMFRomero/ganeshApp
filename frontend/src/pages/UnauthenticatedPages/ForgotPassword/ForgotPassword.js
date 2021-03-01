@@ -29,6 +29,9 @@ function ForgotPassword(){
   const handleSubmit = (e) => {
     e.preventDefault()
     
+    setFormErrors({})
+    setFormSuccess({})
+
     if( recoverToken ) {
 
       if(formData.password !== formData.repeatPassword) {
@@ -37,14 +40,14 @@ function ForgotPassword(){
       }
 
       authService.resetPassword(formData.password, recoverToken)
-      .then(   function(s) { setFormSuccess(s)})
+      .then(   function(s) { setFormSuccess(s) })
       .catch(  function(e) { setFormErrors(e) })     
       .finally(function( ) { setSubmitDisabled(false) })
     
     } else {  
       authService.recoverLink(formData.email)
       .then(   function(s) { setFormSuccess(s) })
-      .catch(  function(e) { setFormErrors(e)  })     
+      .catch(  function(e) { setFormErrors(e) })     
       .finally(function( ) { setSubmitDisabled(false) })
     }
   }
