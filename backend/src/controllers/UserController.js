@@ -261,19 +261,12 @@ module.exports = {
             }
         }
 
-        console.log(name, user.name);
-        console.log(name ? true : false);
-        console.log((user.name != name));
-        console.log(name.length);
-
         if (name && name != user.name) {
             if (name.length > 64) {
                 return res.status(400).json({ name: "O campo 'Nome completo' é obrigatório" });
             }
             else if (name.length > 0) {
-                console.log(name);
                 user.name = name;
-                console.log(user.name);
             }
         }
 

@@ -20,6 +20,9 @@ routes.post('/api/validate', SessionController.isAuth, (req, res) => { res.statu
 routes.post('/api/login', passport.authenticate('local'), UserController.getLoginInfo);
 routes.post('/api/logout', SessionController.isAuth, SessionController.destroy);
 
+//users
+routes.put('/api/user/:id', UserController.update);
+
 //new users management
 routes.post('/api/acceptUser', SessionController.isAuth, privilegeMan.canManageMembers, RequestUserController.update);
 routes.post('/api/rejectUser', SessionController.isAuth, privilegeMan.canManageMembers, RequestUserController.destroy);
