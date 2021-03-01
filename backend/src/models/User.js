@@ -31,8 +31,6 @@ const UserSchema = new mongoose.Schema({
     },
     collegeID: {
         type: Number,
-        unique: true,
-        required: true
     },
     yearJoinCollege: {
         type: Number,

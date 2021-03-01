@@ -31,7 +31,6 @@ const RequestUserSchema = new mongoose.Schema({
     },
     collegeID: {
         type: Number,
-        required: true
     },
     course : {
         type: String,
