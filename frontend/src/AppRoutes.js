@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core'
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
+import { authService } from './services/authService'
 
 /* General Components */
 import Header from './components/Header/Header'
@@ -26,10 +27,24 @@ import Requests from './pages/CoordinatorPages/Requests/Requests'
 function AppRoutes(props) {
 
   // List of all private paths to add the HaveMenu class in <Box>
+  const currentLocation = useLocation();
   const privatePaths = ['/minha-conta', '/reunioes', '/reuniao/', '/criar-reuniao', '/editar-reuniao/', 
     '/comunicados', '/criar-comunicado', '/editar-comunicado/', '/usuario/',
     '/frentes', '/criar-frente', '/editar-frente/', '/usuarios', '/solicitacoes']
-  const currentLocation = useLocation();
+  
+  function PublicRoute({children, component: RenderComponent, ...rest}) {  
+    return (
+      <Route {...rest} render={((p) => {
+        if(authService.isAuthenticated()) 
+          return ( <Redirect to="/reunioes"/> )
+        
+        if(!props.darkTheme) 
+          props.handleTheme(true)
+        
+        return ( children)
+      })}/>
+    )
+  }
   
   function PrivateRoute({children, component: RenderComponent, ...rest}) {
     const isAuthenticated = () => true
@@ -53,11 +68,11 @@ function AppRoutes(props) {
       <Switch>
 
         {/* Routes - Unauthenticated User*/}
-        <Route exact path="/" component={Home}/>
-        <Route path="/login"  component={Login}/>
-        <Route path="/criar-conta" component={Register}/>
-        <Route path="/recuperar-senha/:recoverToken" component={ForgotPassword}/>
-        <Route path="/recuperar-senha" component={ForgotPassword}/>
+        <PublicRoute exact path="/"><Home/></PublicRoute>
+        <PublicRoute path="/login"><Login/></PublicRoute>
+        <PublicRoute path="/criar-conta"><Register/></PublicRoute>
+        <PublicRoute path="/recuperar-senha/:recoverToken"><ForgotPassword/></PublicRoute>
+        <PublicRoute path="/recuperar-senha"><ForgotPassword/></PublicRoute>
         
         {/* Rotas - Authenticated User*/}
         <PrivateRoute path="/reunioes"><Timeline variant="meetings"/></PrivateRoute>
@@ -78,7 +93,8 @@ function AppRoutes(props) {
         <PrivateRoute path="/solicitacoes"><Requests/></PrivateRoute>
 
         {/* Página 404 */}
-        <Route path="*" component={PageNotFound}/>
+        <Route exact path="/404" component={PageNotFound}/>
+        <Redirect path="*" to="/404"/>
       </Switch>
     </Box>
   )

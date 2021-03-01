@@ -43,20 +43,19 @@ function Login(){
 
             { showGlitchHop && <GlitchHop/> }
 
-
             <SnackAlerts formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
               formErrors={formErrors} setFormErrors={setFormErrors}/>
 
-            <form classname="LoginForm" onSubmit={handleSubmit}>
+            <form className="LoginForm" onSubmit={handleSubmit}>
               <Typography variant="h5" align="center">
                 <strong>Entrar no Ganesh App</strong>
               </Typography>
               
               <TextField type="email" variant="outlined" fullWidth label="E-mail" name="email" value={formData.email}
-                required inputProps={{maxlength:64}} error={formErrors.email} onChange={handleChange} />
+                required inputProps={{maxLength:64}} error={formErrors.email} onChange={handleChange} />
               
               <TextField type="password" variant="outlined" fullWidth label="Senha" name="password" value={formData.password}
-                required inputProps={{maxlength:64}} error={formErrors.password} onChange={handleChange} />
+                required inputProps={{maxLength:64}} error={formErrors.password} onChange={handleChange} />
               
               <Button variant="contained" size="large" fullWidth color="primary"
                 type="submit" disabled={submitDisabled}>

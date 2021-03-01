@@ -18,7 +18,7 @@ function Home(){
           </Grid>
           
           {/* Form Selection Buttons */}
-          <Grid item xs={12} md={5} justify="center" className="HomeWelcome" >
+          <Grid item xs={12} md={5} className="HomeWelcome" >
             <Typography variant="h5" align="center">
               <strong>Bem vindo ao Ganesh App!</strong>
             </Typography>
