@@ -37,6 +37,9 @@ function Register(){
   const handleSubmit = (e) => {
     e.preventDefault()
     
+    setFormErrors({})
+    setFormSuccess({})
+
     if(formData.password !== formData.repeatPassword) {
       setFormErrors({ repeatPassword: "As senhas não são iguais!" })
       return

@@ -13,7 +13,7 @@ function Login(){
 
   const [showGlitchHop, setShowGitchHop]    = useState(false)
   const [submitDisabled, setSubmitDisabled] = useState(false)
-  const [formSuccess, setFormSuccess]       = useState('')
+  const [formSuccess, setFormSuccess]       = useState({})
   const [formErrors, setFormErrors]         = useState({})
   const [formData, setFormData]             = useState({
     email: '',
@@ -27,6 +27,9 @@ function Login(){
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    
+    setFormErrors({})
+    setFormSuccess({})
     
     authService.login(formData.email, formData.password)
     .then(   function( ) { setShowGitchHop(true) })

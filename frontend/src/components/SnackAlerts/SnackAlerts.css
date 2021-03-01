@@ -1,0 +1,7 @@
+.SnackAlerts .MuiAlert-root {
+    margin-top: 8px;
+}
+
+.SnackAlerts .MuiAlert-root:first-child { 
+    margin-top: 0;
+}
