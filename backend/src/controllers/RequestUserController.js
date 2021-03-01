@@ -117,45 +117,45 @@ module.exports = {
 
         //TODO: Change fieldname to align with frontend
         if (!yearJoinCollege) {
-            return res.status(400).json({ yearJoinCollege: "O campo '111' é obrigatório" });
+            return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' é obrigatório" });
         }
         else {
             yearJoinCollege = yearJoinCollege.toString();
         }
         if (yearJoinCollege.length > 12) {
-            return res.status(400).json({ yearJoinCollege: "O campo '111' só aceita no máximo 12 caracteres" });
+            return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' só aceita no máximo 12 caracteres" });
         }
         else if (isNaN(yearJoinCollege)) {
-            return res.status(400).json({ yearJoinCollege: "O campo '111' é inválido" });
+            return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' é inválido" });
         }
         
         //TODO: Change fieldname to align with frontend
         if (!yearJoinGanesh) {
-            return res.status(400).json({ yearJoinGanesh: "O campo '222' é obrigatório" });
+            return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' é obrigatório" });
         }
         else {
             yearJoinGanesh = yearJoinGanesh.toString();
         }
         if (yearJoinGanesh.length > 12) {
-            return res.status(400).json({ yearJoinGanesh: "O campo '222' só aceita no máximo 12 caracteres" });
+            return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' só aceita no máximo 12 caracteres" });
         }
         else if (isNaN(yearJoinGanesh)) {
-            return res.status(400).json({ yearJoinGanesh: "O campo '222' é inválido" });
+            return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' é inválido" });
         }
 
 
         //TODO: Change fieldname to align with frontend
         if (!collegeID) {
-            return res.status(400).json({ collegeID: "O campo '333' é obrigatório" });
+            return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' é obrigatório" });
         }
         else {
             collegeID = collegeID.toString();
         }
         if (collegeID.length > 12) {
-            return res.status(400).json({ collegeID: "O campo '333' só aceita no máximo 12 caracteres" });
+            return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' só aceita no máximo 12 caracteres" });
         }
         else if (isNaN(collegeID)) {
-            return res.status(400).json({ collegeID: "O campo '333' é inválido" });
+            return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' é inválido" });
         }
 
 
@@ -163,15 +163,11 @@ module.exports = {
         if (user) return res.status(409).json( {email: "Email já em uso" });
         user = await SafeFindOne(User, { username });
         if (user) return res.status(409).json( {username: "Apelido já em uso" });
-        user = await SafeFindOne(User, { collegeID });
-        if (user) return res.status(409).json( {collegeID: "Número de matrícula já em uso" });
 
         user = await SafeFindOne(RequestUser, { email });
         if (user) return res.status(409).json( {email: "Email já em uso" });
         user = await SafeFindOne(RequestUser, { username });
         if (user) return res.status(409).json( {username: "Apelido já em uso" });
-        user = await SafeFindOne(RequestUser, { collegeID });
-        if (user) return res.status(409).json( {collegeID: "Número de matrícula já em uso" });
 
         password = bCrypt.createHash(password);
 
