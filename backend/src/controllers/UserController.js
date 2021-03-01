@@ -1,8 +1,9 @@
 const User = require('../models/User');
 const RequestUser = require('../models/RequestUser');
 const bCrypt = require('../services/hashes');
-const { SafeFindOne, SafeCreateObj } = require('../services/safe-exec');
+const { SafeFindOne, SafeCreateObj, SafeFindById } = require('../services/safe-exec');
 const { setGlobalRole } = require('../services/privilege');
+const { parse } = require('dotenv/types');
 
 module.exports = {
     async store (req, res) {
@@ -200,6 +201,156 @@ module.exports = {
         }
 
         return res.status(201).end();
+    },
+
+    async update (req, res) {
+        let email = (req.body.email)?.toString();
+        let username = (req.body.username)?.toString();
+        let password = (req.body.password)?.toString();
+        
+        let name = (req.body.name)?.toString();
+        let institution = (req.body.institution)?.toString();
+        let otherInstitution = (req.body.otherInstitution)?.toString();
+        let course = (req.body.course)?.toString();
+        let otherCourse = (req.body.otherCourse)?.toString();
+        let collegeID = (req.body.collegeID)?.toString();
+        let yearJoinCollege = (req.body.yearJoinCollege)?.toString();
+        let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString();
+
+        let user = await SafeFindById(User, req.params.id);
+        if (!user) {
+            return res.status(404).json({ user: "Usuário não encontrado" });
+        }
+
+        let conflict1, conflict2;
+
+        if (email && email != user.email) {
+            if (email.lenght > 64) {
+                return res.status(400).json( { email: "O campo 'Email' só aceita no máximo 64 caracteres" });
+            }
+            else if (email.lenght) {
+                conflict1 = await SafeFindOne(User, { email });
+                conflict2 = await SafeFindOne(RequestUser, { email });
+                if (conflict1 || conflict2) {
+                    return res.status(409).json( {email: "Email já em uso" });
+                }
+                user.email = email;
+            }
+        }
+
+        if (username && username != user.username) {
+            if (username.length > 64) {
+                return res.status(400).json({ username: "O campo 'Apelido' só aceita no máximo 64 caracteres" });
+            }
+            else if (username.lenght > 0) {
+                conflict1 = await SafeFindOne(User, { username });
+                conflict2 = await SafeFindOne(RequestUser, { username });
+                if (conflict1|| conflict2) {
+                    return res.status(409).json({ username: "Apelido já em uso" });
+                }
+                user.username = username;
+            }
+        }
+
+        if (password && password != user.password) {
+            if (password.length > 64) {
+                return res.status(400).json({ password: "O campo 'Senha' só aceita no máximo 64 caracteres" });
+            }
+            else if (password.lenght > 0) {
+                password = bCrypt.createHash(password);
+                user.password = password;
+            }
+        }
+
+        if (name && name != user.name) {
+            if (name.length > 64) {
+                return res.status(400).json({ name: "O campo 'Nome completo' é obrigatório" });
+            }
+            else if (name.lenght > 0) {
+                user.name = name;
+            }
+        }
+
+        if (course && course != user.course) {
+            if (course.length > 64) {
+                return res.status(400).json({ course: "O campo 'Curso atual' só aceita no máximo 64 caracteres" });
+            }
+            else if (course.lenght > 0) {
+                if (course == 'OUTRO') {
+                        if (otherCourse && otherCourse != user.course) {
+                            if (otherCourse.lenght > 64) {
+                                return res.status(400).json({ otherCourse: "O campo 'Outro curso' só aceita no máximo 64 caracteres" });
+                            }
+                            else if (otherCourse.lenght > 0) {
+                                user.course = otherCourse;
+                            }
+                        }
+                }
+                else {
+                    user.course = course;
+                }
+            }
+        }
+        
+        if (institution && institution != user.institution) {
+            if (institution.length > 64) {
+                return res.status(400).json({ institution: "O campo 'Instituição' só aceita no máximo 64 caracteres" });
+            }
+            else if (institution.lenght > 0) {
+                if (institution == 'OUTRA') {
+                        if (otherInstitution && otherInstitution != user.institution) {
+                            if (otherInstitution.lenght > 64) {
+                                return res.status(400).json({ otherInstitution: "O campo 'Outra instituição' só aceita no máximo 64 caracteres" });
+                            }
+                            else if (otherInstitution.lenght > 0) {
+                                user.institution = otherInstitution;
+                            }
+                        }
+                }
+                else {
+                    user.institution = institution;
+                }
+            }
+        }
+
+        //TODO: Change fieldname to align with frontend
+        if (yearJoinCollege) {
+            if (yearJoinCollege.lenght > 12) {
+                return res.status(400).json({ yearJoinCollege: "O campo '111' só aceita no máximo 12 caracteres" });
+            }
+            else if (isNaN(yearJoinCollege) == false) {
+                user.yearJoinCollege = parseInt(yearJoinCollege);
+            } 
+        }
+        
+        //TODO: Change fieldname to align with frontend
+        if (yearJoinGanesh) {
+            if (yearJoinGanesh.lenght > 12) {
+                return res.status(400).json({ yearJoinGanesh: "O campo '222' só aceita no máximo 12 caracteres" });
+            }
+            else if (isNaN(yearJoinGanesh) == false) {
+                user.yearJoinGanesh = parseInt(yearJoinGanesh);
+            } 
+        }
+
+        //TODO: Change fieldname to align with frontend
+        if (collegeID) {
+            if (collegeID.lenght > 12) {
+                return res.status(400).json({ collegeID: "O campo '333' só aceita no máximo 12 caracteres" });
+            }
+            else if (isNaN(collegeID) == false) {
+                user.collegeID = parseInt(collegeID);
+            } 
+        }
+
+        try {
+            await user.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ user: "Não foi possível atualizar usuário" });
+        }
+
+        return res.status(200).end();
     },
 
     async verify (email, password) {
