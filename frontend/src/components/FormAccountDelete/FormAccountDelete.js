@@ -38,8 +38,8 @@ function FormAccountDelete({ userId, confirmEmail, submitDisabled, setSubmitDisa
   }
 
   return(
-    <Box component="form" onSubmit={handleSubmit}>
-      <Typography variant="h5" gutterBottom style={{ marginTop:"40px !important" }}>
+    <Box component="form" onSubmit={handleSubmit} style={{ marginTop: 62 }}>
+      <Typography variant="h5" gutterBottom>
         <strong>Excluir Cadastro</strong>
       </Typography>
       

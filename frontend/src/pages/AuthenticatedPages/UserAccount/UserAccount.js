@@ -68,13 +68,13 @@ function UserAccount({variant = "my-account"}){
               formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
               formErrors={formErrors} setFormErrors={setFormErrors} />
             
-            <Grid className="FormSection" item xs={12} sm={12} md={6}>
+            <Grid item xs={12} sm={12} md={6}>
               <FormAccountData variant={variant}
                 submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
                 formData={formData} setFormData={setFormData} 
                 formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
                 formErrors={formErrors} setFormErrors={setFormErrors} />
-              
+            
               <FormChangePassword variant={variant}
                 submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
                 formData={formData} setFormData={setFormData} 
