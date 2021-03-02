@@ -23,15 +23,14 @@ function getById(userId) {
     })
 }
 
-function getAll(page = "1") { 
-    return api.get('/users/' + page)
+function getAll() { 
+    return api.get('/users/')
     // .catch(handleErrors) 
     .catch(() => Promise.resolve('Return mockup Data'))
     .then((response) => {
         return Promise.resolve([{
-            id: "123abc", name: 'Zézinho 013', course: 'BCC', otherCourse: '', institution: 'USP/ICMC', otherInstitution: '',
-            collegeID: '1337013', yearJoinCollege: "2021", yearJoinGanesh:  "2021",
-            email: 'ze@zinho.com', username: 'Z3z1nh013', title: 'Membro', role:  60,
+            id: "123abc", username: 'Z3z1nh013', email: 'ze@zinho.com',  title: 'Membro',
+            yearJoinGanesh:  "2021", status: true 
         }])
     })
 }
