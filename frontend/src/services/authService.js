@@ -7,12 +7,12 @@ export const authService = {
     recoverLink,
     resetPassword,
     isAuthenticated,
+    getAuth,
 }
 
 function login(email, password) {
     return api.post('/login', {email, password})
-    .then((response) => {       
-        // @TODO: Read JSON response object with basic user info:
+    .then((response) => {
         localStorage.setItem("user", JSON.stringify(response.data))
     })
     .catch((error) => {
@@ -96,4 +96,9 @@ function isAuthenticated() {
     } catch (e) {
         return false
     }
+}
+
+function getAuth() { 
+    try { return JSON.parse(localStorage.getItem("user")) } 
+    catch(e) { document.location.href = "/" }
 }
