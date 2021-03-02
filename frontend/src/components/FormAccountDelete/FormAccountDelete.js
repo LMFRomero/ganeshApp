@@ -8,10 +8,10 @@ import { userService } from '../../services/userService'
 function FormAccountDelete({ userId, confirmEmail, submitDisabled, setSubmitDisabled, 
   formSuccess, setFormSuccess, formErrors, setFormErrors }){
     
-    const [showDialog, setShowDialog] = useState(false)
-    const [formData, setFormData]     = useState({
-      email: '',
-    })
+  const [showDialog, setShowDialog] = useState(false)
+  const [formData, setFormData]     = useState({
+    email: '',
+  })
 
   const handleChange = (e) => {
     const {name, value} = e.target

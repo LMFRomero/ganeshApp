@@ -37,7 +37,7 @@ function UserAccount({variant = "my-account"}){
   })
 
   useEffect(() => { 
-    userService.getById(variant === 'my-account' ? authService.getAuth().username : userId)
+    userService.getById(variant === 'my-account' ? authService.getAuth().id : userId)
     .then(   function(u) { 
       setFormData(u) 
       setConfirmEmail(u.email || "membro@ganesh.com")
@@ -75,9 +75,8 @@ function UserAccount({variant = "my-account"}){
                 formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
                 formErrors={formErrors} setFormErrors={setFormErrors} />
             
-              <FormChangePassword variant={variant}
+              <FormChangePassword variant={variant} userId={formData.id}
                 submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
-                formData={formData} setFormData={setFormData} 
                 formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
                 formErrors={formErrors} setFormErrors={setFormErrors} />
 

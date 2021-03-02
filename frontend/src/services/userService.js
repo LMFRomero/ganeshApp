@@ -42,7 +42,11 @@ function update(userId, user) {
     .catch(handleErrors) 
 }
 
-function updatePassword() { }
+function updatePassword(userId, password, newPassword) { 
+    return api.put('/user/' + userId + '/changePassword', { password, newPassword })
+    .then((response) => Promise.resolve(response.data))
+    .catch(handleErrors) 
+}
 
 function deleteAccount(userId, email) { 
     return api.delete('/user/' + userId)
