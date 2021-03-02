@@ -5,7 +5,7 @@ import { TextField } from '@material-ui/core'
 function FormChangePassword(props){
   return(
     <Box className="FormSection" component="form">
-      <Typography variant="h5">
+      <Typography variant="h5" gutterBottom style={{ marginTop: "40px !important"}}>
         <strong>Alterar Senha</strong>
       </Typography>
       

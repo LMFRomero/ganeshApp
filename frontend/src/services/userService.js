@@ -44,7 +44,14 @@ function update(userId, user) {
 
 function updatePassword() { }
 
-function deleteAccount() { }
+function deleteAccount(userId, email) { 
+    return api.delete('/user/' + userId)
+    .then( () => {
+        authService.logout()
+        .then(() => { document.location.reload() })
+    })
+    .catch(handleErrors) 
+}
 
 function handleErrors(error) { 
     // Status Code is 401 -> Unauthorized

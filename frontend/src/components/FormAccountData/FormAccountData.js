@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { TextField, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
 
 // Variants: 'my-account' and 'coordinator'
@@ -50,13 +50,6 @@ function FormAccountData({ variant, submitDisabled, setSubmitDisabled, formData,
         </FormControl>
       </>
       }
-
-      <Typography>
-        <Button variant="contained" size="large" fullWidth color="primary">
-          <strong>Excluir cadastro</strong>
-        </Button>
-      </Typography>
-
     </Box>
   )
 }

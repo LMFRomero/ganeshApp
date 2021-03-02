@@ -8,6 +8,7 @@ import { userService } from '../../../services/userService'
 import SnackAlerts from '../../../components/SnackAlerts/SnackAlerts'
 import FormUserData from '../../../components/FormUserData/FormUserData'
 import FormAccountData from '../../../components/FormAccountData/FormAccountData'
+import FormAccountDelete from '../../../components/FormAccountDelete/FormAccountDelete'
 import FormChangePassword from '../../../components/FormChangePassword/FormChangePassword'
 
 // Variants: 'my-account', 'coordinator'
@@ -18,6 +19,7 @@ function UserAccount({variant = "my-account"}){
   const [submitDisabled, setSubmitDisabled] = useState(false)
   const [formSuccess, setFormSuccess]       = useState({})
   const [formErrors, setFormErrors]         = useState({})
+  const [confirmEmail, setConfirmEmail]     = useState("membro@ganesh.com")
   const [formData, setFormData]             = useState({
     id: '',
     name: '',
@@ -36,7 +38,10 @@ function UserAccount({variant = "my-account"}){
 
   useEffect(() => { 
     userService.getById(variant === 'my-account' ? authService.getAuth().username : userId)
-    .then(   function(u) { setFormData(u) })
+    .then(   function(u) { 
+      setFormData(u) 
+      setConfirmEmail(u.email || "membro@ganesh.com")
+    })
     .catch(  function(e) { 
       setFormErrors(e) 
       setSubmitDisabled(true)
@@ -73,6 +78,11 @@ function UserAccount({variant = "my-account"}){
               <FormChangePassword variant={variant}
                 submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
                 formData={formData} setFormData={setFormData} 
+                formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
+                formErrors={formErrors} setFormErrors={setFormErrors} />
+
+              <FormAccountDelete variant={variant} userId={formData.id} confirmEmail={confirmEmail}
+                submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
                 formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
                 formErrors={formErrors} setFormErrors={setFormErrors} />
             </Grid>
