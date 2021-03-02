@@ -38,7 +38,7 @@ function FormChangePassword({ userId, submitDisabled, setSubmitDisabled,
   }
 
   return(
-    <Box className="FormSection" component="form" style={{ marginTop: 40 }} onSubmit={handleSubmit}>
+    <Box className="FormSection" component="form" onSubmit={handleSubmit}>
       <Typography variant="h5" gutterBottom>
         <strong>Alterar Senha</strong>
       </Typography>

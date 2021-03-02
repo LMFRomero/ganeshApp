@@ -68,7 +68,8 @@ function UserAccount({variant = "my-account"}){
               formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
               formErrors={formErrors} setFormErrors={setFormErrors} />
             
-            <Grid item xs={12} sm={12} md={6}>
+            <Grid className="FormSection" item xs={12} sm={12} md={6} 
+              style={{display: "flex", flexFlow:"column nowrap", justifyContent: "space-between"}}>
               <FormAccountData variant={variant}
                 submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
                 formData={formData} setFormData={setFormData} 

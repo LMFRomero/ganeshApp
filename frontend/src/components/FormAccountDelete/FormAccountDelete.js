@@ -38,20 +38,20 @@ function FormAccountDelete({ userId, confirmEmail, submitDisabled, setSubmitDisa
   }
 
   return(
-    <Box component="form" onSubmit={handleSubmit} style={{ marginTop: 62 }}>
+    <Box component="form" onSubmit={handleSubmit} >
       <Typography variant="h5" gutterBottom>
         <strong>Excluir Cadastro</strong>
       </Typography>
       
+      <Typography variant="caption">
+        <strong> Atenção: </strong> esta ação não é reversível!  
+      </Typography>
+
       <Typography>
         <Button variant="contained" size="large" fullWidth color="primary"
           onClick={() => setShowDialog(true)}>
           <strong>Continuar exclusão</strong>
         </Button>
-      </Typography>
-
-      <Typography variant="caption">
-        <strong> Cuidado! </strong> esta ação não é reversível!  
       </Typography>
 
       <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
