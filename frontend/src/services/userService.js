@@ -12,27 +12,29 @@ export const userService = {
 
 function getById(userId) { 
     return api.get('/user/' + userId)
-    // .catch(handleErrors)
-    .catch(() => Promise.resolve('Return mockup Data'))
-    .then(() => {
-        return Promise.resolve({
-            id: "123abc", name: 'Zézinho 013', course: 'BCC', otherCourse: '', institution: 'USP/ICMC', otherInstitution: '',
-            collegeID: '1337013', yearJoinCollege: "2021", yearJoinGanesh:  "2021",
-            email: 'ze@zinho.com', username: 'Z3z1nh013', title: 'Membro', role:  60,
-        })
-    })
+    .then(respose => Promise.resolve(response.data))
+    .catch(handleErrors)
+    // .catch(() => Promise.resolve('Return mockup Data'))
+    // .then(() => {
+    //     return Promise.resolve({
+    //         id: "123abc", name: 'Zézinho 013', course: 'BCC', otherCourse: '', institution: 'USP/ICMC', otherInstitution: '',
+    //         collegeID: '1337013', yearJoinCollege: "2021", yearJoinGanesh:  "2021",
+    //         email: 'ze@zinho.com', username: 'Z3z1nh013', title: 'Membro', role:  60,
+    //     })
+    // })
 }
 
 function getAll() { 
     return api.get('/users/')
-    // .catch(handleErrors) 
-    .catch(() => Promise.resolve('Return mockup Data'))
-    .then((response) => {
-        return Promise.resolve([{
-            id: "123abc", username: 'Z3z1nh013', email: 'ze@zinho.com',  title: 'Membro',
-            yearJoinGanesh:  "2021", status: true 
-        }])
-    })
+    .then(respose => Promise.resolve(response.data))
+    .catch(handleErrors)
+    // .catch(() => Promise.resolve('Return mockup Data'))
+    // .then((response) => {
+    //     return Promise.resolve([{
+    //         id: "123abc", username: 'Z3z1nh013', email: 'ze@zinho.com',  title: 'Membro',
+    //         yearJoinGanesh:  "2021", status: true 
+    //     }])
+    // })
 }
 
 function update(userId, user) { 
