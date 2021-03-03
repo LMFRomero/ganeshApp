@@ -5,6 +5,20 @@ const { SafeFindOne, SafeCreateObj, SafeFind, SafeDeleteOne } = require('../serv
 const { session } = require('passport');
 const { getRoleInt, getTitle } = require('../utils/roles');
 
+function validateString(str, fieldName, maxLen) {
+    if (!str) {
+        return `O campo '${fieldName}' é obrigatório`;
+    }
+
+    if (str.length > maxLen) {
+        return `O campo '${fieldName}' só aceita no máximo ${maxLen} caracteres`;
+    }
+
+    else {
+        return null;
+    }
+}
+
 module.exports = {
     async store (req, res) {
         let email = (req.body.email)?.toString();
@@ -27,101 +41,84 @@ module.exports = {
 
         pingParticipant = (pingParticipant == 'true');
 
-        if (!email) {
-            return res.status(400).json({ email: "O campo 'Email' é obrigatório" });
-        }
-        else if (email.length > 64) {
-            return res.status(400).json( { email: "O campo 'Email' só aceita no máximo 64 caracteres" });
-        }
-
-        if (!username) {
-            return res.status(400).json({ username: "O campo 'Apelido' é obrigatório" });
-        }
-        else if (username.length > 64) {
-            return res.status(400).json({ username: "O campo 'Apelido' só aceita no máximo 64 caracteres" });
+        let resp;
+        
+        resp = validateString(email, "Email", 64);
+        if (resp) {
+            return res.status(400).json( { email: resp });
         }
 
-        if (!password) {
-            return res.status(400).json({ password: "O campo 'Senha' é obrigatório" });
-        }
-        else if (password.length > 64) {
-            return res.status(400).json({ password: "O campo 'Senha' só aceita no máximo 64 caracteres" });
+        resp = validateString(username, "Apelido", 64);
+        if (resp) {
+            return res.status(400).json({ username: resp });
         }
 
-        if (!name) {
-            return res.status(400).json({ name: "O campo 'Nome completo' é obrigatório" });
+        resp = validateString(password, "Senha", 64);
+        if (resp) {
+            return res.status(400).json( { password: resp });
         }
-        else if (name.length > 64) {
-            return res.status(400).json({ name: "O campo 'Nome completo' só aceita no máximo 64 caracteres" });
-        } 
 
-        if (!course) {
-            return res.status(400).json({ course: "O campo 'Curso atual' é obrigatório" });
+        resp = validateString(name, "Nome", 64);
+        if (resp) {
+            return res.status(400).json( { name: resp });
         }
-        else if (course.length > 64) {
-            return res.status(400).json({ course: "O campo 'Curso atual' só aceita no máximo 64 caracteres" });
+
+        resp = validateString(course, "Curso atual", 64);
+        if (resp) {
+            return res.status(400).json( { course: resp });
         }
         else if (course == 'OUTRO') {
-            if (!otherCourse) {
-                return res.status(400).json({ otherCourse: "O campo 'Outro curso' é obrigatório" });
-            }
-            else if (otherCourse.length > 64) {
-                return res.status(400).json({ otherCourse: "O campo 'Outro curso' só aceita no máximo 64 caracteres" });
+            resp = validateString(otherCourse, "Outro curso", 64);
+            if (resp) {
+                return res.status(400).json( { otherCourse: resp });
             }
             else {
                 course = otherCourse;
             }
         }
 
-        if (!institution) {
-            return res.status(400).json({ institution: "O campo 'Instituição' é obrigatório" });
+        resp = validateString(institution, "Instituição", 64);
+        if (resp) {
+            return res.status(400).json( { institution: resp });
         }
-        else if (institution.length > 64) {
-            return res.status(400).json({ institution: "O campo 'Instituição' só aceita no máximo 64 caracteres" });
-        }
-        else if (institution == 'OUTRA') {
-            if (!otherInstitution) {
-                return res.status(400).json({ otherInstitution: "O campo 'Outra instituição' é obrigatório" });
-            }
-            else if (otherInstitution.length > 64) {
-                return res.status(400).json({ otherInstitution: "O campo 'Outra instituição' só aceita no máximo 64 caracteres" });
+        else if (institution == 'OUTRO') {
+            resp = validateString(otherInstitution, "Outra instituição", 64);
+            if (resp) {
+                return res.status(400).json( { otherInstitution: resp });
             }
             else {
                 institution = otherInstitution;
             }
         }
 
-        //TODO: Change fieldname to align with frontend
         if (!yearJoinCollege) {
-            return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' é obrigatório" });
+            yearJoinCollege = '-1';
         }
         else if (yearJoinCollege.length > 12) {
             return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' só aceita no máximo 12 caracteres" });
         }
-        else if (isNaN(yearJoinCollege)) {
+        yearJoinCollege = parseInt(yearJoinCollege);
+        if (isNaN(yearJoinCollege)) {
             return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' é inválido" });
         }
         
-        //TODO: Change fieldname to align with frontend
-        if (!yearJoinGanesh) {
-            return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' é obrigatório" });
+        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", 12);
+        if (resp) {
+            return res.status(400).json( { yearJoinGanesh: resp });
         }
-        else if (yearJoinGanesh.length > 12) {
-            return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' só aceita no máximo 12 caracteres" });
-        }
-        else if (isNaN(yearJoinGanesh)) {
+        yearJoinGanesh = parseInt(yearJoinGanesh);
+        if (isNaN(yearJoinGanesh)) {
             return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' é inválido" });
         }
 
-
-        //TODO: Change fieldname to align with frontend
         if (!collegeID) {
             collegeID = '-1';
         }
-        if (collegeID.length > 12) {
+        else if (collegeID.length > 12) {
             return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' só aceita no máximo 12 caracteres" });
         }
-        else if (isNaN(collegeID)) {
+        collegeID = parseInt(collegeID);
+        if (isNaN(collegeID)) {
             return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' é inválido" });
         }
 
