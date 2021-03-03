@@ -15,12 +15,11 @@ import ForgotPassword from './pages/UnauthenticatedPages/ForgotPassword/ForgotPa
 
 /* Routes - Authenticated User*/
 import Timeline from './pages/AuthenticatedPages/Timeline/Timeline'
-import MyAccount from './pages/AuthenticatedPages/MyAccount/MyAccount'
+import UserAccount from './pages/AuthenticatedPages/UserAccount/UserAccount'
 import Meeting from './pages/AuthenticatedPages/Meeting/Meeting'
 import Fronts from './pages/AuthenticatedPages/Fronts/Fronts'
 
 /* Routes - Coordinator Pages*/
-import UserAccount from './pages/CoordinatorPages/UserAccount/UserAccount'
 import Users from './pages/CoordinatorPages/Users/Users'
 import Requests from './pages/CoordinatorPages/Requests/Requests'
 
@@ -77,7 +76,7 @@ function AppRoutes(props) {
         {/* Rotas - Authenticated User*/}
         <PrivateRoute path="/reunioes"><Timeline variant="meetings"/></PrivateRoute>
         <PrivateRoute path="/comunicados"><Timeline variant="announces"/></PrivateRoute>
-        <PrivateRoute path="/minha-conta"><MyAccount/></PrivateRoute>
+        <PrivateRoute path="/minha-conta"><UserAccount variant="my-account"/></PrivateRoute>
         <PrivateRoute path="/criar-reuniao"><DefaultForm variant="register-meeting"/></PrivateRoute>
         <PrivateRoute path="/editar-reuniao/:meetingId"><DefaultForm variant="edit-meeting"/></PrivateRoute>
         <PrivateRoute path="/reuniao/:meetingId"><Meeting/></PrivateRoute>
@@ -88,7 +87,7 @@ function AppRoutes(props) {
         <PrivateRoute path="/editar-comunicado/:announceId"><DefaultForm variant="edit-announce"/></PrivateRoute>
         <PrivateRoute path="/criar-frente"><DefaultForm variant="register-front"/></PrivateRoute>
         <PrivateRoute path="/editar-frente/:frontId"><DefaultForm variant="edit-front"/></PrivateRoute>
-        <PrivateRoute path="/usuario/:userId"><UserAccount/></PrivateRoute>
+        <PrivateRoute path="/usuario/:userId"><UserAccount variant="coordinator"/></PrivateRoute>
         <PrivateRoute path="/usuarios"><Users/></PrivateRoute>
         <PrivateRoute path="/solicitacoes"><Requests/></PrivateRoute>
 
