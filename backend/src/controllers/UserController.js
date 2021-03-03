@@ -74,7 +74,7 @@ module.exports = {
         if (resp) {
             return res.status(400).json( { institution: resp });
         }
-        else if (institution == 'OUTRO') {
+        else if (institution == 'OUTRA') {
             resp = validateString(otherInstitution, "Outra instituição", 64);
             if (resp) {
                 return res.status(400).json( { otherInstitution: resp });
