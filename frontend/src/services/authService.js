@@ -30,7 +30,6 @@ function logout() {
     .catch(() => Promise.resolve("Logout realizado"))
     .finally(() => {
         localStorage.removeItem("user")
-        document.cookie = "ganeshSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         return Promise.resolve();
     })
 }
@@ -87,11 +86,6 @@ function isAuthenticated() {
     try {
         const user = JSON.parse(localStorage.getItem("user"))
         const validToken = (user && user.username && user.role && user.title)
-
-        // If auth object not valid then exclude the Cookie also
-        if (!validToken)
-            document.cookie = "ganeshSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
         return validToken
     } catch (e) {
         return false
