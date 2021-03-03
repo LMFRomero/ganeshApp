@@ -12,7 +12,7 @@ export const userService = {
 
 function getById(userId) { 
     return api.get('/user/' + userId)
-    .then(respose => Promise.resolve(response.data))
+    .then((response) => Promise.resolve(response.data))
     .catch(handleErrors)
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then(() => {
@@ -26,7 +26,7 @@ function getById(userId) {
 
 function getAll() { 
     return api.get('/users/')
-    .then(respose => Promise.resolve(response.data))
+    .then((response) => Promise.resolve(response.data))
     .catch(handleErrors)
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then((response) => {
