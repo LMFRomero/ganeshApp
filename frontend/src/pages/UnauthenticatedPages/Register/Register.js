@@ -60,7 +60,7 @@ function Register(){
             <SnackAlerts formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
               formErrors={formErrors} setFormErrors={setFormErrors}/>
             
-            <Grid className="FormSection" item xs={12} sm={6} md={4}>
+            <Grid className="FormSection" item xs={12} sm={6} md={5} lg={4}>
               <Typography variant="h5">
                 <strong>Dados Pessoais</strong>
               </Typography>
@@ -114,7 +114,7 @@ function Register(){
                 inputProps={{maxLength:4}} error={formErrors.yearJoinGanesh} onChange={handleChange} />
             </Grid>
 
-            <Grid className="FormSection" item xs={12} sm={6} md={4}>
+            <Grid className="FormSection" item xs={12} sm={6} md={5} lg={4}>
               <Typography variant="h5">
                 <strong>Dados de Acesso</strong>
               </Typography>

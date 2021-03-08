@@ -104,7 +104,7 @@ function ForgotPassword(){
           <SnackAlerts formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
             formErrors={formErrors} setFormErrors={setFormErrors}/>
 
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12}>
             <form className="ForgotPasswordForm" onSubmit={handleSubmit}>
 
               {/* Show the form based on the URL parameter */}
