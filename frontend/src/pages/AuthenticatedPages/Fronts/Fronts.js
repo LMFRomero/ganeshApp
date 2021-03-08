@@ -1,10 +1,15 @@
+import { useState, useEffect } from 'react'
+import { Link as RouterLink } from 'react-router-dom';
 import { Box, Container, Grid, Button } from '@material-ui/core'
-import AddSharpIcon from '@material-ui/icons/AddSharp';
 import './Fronts.css'
 
-import { Link as RouterLink } from 'react-router-dom';
+import AddSharpIcon from '@material-ui/icons/AddSharp';
 
+import { frontService } from '../../../services/frontService'
+import { authService } from '../../../services/authService'
 import FrontCard from '../../../components/FrontCard/FrontCard'
+import SnackAlerts from '../../../components/SnackAlerts/SnackAlerts'
+
 
 const frontMembers = [
     {name: "Gabriel", avatar:"G", dateHour: "09/02/2021 19h30"},
@@ -25,56 +30,52 @@ const frontMembers = [
   ]
   
 function Fronts(props){
-    return(
-      <Box className="FrontsPage" flexGrow={1} component="main">
-        <Container fixed>
-            <Grid container spacing={3} justify="center">
-  
-              <Grid item container xs={12} sm={12} md={8} justify="flex-end">
-                <Button variant="contained" color="secondary" startIcon={<AddSharpIcon/>} 
-                  component={RouterLink} to="/criar-frente">Criar Frente</Button>
-              </Grid>
-              
-              <Grid item xs={12} sm={12} md={8}>
-                <FrontCard 
-                    avatar="W" 
-                    title="Segurança Web"
-                    type="Frente de estudos"
-                    participants={frontMembers}
-                    />
-              </Grid>
 
-              <Grid item xs={12} sm={12} md={8}>
-                <FrontCard 
-                    avatar="R" 
-                    title="Redes e Pentesting"
-                    type="Frente de estudos"
-                    participants={frontMembers}
-                    />
-              </Grid>
+  const [ fronts, setFronts ]              = useState([])
+  const [ authUsername, setUsername ]        = useState('')
+  const [ errorMessages, setErrorMessages] = useState({})
 
-              <Grid item xs={12} sm={12} md={8}>
-                <FrontCard 
-                    avatar="C" 
-                    title="Criptografia"
-                    type="Frente de estudos"
-                    participants={frontMembers}
-                    />
-              </Grid>
+  useEffect(() => { 
+    setUsername(authService.getAuth().username)
 
-              <Grid item xs={12} sm={12} md={8}>
-                <FrontCard 
-                    avatar="G" 
-                    title="Reunião Geral"
-                    type="Grupo de Extensão"
-                    participants={frontMembers}
-                    />
-              </Grid>
-              
+    frontService.getAll()
+    .then( (s) => setFronts(s))
+    .catch((e) => setErrorMessages(e))
+  }, [])
+
+  return(
+    <Box className="FrontsPage" flexGrow={1} component="main">
+      <Container fixed>
+          <Grid container spacing={3} justify="center">
+
+            <SnackAlerts formSuccess={{}} setFormSuccess={()=>undefined} 
+              formErrors={errorMessages} setFormErrors={setErrorMessages}/>
+
+            <Grid item container xs={12} sm={12} md={8} justify="flex-end">
+              <Button variant="contained" color="secondary" startIcon={<AddSharpIcon/>} 
+                component={RouterLink} to="/criar-frente">Criar Frente</Button>
             </Grid>
-        </Container>
-      </Box>
-    )
-  }
+            
+            { fronts.map((f,i) => { 
+              return(
+                <Grid key={i} item xs={12} sm={12} md={8}>
+                  <FrontCard
+                      id={f.id} name={f.name} slug={f.slug} type={f.type} 
+                      description={f.description} 
+                      initMembers={f.members}
+                      deleted={f.deleted} membersOnly={f.membersOnly}
+
+                      authUsername={authUsername}
+                      errorMessages={errorMessages} setErrorMessages={setErrorMessages}
+                      />
+                </Grid>
+              )
+            })}
+            
+          </Grid>
+      </Container>
+    </Box>
+  )
+}
   
-  export default Fronts
+export default Fronts

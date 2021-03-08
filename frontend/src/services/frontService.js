@@ -6,7 +6,9 @@ export const frontService = {
     update,
     _delete,
     getById,
-    getAll
+    getAll,
+    addMember,
+    removeMember,
 }
 
 function register(front) { 
@@ -49,14 +51,40 @@ function getById(frontId) {
 }
 
 function getAll() { 
-    // return api.get('/users/')
+    return api.get('/fronts/')
     // .then((response) => Promise.resolve(response.data))
     // .catch(handleErrors)
-    // // .catch(() => Promise.resolve('Return mockup Data'))
-    // // .then((response) => {
-    // //     return Promise.resolve([{
-    // //         id: "123abc", username: 'Z3z1nh013', email: 'ze@zinho.com',  title: 'Membro',
-    // //         yearJoinGanesh:  "2021", status: true 
-    // //     }])
-    // // })
+    .catch(() => Promise.resolve('Return mockup Data'))
+    .then((response) => {
+        return Promise.resolve([
+            { 
+                id:   '123FRONT45', name: 'Segurança Web', slug: 'seguranca-web',
+                description: 'Estudo de vulnerabilidades mais comuns como OWASP TOP 10 e outras.',
+                type: 'study', membersOnly: false, deleted: false,
+                members: [ {username:"teste"}, {username:"Gabriel"}, {username:"Kairi"}, {username:"Axel"}]
+            },
+            { 
+                id:   '133FRONT45', name: 'Sh1v4', slug: 'sh1v4-ctfs',
+                description: 'Frente para prática de CTFs do Ganesh',
+                type: 'special', membersOnly: true, deleted: false,
+                members: [ {username:"Xemnas"}, {username:"Naminé"}, {username:"2B"}]
+            }
+        ])
+    })
+}
+
+function addMember(frontSlug, username) { 
+    return api.post(`/front/addUser/${frontSlug}`, { username })
+    // .then((response) => Promise.resolve(response.data))
+    // .catch(handleErrors)
+    .catch(() => Promise.resolve('Return mockup Data'))
+    .then(()  => Promise.resolve({ message: "Membro adicionado!" }) )
+}
+
+function removeMember(frontSlug, username) { 
+    return api.post(`/front/removeUser/${frontSlug}`, { username })
+    // .then((response) => Promise.resolve(response.data))
+    // .catch(handleErrors)
+    .catch(() => Promise.resolve('Return mockup Data'))
+    .then(()  => Promise.resolve({ message: "Membro adicionado!" }) )
 }
