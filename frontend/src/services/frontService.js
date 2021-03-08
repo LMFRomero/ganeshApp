@@ -1,5 +1,5 @@
 import api from './_api'
-import handleErrors from './_handlers'
+// import handleErrors from './_handlers'
 
 export const frontService = { 
     register,

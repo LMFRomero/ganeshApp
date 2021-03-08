@@ -9,25 +9,6 @@ import { frontService } from '../../../services/frontService'
 import { authService } from '../../../services/authService'
 import FrontCard from '../../../components/FrontCard/FrontCard'
 import SnackAlerts from '../../../components/SnackAlerts/SnackAlerts'
-
-
-const frontMembers = [
-    {name: "Gabriel", avatar:"G", dateHour: "09/02/2021 19h30"},
-    {name: "Pedro",   avatar:"P", dateHour: "09/02/2021 19h30"},
-    {name: "Alex",    avatar:"A", dateHour: "09/02/2021 19h30"},
-    {name: "Fabiano", avatar:"F", dateHour: "09/02/2021 19h30"},
-    {name: "Serena",  avatar:"S", dateHour: "09/02/2021 19h30"},
-    {name: "Gabriel", avatar:"G", dateHour: "09/02/2021 19h30"},
-    {name: "Pedro",   avatar:"P", dateHour: "09/02/2021 19h30"},
-    {name: "Alex",    avatar:"A", dateHour: "09/02/2021 19h30"},
-    {name: "Fabiano", avatar:"F", dateHour: "09/02/2021 19h30"},
-    {name: "Serena",  avatar:"S", dateHour: "09/02/2021 19h30"},
-    {name: "Pedro",   avatar:"P", dateHour: "09/02/2021 19h30"},
-    {name: "Alex",    avatar:"A", dateHour: "09/02/2021 19h30"},
-    {name: "Fabiano", avatar:"F", dateHour: "09/02/2021 19h30"},
-    {name: "Serena",  avatar:"S", dateHour: "09/02/2021 19h30"},
-    {name: "Heloise", avatar:"H", dateHour: "09/02/2021 19h30"}
-  ]
   
 function Fronts(props){
 

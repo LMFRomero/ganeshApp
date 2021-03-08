@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom';
 import { Typography, Card, CardHeader, Avatar, CardContent, Divider, IconButton, Box, Button, CardActions } from '@material-ui/core'
 import './FrontCard.css'
