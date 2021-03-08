@@ -7,6 +7,7 @@ export const frontService = {
     _delete,
     getById,
     getAll,
+    getOptions,
     addMember,
     removeMember,
 }
@@ -69,6 +70,21 @@ function getAll() {
                 type: 'special', membersOnly: true, deleted: false,
                 members: [ {username:"Xemnas"}, {username:"Naminé"}, {username:"2B"}]
             }
+        ])
+    })
+}
+
+function getOptions() { 
+    return api.get('/fronts/options/')
+    // .then((response) => Promise.resolve(response.data))
+    // .catch(handleErrors)
+    .catch(() => Promise.resolve('Return mockup Data'))
+    .then((response) => {
+        return Promise.resolve([
+            { name: 'Segurança Web',      slug: 'seguranca-web'},
+            { name: 'Redes & Pentest',    slug: 'redes'},
+            { name: 'Criptografia',       slug: 'cripto'},
+            { name: 'Engenharia Reversa', slug: 'reversa'},
         ])
     })
 }
