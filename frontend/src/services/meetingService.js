@@ -44,7 +44,7 @@ function getById(meetingId) {
     .then(() => {
         return Promise.resolve({
             id:'M337', title: 'Reunião de Web - SQL Injection + HackTheBox', 
-            date: '2021-03-14T18:02:00.694Z', duration: '2 horas', place: 'Online (Canal #web Discord)',
+            date: '2021-03-22T14:30:00.000Z', duration: '2 horas', place: 'Online (Canal #web Discord)',
             content: 'Lorem Ipsum Dolor Sit Amet Veras Tamen',
             front:  { name: 'Segurança Web', slug: 'seguranca-web' },
             membersOnly: true, deleted: false,
@@ -77,7 +77,7 @@ function getAll( page = 1, frontSlug = '') {
 }
 
 function addMember(meetingId, username) { 
-    return api.post(`/front/addUser/${meetingId}`, { username })
+    return api.post(`/meeting/addUser/${meetingId}`, { username })
     // .then((response) => Promise.resolve(response.data))
     // .catch(handleErrors)
     .catch(() => Promise.resolve('Return mockup Data'))
@@ -85,7 +85,7 @@ function addMember(meetingId, username) {
 }
 
 function removeMember(meetingId, username) { 
-    return api.post(`/front/removeUser/${meetingId}`, { username })
+    return api.post(`/meeting/removeUser/${meetingId}`, { username })
     // .then((response) => Promise.resolve(response.data))
     // .catch(handleErrors)
     .catch(() => Promise.resolve('Return mockup Data'))

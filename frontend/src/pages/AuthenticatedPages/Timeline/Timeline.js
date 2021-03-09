@@ -48,7 +48,7 @@ function Timeline(props){
               
               { props.variant === "meetings" &&
               <Grid item xs={12} sm={12} md={8}>
-                <MeetingCard avatar="G" author="Gabriel Van Loon (Membro)"
+                {/* <MeetingCard avatar="G" author="Gabriel Van Loon (Membro)"
                     dateHour="2 de fevereiro de 2020, 13h37"
                     title="Reunião de Web - SQL Injection + HackTheBox"
                     summary="Nesta reunião iremos apresentar um pouco sobre SQL Injection nos 
@@ -57,7 +57,7 @@ function Timeline(props){
                     meetingDate="15 de fevereiro de 2020, 17h00"
                     meetingDuration="2 horas e 15 minutos"
                     meetingPlace="Online (Canal Discord)"
-                    />
+                    /> */}
 
               </Grid>
               }

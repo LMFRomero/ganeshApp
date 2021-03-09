@@ -1,86 +1,147 @@
+import { useState, useEffect } from 'react'
+import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Typography, Card, CardHeader, Avatar, CardContent, 
   Divider, Table, TableBody, TableRow, TableCell, CardActions, IconButton } from '@material-ui/core'
 import './MeetingCard.css'
 
-import { Link as RouterLink } from 'react-router-dom';
-
 import AddSharpIcon from '@material-ui/icons/AddSharp';
 import CheckSharpIcon from '@material-ui/icons/CheckSharp';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import PeopleIcon from '@material-ui/icons/People';
 import EditIcon from '@material-ui/icons/Edit';
 
-function MeetingCard(props){
+import { meetingService } from '../../services/meetingService'
 
+const monthNames = [" ", "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+  "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+];
+
+function MeetingCard({ authUsername, variant, id, title, content, date, duration, place, front, author, 
+    publishDate, initMembers, membersOnly, deleted, errorMessages, setErrorMessages }){
+
+  const [ submitDisabled, setSubmitDisabled] = useState(false)
+  const [ isMember, setIsMember] = useState(initMembers.find((m) => m.username === authUsername))
+  const [ members,  setMembers ] = useState(initMembers)
+  
+  useEffect(() => { 
+    setMembers(initMembers)
+    setIsMember(initMembers.find((m) => m.username === authUsername))
+  }, [initMembers])
+
+  const getFormattedDate = (date) => { 
+    let parts = (new Date(date)).toLocaleString().split(/[/: ]/)
+    return `${parts[0]} de ${monthNames[parseInt(parts[1])]} de ${parts[2]}, ${parts[3]}h${parts[4]}`
+  }
+  
   const renderActionIcon = () => {
-    if(props.variant === "large") { return (
-        <IconButton aria-label="settings" component={RouterLink} to="/editar-reuniao/abc">
+    if(variant === "large") { return (
+        <IconButton aria-label="settings" component={RouterLink} to={`/editar-reuniao/${id}`}>
           <EditIcon/>
         </IconButton>
     )} else return <></>
   }
 
+  const handleAddMember = (e) => {
+    e.preventDefault()
+    
+    setSubmitDisabled(true)
+
+    meetingService.addMember(id, authUsername)
+    .then(   function(s) {  
+      setIsMember(true)
+      setMembers([...members, {username: authUsername}])
+    })
+    .catch(  function(e) { setErrorMessages(e) })     
+    .finally(function( ) { setSubmitDisabled(false) })
+  }
+
+  const handleRemoveMember = (e) => {
+    e.preventDefault()
+    
+    setErrorMessages({})
+    setSubmitDisabled(true)
+
+    meetingService.removeMember(id, authUsername)
+    .then(   function(s) {  
+      setIsMember(false)
+      setMembers([...members.filter((m) => m.username !== authUsername)])
+    })
+    .catch(  function(e) { setErrorMessages(e) })     
+    .finally(function( ) { setSubmitDisabled(false) })
+  }
+
   return(
-    <Card className={"MeetingCard MeetingCard-" + (props.variant || 'small')} elevation={2}>
+    <Card className={"MeetingCard MeetingCard-" + (variant || 'small')} elevation={2}>
       <CardHeader
-        avatar={<Avatar>{props.avatar}</Avatar>}
-        title={props.author}
-        subheader={props.dateHour}
+        avatar={<Avatar>{author.username[0].toUpperCase()}</Avatar>}
+        title={`${author.username} (${author.title})`}
+        subheader={getFormattedDate(publishDate)}
         action={renderActionIcon()}
         />
-
       <Divider/>
         
       <CardContent>
         <Box className="MeetingInfo">
           <Typography variant="h5" gutterBottom>
-            {props.title}
+            {title}
           </Typography>
 
           <Table size="small">
             <TableBody>
               <TableRow>
                   <TableCell padding="none"><strong>Data:</strong></TableCell>
-                  <TableCell>{props.meetingDate}</TableCell>
+                  <TableCell>{getFormattedDate(date)}</TableCell>
               </TableRow>
               <TableRow>
                   <TableCell padding="none"><strong>Duração:</strong></TableCell>
-                  <TableCell>{props.meetingDuration}</TableCell>
+                  <TableCell>{duration}</TableCell>
               </TableRow>
               <TableRow>
                   <TableCell padding="none"><strong>Local:</strong></TableCell>
-                  <TableCell>{props.meetingPlace}</TableCell>
+                  <TableCell>{place}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
 
-          { props.variant === "large" && 
+          { variant === "large" && 
           <Typography className="MeetingContent" align="justify" gutterBottom>
-            {props.content}
+            {content}
           </Typography>
           }
         </Box>
         
-        { props.variant === "large" && props.presents !== undefined &&  
+        { variant === "large" && members !== undefined &&  
         <Box className="MeetingPresents">
-          {props.presents.map((i) => <Avatar key={i.name}>{i.avatar}</Avatar>)}
+          {members.map((i) => <Avatar key={i.username} title={i.username}>
+            {i.username[0].toUpperCase()}</Avatar>)}
         </Box>
         }
       </CardContent>
 
       <CardActions >
-        { props.variant === "large" &&
-        <Button color="default" variant="text" size="large" startIcon={<PeopleIcon/>}>
-          <span>{props.presents.length}</span>
-        </Button>
+        { variant === "large" &&
+          <Button color="default" variant="text" size="large" startIcon={<PeopleIcon/>}>
+            <span>{members.length}</span>
+          </Button>
         } 
 
-        <Button color="secondary" variant="contained" size="medium" startIcon={<CheckSharpIcon/>}>
-          Presente
-        </Button>
+        { isMember && 
+          <Button color="primary" variant="contained" size="medium" startIcon={<CheckSharpIcon/>}
+            onClick={handleRemoveMember} disabled={submitDisabled}>
+            Participou
+          </Button>
+        }
 
-        { props.variant !== "large" && 
+        { !isMember && 
+          <Button color="secondary" variant="contained" size="medium" startIcon={<PersonAddIcon/>}
+            onClick={handleAddMember} disabled={submitDisabled}>
+            Participar
+          </Button>
+        }
+
+        { variant !== "large" && 
         <Button color="primary" variant="contained" size="medium" startIcon={<AddSharpIcon/>}
-          component={RouterLink} to="/reuniao/abc">
+          component={RouterLink} to={`/reuniao/${id}`}>
             Detalhes
         </Button>
         }
