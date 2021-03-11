@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, Button } from '@material-ui/core'
-import { TextField, InputLabel, Select, MenuItem, FormControl, Checkbox, FormControlLabel } from '@material-ui/core'
+import { TextField, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
 
 import { meetingService } from '../../services/meetingService'
 import { frontService } from '../../services/frontService'
