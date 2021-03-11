@@ -1,7 +1,8 @@
 import { Grid, Button, Typography } from '@material-ui/core'
-import { TextField, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
+import { TextField, InputLabel, Select, FormControl } from '@material-ui/core'
 
 import { userService } from '../../services/userService'
+import { optionsHelper as optHelper } from '../../helpers/optionsHelper'
 
 // Variants: 'my-account' and 'coordinator'
 function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, setFormData, 
@@ -19,7 +20,17 @@ function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, se
     setFormSuccess({})
     setSubmitDisabled(true)
 
-    userService.update(formData.id, formData)
+    let userData = { ...formData }
+
+    if(optHelper.isCustomOption(formData.course))
+      userData.course = formData.otherCourse
+    if(optHelper.isCustomOption(formData.institution))
+      userData.institution = formData.otherInstitution
+
+    delete userData.otherCourse
+    delete userData.otherInstitution
+
+    userService.update(userData.id, userData)
     .then(   function(s) { setFormSuccess(s) })
     .catch(  function(e) { setFormErrors(e) })     
     .finally(function( ) { setSubmitDisabled(false) })
@@ -47,15 +58,11 @@ function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, se
         <InputLabel id="LabelCourse">Curso atual *</InputLabel>
         <Select labelId="LabelCourse" label="Curso atual *" name="course" value={formData.course}
           required onChange={handleChange}>
-            <MenuItem value="BCC">Ciências da Computação </MenuItem>
-            <MenuItem value="BSI">Sistemas de Informação</MenuItem>
-            <MenuItem value="ENGCOMP">Engenharia da Computação</MenuItem>
-            <MenuItem value="NENHUM">Nenhum</MenuItem>
-            <MenuItem value="OUTRO">Outro curso</MenuItem>
+            { optHelper.renderOptions(optHelper.optsCourses) }
         </Select>
       </FormControl>
 
-      { formData.course === "OUTRO" && 
+      { optHelper.isCustomOption(formData.course) && 
       <TextField variant="filled" fullWidth label="Nome do curso" name="otherCourse" value={formData.otherCourse}
         required inputProps={{maxLength:64}} error={formErrors.otherCourse} onChange={handleChange} />
       }
@@ -64,17 +71,11 @@ function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, se
         <InputLabel id="LabelInstitute">Instituição *</InputLabel>
         <Select labelId="LabelInstitute" label="Instituição *" name="institution" value={formData.institution}
           required onChange={handleChange}>
-            <MenuItem value="USP/ICMC">USP - ICMC</MenuItem>
-            <MenuItem value="USP/EESC">USP - EESC</MenuItem>
-            <MenuItem value="USP/IFSC">USP - IFSC</MenuItem>
-            <MenuItem value="USP/IQSC">USP - IQSC</MenuItem>
-            <MenuItem value="UFSCAR">UFSCAR</MenuItem>
-            <MenuItem value="NENHUMA">Nenhuma</MenuItem>
-            <MenuItem value="OUTRA">Outra instituição</MenuItem>
+            { optHelper.renderOptions(optHelper.optsInstitutions) }
         </Select>
       </FormControl>
 
-      { formData.institution === "OUTRA" && 
+      { optHelper.isCustomOption(formData.institution) && 
       <TextField variant="filled" fullWidth label="Nome da instituição" name="otherInstitution" value={formData.otherInstitution}
         required inputProps={{maxLength:64}} error={formErrors.otherInstitution} onChange={handleChange} />
       }

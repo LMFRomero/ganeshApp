@@ -5,6 +5,7 @@ import './UserAccount.css'
 
 import { authService } from '../../../services/authService'
 import { userService } from '../../../services/userService'
+import { optionsHelper as optHelper } from '../../../helpers/optionsHelper'
 import SnackAlerts from '../../../components/SnackAlerts/SnackAlerts'
 import FormUserData from '../../../components/FormUserData/FormUserData'
 import FormAccountData from '../../../components/FormAccountData/FormAccountData'
@@ -23,9 +24,9 @@ function UserAccount({variant = "my-account"}){
   const [formData, setFormData]             = useState({
     id: '',
     name: '',
-    course: 'BCC',
+    course: optHelper.getDefaultOption(optHelper.optsCourses),
     otherCourse: '',
-    institution: 'USP/ICMC',
+    institution: optHelper.getDefaultOption(optHelper.optsInstitutions),
     otherInstitution: '',
     collegeID: '',
     yearJoinCollege: new Date().getFullYear(),
@@ -39,8 +40,21 @@ function UserAccount({variant = "my-account"}){
   useEffect(() => { 
     userService.getById(variant === 'my-account' ? authService.getAuth().id : userId)
     .then(   function(u) { 
-      setFormData(u) 
-      setConfirmEmail(u.email || "membro@ganesh.com")
+
+      let userData = { ...u }
+      
+      // If option is not predefined then set it to otherField
+      if( !optHelper.isPredefinedOption(userData.course, optHelper.optsCourses) ){
+        userData.otherCourse = u.course
+        userData.course = optHelper.CUSTOM_OPTION
+      }
+      if( !optHelper.isPredefinedOption(userData.institution, optHelper.optsInstitutions) ){
+        userData.otherInstitution = u.institution
+        userData.institution = optHelper.CUSTOM_OPTION
+      }
+
+      setFormData(userData) 
+      setConfirmEmail(userData.email || "membro@ganesh.com")
     })
     .catch(  function(e) { 
       setFormErrors(e) 

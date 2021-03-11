@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Container, Grid, Button, Typography } from '@material-ui/core'
-import { TextField, InputLabel, Select, MenuItem, FormControl, Checkbox, FormControlLabel } from '@material-ui/core'
+import { TextField, InputLabel, Select, FormControl, Checkbox, FormControlLabel } from '@material-ui/core'
 import './Register.css'
 
 import OrDivider from '../../../components/OrDivider/OrDivider'
 import SnackAlerts from '../../../components/SnackAlerts/SnackAlerts'
 import { authService } from '../../../services/authService'
+import { optionsHelper as optHelper } from '../../../helpers/optionsHelper'
 
 function Register(){
 
@@ -15,9 +16,9 @@ function Register(){
   const [formErrors, setFormErrors]         = useState({})
   const [formData, setFormData]             = useState({
     name: '',
-    course: 'BCC',
+    course: optHelper.getDefaultOption(optHelper.optsCourses),
     otherCourse: '',
-    institution: 'USP/ICMC',
+    institution: optHelper.getDefaultOption(optHelper.optsInstitutions),
     otherInstitution: '',
     collegeID: '',
     yearJoinCollege: new Date().getFullYear(),
@@ -40,12 +41,24 @@ function Register(){
     setFormErrors({})
     setFormSuccess({})
 
+    // validate the password
     if(formData.password !== formData.repeatPassword) {
       setFormErrors({ repeatPassword: "As senhas não são iguais!" })
       return
     }
 
-    authService.register(formData)
+    let userData = { ...formData }
+
+    if(optHelper.isCustomOption(formData.course))
+      userData.course = formData.otherCourse
+    if(optHelper.isCustomOption(formData.institution))
+      userData.institution = formData.otherInstitution
+
+    delete userData.otherCourse
+    delete userData.otherInstitution
+    delete userData.repeatPassword
+
+    authService.register(userData)
     .then(   function( ) { setFormSuccess({message: "Cadastro criado com sucesso!" }) })
     .catch(  function(e) { setFormErrors(e) })     
     .finally(function( ) { setSubmitDisabled(false) })
@@ -75,15 +88,11 @@ function Register(){
                 <InputLabel id="LabelCourse">Curso atual *</InputLabel>
                 <Select labelId="LabelCourse" label="Curso atual *" name="course" value={formData.course}
                   required onChange={handleChange}>
-                    <MenuItem value="BCC">Ciências da Computação </MenuItem>
-                    <MenuItem value="BSI">Sistemas de Informação</MenuItem>
-                    <MenuItem value="ENGCOMP">Engenharia da Computação</MenuItem>
-                    <MenuItem value="NENHUM">Nenhum</MenuItem>
-                    <MenuItem value="OUTRO">Outro curso</MenuItem>
+                    { optHelper.renderOptions(optHelper.optsCourses) }
                 </Select>
               </FormControl>
 
-              { formData.course === "OUTRO" && 
+              { optHelper.isCustomOption(formData.course) && 
               <TextField variant="outlined" fullWidth label="Nome do curso" name="otherCourse" value={formData.otherCourse}
                 required inputProps={{maxLength:64}} error={formErrors.otherCourse} onChange={handleChange} />
               }
@@ -92,17 +101,11 @@ function Register(){
                 <InputLabel id="LabelInstitute">Instituição *</InputLabel>
                 <Select labelId="LabelInstitute" label="Instituição *" name="institution" value={formData.institution}
                   required onChange={handleChange}>
-                    <MenuItem value="USP/ICMC">USP - ICMC</MenuItem>
-                    <MenuItem value="USP/EESC">USP - EESC</MenuItem>
-                    <MenuItem value="USP/IFSC">USP - IFSC</MenuItem>
-                    <MenuItem value="USP/IQSC">USP - IQSC</MenuItem>
-                    <MenuItem value="UFSCAR">UFSCAR</MenuItem>
-                    <MenuItem value="NENHUMA">Nenhuma</MenuItem>
-                    <MenuItem value="OUTRA">Outra instituição</MenuItem>
+                    { optHelper.renderOptions(optHelper.optsInstitutions) }
                 </Select>
               </FormControl>
 
-              { formData.institution === "OUTRA" && 
+              { optHelper.isCustomOption(formData.institution) &&
               <TextField variant="outlined" fullWidth label="Nome da instituição" name="otherInstitution" value={formData.otherInstitution}
                 required inputProps={{maxLength:64}} error={formErrors.otherInstitution} onChange={handleChange} />
               }
