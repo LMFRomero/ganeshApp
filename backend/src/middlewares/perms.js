@@ -4,8 +4,15 @@ const Front = require('../models/Front');
 const roles = require('../utils/roles');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec'); 
 
+// require('passport');
 
 module.exports = {
+    isAuth (req, res, next) {
+        if (req.isAuthenticated()) {
+            return next();
+        } else res.status(401).end();
+    },
+
     async canManageMembers (req, res, next) {
         if (!req.session || !req.session.passport || !req.session.passport.user) {
             return res.status(401).end();
