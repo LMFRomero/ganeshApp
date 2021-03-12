@@ -28,9 +28,7 @@ module.exports = {
         
         let name = (req.body.name)?.toString();
         let institution = (req.body.institution)?.toString();
-        let otherInstitution = (req.body.otherInstitution)?.toString();
         let course = (req.body.course)?.toString();
-        let otherCourse = (req.body.otherCourse)?.toString();
         let collegeID = (req.body.collegeID)?.toString();
         let yearJoinCollege = (req.body.yearJoinCollege)?.toString();
         let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString();
@@ -67,28 +65,10 @@ module.exports = {
         if (resp) {
             return res.status(400).json( { course: resp });
         }
-        else if (course == 'OUTRO') {
-            resp = validateString(otherCourse, "Outro curso", 64);
-            if (resp) {
-                return res.status(400).json( { otherCourse: resp });
-            }
-            else {
-                course = otherCourse;
-            }
-        }
 
         resp = validateString(institution, "Instituição", 64);
         if (resp) {
             return res.status(400).json( { institution: resp });
-        }
-        else if (institution == 'OUTRA') {
-            resp = validateString(otherInstitution, "Outra instituição", 64);
-            if (resp) {
-                return res.status(400).json( { otherInstitution: resp });
-            }
-            else {
-                institution = otherInstitution;
-            }
         }
 
         if (!yearJoinCollege) {

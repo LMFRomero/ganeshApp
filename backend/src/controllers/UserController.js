@@ -26,9 +26,7 @@ module.exports = {
         
         let name = (req.body.name)?.toString();
         let institution = (req.body.institution)?.toString();
-        let otherInstitution = (req.body.otherInstitution)?.toString();
         let course = (req.body.course)?.toString();
-        let otherCourse = (req.body.otherCourse)?.toString();
         let collegeID = (req.body.collegeID)?.toString();
         let yearJoinCollege = (req.body.yearJoinCollege)?.toString();
         let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString();
@@ -60,28 +58,10 @@ module.exports = {
         if (resp) {
             return res.status(400).json( { course: resp });
         }
-        else if (course == 'OUTRO') {
-            resp = validateString(otherCourse, "Outro curso", 64);
-            if (resp) {
-                return res.status(400).json( { otherCourse: resp });
-            }
-            else {
-                course = otherCourse;
-            }
-        }
 
         resp = validateString(institution, "Instituição", 64);
         if (resp) {
             return res.status(400).json( { institution: resp });
-        }
-        else if (institution == 'OUTRA') {
-            resp = validateString(otherInstitution, "Outra instituição", 64);
-            if (resp) {
-                return res.status(400).json( { otherInstitution: resp });
-            }
-            else {
-                institution = otherInstitution;
-            }
         }
 
         if (!yearJoinCollege) {
@@ -169,9 +149,7 @@ module.exports = {
         
         let name = (req.body.name)?.toString();
         let institution = (req.body.institution)?.toString();
-        let otherInstitution = (req.body.otherInstitution)?.toString();
         let course = (req.body.course)?.toString();
-        let otherCourse = (req.body.otherCourse)?.toString();
         let collegeID = (req.body.collegeID)?.toString();
         let yearJoinCollege = (req.body.yearJoinCollege)?.toString();
         let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString();
@@ -235,19 +213,7 @@ module.exports = {
                 return res.status(400).json({ course: "O campo 'Curso atual' só aceita no máximo 64 caracteres" });
             }
             else if (course.length > 0) {
-                if (course == 'OUTRO') {
-                        if (otherCourse && otherCourse != user.course) {
-                            if (otherCourse.length > 64) {
-                                return res.status(400).json({ otherCourse: "O campo 'Outro curso' só aceita no máximo 64 caracteres" });
-                            }
-                            else if (otherCourse.length > 0) {
-                                user.course = otherCourse;
-                            }
-                        }
-                }
-                else {
-                    user.course = course;
-                }
+                user.course = course;
             }
         }
         
@@ -256,19 +222,7 @@ module.exports = {
                 return res.status(400).json({ institution: "O campo 'Instituição' só aceita no máximo 64 caracteres" });
             }
             else if (institution.length > 0) {
-                if (institution == 'OUTRA') {
-                        if (otherInstitution && otherInstitution != user.institution) {
-                            if (otherInstitution.length > 64) {
-                                return res.status(400).json({ otherInstitution: "O campo 'Outra instituição' só aceita no máximo 64 caracteres" });
-                            }
-                            else if (otherInstitution.length > 0) {
-                                user.institution = otherInstitution;
-                            }
-                        }
-                }
-                else {
-                    user.institution = institution;
-                }
+                user.institution = institution;
             }
         }
 
