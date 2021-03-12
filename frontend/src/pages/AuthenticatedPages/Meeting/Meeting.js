@@ -31,7 +31,7 @@ function Meeting(){
     meetingService.getById(meetingId)
     .then(function(m) { setMeetingData({ ...m }) })
     .catch(function(e) { history.push("/404") }) 
-  }, [meetingId])
+  }, [meetingId, history])
 
   return(
     <Box className="MeetingPage" flexGrow={1} component="main">

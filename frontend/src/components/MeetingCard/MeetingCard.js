@@ -26,7 +26,7 @@ function MeetingCard({ authUsername, variant, id, title, content, date, duration
   useEffect(() => { 
     setMembers(initMembers)
     setIsMember(initMembers.find((m) => m.username === authUsername))
-  }, [initMembers])
+  }, [initMembers, authUsername])
 
   const getFormattedDate = (date) => { 
     let parts = (new Date(date)).toLocaleString().split(/[/: ]/)

@@ -18,7 +18,7 @@ function getById(userId) {
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then(() => {
     //     return Promise.resolve({
-    //         id: "123abc", name: 'Zézinho 013', course: 'BCC', otherCourse: '', institution: 'USP/ICMC', otherInstitution: '',
+    //         id: "123abc", name: 'Zézinho 013', course: 'BCC', institution: 'USP/ICMC',
     //         collegeID: '1337013', yearJoinCollege: "2021", yearJoinGanesh:  "2021",
     //         email: 'ze@zinho.com', username: 'Z3z1nh013', title: 'Membro', role:  60,
     //     })
