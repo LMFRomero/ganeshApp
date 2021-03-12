@@ -1,18 +1,21 @@
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
-const routes = require('./routes');
 const timeout = require('connect-timeout');
+const path = require('path');
 
+const cors = require('cors');
 const session = require('express-session');
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
+
+const multer = require('multer');
 const redis = require('./services/redis-store');
 
-const passport = require('passport');
-const passportConfig = require('./services/passport');
-
-const cookieParser = require('cookie-parser');
-const path = require('path');
-const multer = require('multer');
+const sessionRoutes = require('./routes/session');
+const userRoutes = require('./routes/user');
+const frontRoutes = require('./routes/front');
+const meetingRoutes = require('./routes/meeting');
+const devRoutes = require('./routes/dev');
 
 require('dotenv').config();
 
@@ -59,7 +62,12 @@ try {
 
 app.use(timeout('10s'));
 app.use(express.json());
-app.use(routes);
+
+app.use('/api/session', sessionRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/meeting', meetingRoutes);
+app.use('/api/front', frontRoutes);
+app.use('/api/dev', devRoutes);
 
 function haltOnTimedout (req, res, next) {
     if (!req.timedout) next();
