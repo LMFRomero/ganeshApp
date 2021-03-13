@@ -11,7 +11,7 @@ export const authService = {
 }
 
 function login(email, password) {
-    return api.post('/login', {email, password})
+    return api.post('/session/login', {email, password})
     .then((response) => {
         localStorage.setItem("user", JSON.stringify(response.data))
     })
@@ -26,7 +26,7 @@ function login(email, password) {
 }
 
 function logout() {
-    return api.post('/logout')
+    return api.post('/session/logout')
     .catch(() => Promise.resolve("Logout realizado"))
     .finally(() => {
         localStorage.removeItem("user")
@@ -35,7 +35,7 @@ function logout() {
 }
 
 function register(user) { 
-    return api.post('/register', user)
+    return api.post('/user/register', user)
     .catch( (error) => {
         // Status Code out of range 2xx
         if(error.response) {
@@ -49,7 +49,7 @@ function register(user) {
 }
 
 function recoverLink(email) { 
-    return api.post('/forgotPassword', {email})
+    return api.post('/user/forgotPassword', {email})
     .then((response) => { 
         return Promise.resolve({message: "Link enviado para seu e-mail!"})
     })
@@ -66,7 +66,7 @@ function recoverLink(email) {
 }
 
 function resetPassword(password, token) { 
-    return api.post('/resetPassword/' + token, { password })
+    return api.post('/user/resetPassword/' + token, { password })
     .then((response) => { 
         return Promise.resolve({message: "Senha atualizada com sucesso!"})
     })
