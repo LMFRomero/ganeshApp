@@ -84,5 +84,14 @@ module.exports = {
                 return true;
             }
         }
+    },
+
+    isCoordOrIsSelf (req, res, next) {
+        if (permsMiddlewares.isCoordinator(req, res) || permsMiddlewares.isSelf(req, res)) {
+            next();
+        }
+        else {
+            return res.status(401).end();
+        }
     }
 }
