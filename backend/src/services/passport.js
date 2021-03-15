@@ -6,8 +6,6 @@ module.exports = function (passport) {
     passport.serializeUser(function(user, done){
         done(null, {
             id: user._id,
-            name: user.name,
-            roleInt: user.roleInt
         });
     });
  
