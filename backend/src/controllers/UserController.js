@@ -311,6 +311,24 @@ module.exports = {
         return res.status(200).json({ message: "Dados atualizados com sucesso!" });
     },
 
+    async destroy (req, res) {
+        let user = await SafeFindById(User, req.params?.id);
+        if (!user) {
+            return res.status(404).json({ userId: "Usuário não encontrado" });
+        }
+
+        user.isDeleted = true;
+
+        try {
+            user.save();
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ message: "Não foi possível excluir a conta" });
+        }
+
+        return res.status(200).json({ message: "Conta excluída com sucesso!" });
+    },
+
     async verify (email, password) {
         if (!email || !password) {
             return null;

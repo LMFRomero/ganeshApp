@@ -20,6 +20,7 @@ routes.use(permsMiddlewares.isAuth);
 routes.get('/', permsMiddlewares.isCoordOrIsSelf, UserController.show);
 routes.get('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.show);
 routes.put('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.update);
+routes.delete('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.destroy);
 
 routes.post('/acceptUser', permsMiddlewares.isCoordinator, RequestUserController.update);
 routes.post('/rejectUser', permsMiddlewares.isCoordinator, RequestUserController.destroy);
