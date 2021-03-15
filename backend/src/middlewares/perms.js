@@ -2,7 +2,7 @@ const User = require('../models/User');
 const Front = require('../models/Front');
 
 const roles = require('../utils/roles');
-const { isCoordinator } = require('../services/privilege');
+const { isCoordinator } = require('../utils/roles');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec'); 
 
