@@ -15,7 +15,8 @@ routes.post('/forgotPassword', ResetPasswordController.store);
 routes.post('/resetPassword/:token', ResetPasswordController.update);
 
 //auth routes
-routes.use((req, res, next) => { permsMiddlewares.isAuth });
+routes.use(permsMiddlewares.isAuth);
+
 
 routes.put('/:id', UserController.update);
 
