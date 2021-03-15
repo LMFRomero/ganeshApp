@@ -8,12 +8,12 @@ const permsMiddlewares = require('../middlewares/perms');
 
 //route: /api/front
 
-routes.post('/', permsMiddlewares.canManageFront, FrontController.store);
-routes.put('/:frontName', permsMiddlewares.canManageFront, FrontController.update);
-routes.delete('/:frontName', permsMiddlewares.canManageFront, FrontController.destroy);
+routes.post('/', permsMiddlewares.isCoordinator, FrontController.store);
+routes.put('/:frontName', permsMiddlewares.isCoordinator, FrontController.update);
+routes.delete('/:frontName', permsMiddlewares.isCoordinator, FrontController.destroy);
 routes.post('/addUser/:frontName', permsMiddlewares.isSelf, FrontController.addUser);
 routes.post('/removeUser/:frontName', permsMiddlewares.isSelf, FrontController.removeUser);
 routes.post('/addMeeting/:frontName', FrontController.addMeeting);
-routes.post('/removeMeeting/:frontName', permsMiddlewares.canManageFront, FrontController.removeMeeting);
+routes.post('/removeMeeting/:frontName', permsMiddlewares.isCoordinator, FrontController.removeMeeting);
 
 module.exports = routes;

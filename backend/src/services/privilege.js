@@ -50,4 +50,13 @@ module.exports = {
 
         return true;
     },
+
+    async isCoordinator (id) {
+        let user = await SafeFindById(User, id);
+        if (!user) {
+            return false;
+        }
+
+        return (user.roleInt < 30);
+    },
 }

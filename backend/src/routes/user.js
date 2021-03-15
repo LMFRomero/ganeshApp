@@ -7,6 +7,7 @@ const UserController = require('../controllers/UserController');
 const ResetPasswordController = require('../controllers/ResetPasswordController');
 
 const permsMiddlewares = require('../middlewares/perms');
+const privilegeMan = require('../services/privilege');
 
 //route: /api/user
 
@@ -18,10 +19,17 @@ routes.post('/resetPassword/:token', ResetPasswordController.update);
 routes.use(permsMiddlewares.isAuth);
 
 
-routes.put('/:id', UserController.update);
+routes.put('/:id', (req, res, next) => {
+    if (permsMiddlewares.isCoordinator(req, res) || permsMiddlewares.isSelf(req, res)) {
+        next();
+    }
+    else {
+        return res.status(401).end();
+    }
+}, UserController.update);
 
-routes.post('/acceptUser', permsMiddlewares.canManageMembers, RequestUserController.update);
-routes.post('/rejectUser', permsMiddlewares.canManageMembers, RequestUserController.destroy);
+routes.post('/acceptUser', permsMiddlewares.isCoordinator, RequestUserController.update);
+routes.post('/rejectUser', permsMiddlewares.isCoordinator, RequestUserController.destroy);
 
 // routes.post('/promote/:username', permsMiddlewares.canChangeRole, privilegeMan.changeRole);
 

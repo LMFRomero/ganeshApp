@@ -2,9 +2,10 @@ const User = require('../models/User');
 const Front = require('../models/Front');
 
 const roles = require('../utils/roles');
+const { isCoordinator } = require('../services/privilege');
+
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec'); 
 
-// require('passport');
 
 module.exports = {
     isAuth (req, res, next) {
@@ -13,95 +14,75 @@ module.exports = {
         } else res.status(401).end();
     },
 
-    async canManageMembers (req, res, next) {
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
-            return res.status(401).end();
+    async isCoordinator (req, res, next) {
+        let resp = await isCoordinator(req.session?.passport?.user?.id);
+        if (resp) {
+            if (next) {
+                next();
+            }
+            else {
+                return true;
+            }
         }
-
-        let user = await SafeFindById(User, req.session.passport.user.id);
-        if (!user) {
-            return res.status(401).end();
+        else {
+            if (next) {
+                return res.status(401).end();
+            }
+            else {
+                return false;
+            }
         }
-        
-        if (user.roleInt >= 30) {
-            return res.status(403).end();
-        }
-        
-        next();
     },
 
     async canChangeRole (req, res, next) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
-
-        if (!req.params.username || !req.body || !req.body.role)
-            return res.status(400).end();
-
-        let user = await SafeFindById(User, req.session.passport.user.id);
-        if (!user) {
-            return res.status(401).end();
+        let reqUser = await SafeFindById(User, req.session?.passport?.user?.id);
+        if (!reqUser) {
+            return (next) ? res.status(404).end() : false;
         }
 
-        if (user.roleInt > 30) {
-            return res.status(403).end();
+        //if the request user is not a coordinator
+        if (reqUser.roleInt >= 30) {
+            return (next) ? res.status(401).end() : false;
         }
         
-        let changedUser = await SafeFindOne(User, { username: req.params.username} );
-        if (!changedUser) {
-            return res.status(400).end();
+        let changedUser = await SafeFindOne(User, { email: req.body.email} );
+        if (!changedUser || getRoleInt(req.body?.role) == -1) {
+            return (next) ? res.status(400).end() : false;
         }
 
         //coordinator can't promote or demote coordinator
-        if (user.roleInt > 20 && changedUser.roleInt < 30) {
-            return res.status(403).end();
+        if (reqUser.roleInt >= 20 && changedUser.roleInt < 30) {
+            return (next) ? res.status(401).end() : false;
         }
 
-        if (changedUser.roleInt <= user.roleInt) {
-            return res.status(403).end();
-        }
-
-        newRoleInt = getRoleInt(req.body.role);
-        if (newRoleInt == -1) {
-            return res.status(400).end();
+        if (reqUser.roleInt > changedUser.roleInt) {
+            return (next) ? res.status(401).end() : false;
         }
         
-        if (newRoleInt <= user.roleInt) {
-            return res.status(403).end();
+        //coodinator can't promote to a higher role than his own
+        if (reqUser.roleInt > newRoleInt) {
+            return (next) ? res.status(401).end() : false;
         }
 
-        next();
-    },
-
-    async canManageFront (req, res, next) {
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
-            return res.status(401).end();
-        }
-
-        let user = await SafeFindById(User, req.session.passport.user.id);
-        if (!user) {
-            return res.status(401).end();
-        }
-
-        if (user.roleInt > 30) {
-            return res.status(403).end();
-        }
-
-        next();
+        return (next) ? next() : true;
     },
 
     async isSelf (req, res, next) {
-        if (!req.session || !req.session.passport || !req.session.passport.user) {
-            return res.status(401).end();
+        if (req.session?.passport?.user?.id != req.params?.id) {
+            if (next) {
+                return res.status(401).end();
+            }
+            else {
+                return false;
+            }
         }
-
-        if (!req.body || !req.body.name) {
-            return res.status(400).end();
+        else {
+            if (next) {
+                next();
+            }
+            else {
+                return true;
+            }
         }
-
-        if (req.session.passport.user.name != req.body.name) {
-            return res.status(403).end();
-        }
-
-        next();
     }
 }
