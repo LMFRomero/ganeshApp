@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+    createdAt: {
+        type: Date,
+    },
+    
     email: {
         type: String,
         unique: true,
@@ -61,6 +65,9 @@ const UserSchema = new mongoose.Schema({
     isDeleted: {
         type: Boolean,
         required: true
+    },
+    deletedAt: {
+        type: Date,
     }
 });
 
