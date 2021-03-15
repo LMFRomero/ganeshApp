@@ -10,7 +10,5 @@ routes.post('/user/acceptUser', RequestUserController.update);
 routes.post('/user/rejectUser', RequestUserController.destroy);
 
 
-// routes.post('/user/promote/:username', privilegeMan.changeRole);
-
 module.exports = routes;
 

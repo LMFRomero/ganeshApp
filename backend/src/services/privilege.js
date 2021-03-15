@@ -5,27 +5,19 @@ const roles = require('../utils/roles');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec'); 
 
 module.exports = {
-    async changeRole (req, res) {
-        if (!req.params.username || !req.body || !req.body.role)
-            return res.status(400).end();
-
-        let user = await SafeFindOne(User, { username: req.params.username });
-        if (!user)
-            return res.status(400).end();
+    changeRole (user, role) {
+        if (!user) {
+            return false;
+        }
         
-        let roleInt = roles.getRoleInt(req.body.role);
-        if (roleInt == -1)
-            return res.status(400).end();
-
-        user.roleInt = roleInt;
-        try {
-            await user.save();
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
+        let roleInt = roles.getRoleInt(role);
+        if (roleInt == -1) {
+            return false
         }
 
-        return res.status(200).end();
+        user.roleInt = roleInt;
+
+        return true;
     },
 
     async setGlobalRole (id, role) {

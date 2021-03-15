@@ -31,7 +31,6 @@ routes.put('/:id', (req, res, next) => {
 routes.post('/acceptUser', permsMiddlewares.isCoordinator, RequestUserController.update);
 routes.post('/rejectUser', permsMiddlewares.isCoordinator, RequestUserController.destroy);
 
-// routes.post('/promote/:username', permsMiddlewares.canChangeRole, privilegeMan.changeRole);
 
 module.exports = routes;
 
