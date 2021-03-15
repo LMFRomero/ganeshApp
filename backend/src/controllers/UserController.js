@@ -2,7 +2,7 @@ const User = require('../models/User');
 const RequestUser = require('../models/RequestUser');
 
 const bCrypt = require('../services/hashes');
-const { SafeFindOne, SafeCreateObj, SafeFindById } = require('../services/safe-exec');
+const { SafeFindOne, SafeCreateObj, SafeFindById, SafeFind } = require('../services/safe-exec');
 
 const { canChangeRole } = require('../middlewares/perms');
 const { getRoleInt, getTitle } = require('../utils/roles');
@@ -23,7 +23,45 @@ function validateString(str, fieldName, maxLen) {
 
 module.exports = {
     async show (req, res) {
+        let resp;
         
+        if (req.params?.id) {
+            resp = await SafeFindById(User, req.params.id);
+            if (!resp) {
+                return res.status(404).json({ userId: "Usuário não encontrado" });
+            }
+
+            let fieldNames = ['name', 'course', 'institution', 'collegeID', 'yearJoinCollege', 'yearJoinGanesh','email', 'username', 'role', 'title', 'isDeleted']
+            let user = {};
+            
+            user.id = resp._id;
+
+            for (let fieldName of fieldNames) {
+                user[fieldName] = resp[fieldName];
+            }
+
+            return res.status(200).json(user);
+            
+        }
+        else {
+            resp = await SafeFind(User, {});
+            
+            let users = [];
+            let fieldNames = ['email', 'username', 'yearJoinGanesh', 'title'];
+
+            resp.forEach((item) => {
+                let user = {};
+                user.id = item._id;
+
+                for (let fieldName of fieldNames) {
+                    user[fieldName] = item[fieldName];
+                }
+
+                users.push(user);
+            });
+
+            return res.status(200).json({ users });
+        }
     },
 
     async store (req, res) {
@@ -127,7 +165,7 @@ module.exports = {
 
         user = await SafeCreateObj(User, {
             createdAt: Date.now(),
-            
+
             email, 
             password, 
             name, 
