@@ -1,8 +1,11 @@
 const User = require('../models/User');
 const RequestUser = require('../models/RequestUser');
+
 const bCrypt = require('../services/hashes');
 const { SafeFindOne, SafeCreateObj, SafeFindById } = require('../services/safe-exec');
-const { setGlobalRole } = require('../services/privilege');
+
+const { canChangeRole } = require('../middlewares/perms');
+const { getRoleInt, getTitle } = require('../utils/roles');
 
 function validateString(str, fieldName, maxLen) {
     if (!str) {
@@ -19,6 +22,10 @@ function validateString(str, fieldName, maxLen) {
 }
 
 module.exports = {
+    async show (req, res) {
+        
+    },
+
     async store (req, res) {
         let email = (req.body.email)?.toString();
         let username = (req.body.username)?.toString();
@@ -46,22 +53,22 @@ module.exports = {
 
         resp = validateString(password, "Senha", 64);
         if (resp) {
-            return res.status(400).json( { password: resp });
+            return res.status(400).json({ password: resp });
         }
 
         resp = validateString(name, "Nome", 64);
         if (resp) {
-            return res.status(400).json( { name: resp });
+            return res.status(400).json({ name: resp });
         }
 
         resp = validateString(course, "Curso atual", 64);
         if (resp) {
-            return res.status(400).json( { course: resp });
+            return res.status(400).json({ course: resp });
         }
 
         resp = validateString(institution, "Instituição", 64);
         if (resp) {
-            return res.status(400).json( { institution: resp });
+            return res.status(400).json({ institution: resp });
         }
 
         if (!yearJoinCollege) {
@@ -77,7 +84,7 @@ module.exports = {
         
         resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", 12);
         if (resp) {
-            return res.status(400).json( { yearJoinGanesh: resp });
+            return res.status(400).json({ yearJoinGanesh: resp });
         }
         yearJoinGanesh = parseInt(yearJoinGanesh);
         if (isNaN(yearJoinGanesh)) {
@@ -143,16 +150,18 @@ module.exports = {
     },
 
     async update (req, res) {
-        let email = (req.body.email)?.toString();
-        let username = (req.body.username)?.toString();
-        let password = (req.body.password)?.toString();
+        let email = (req.body.email)?.toString().trim();
+        let username = (req.body.username)?.toString().trim();
         
-        let name = (req.body.name)?.toString();
-        let institution = (req.body.institution)?.toString();
-        let course = (req.body.course)?.toString();
-        let collegeID = (req.body.collegeID)?.toString();
-        let yearJoinCollege = (req.body.yearJoinCollege)?.toString();
-        let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString();
+        let name = (req.body.name)?.toString().trim();
+        let institution = (req.body.institution)?.toString().trim();
+        let course = (req.body.course)?.toString().trim();
+        let collegeID = (req.body.collegeID)?.toString().trim();
+        let yearJoinCollege = (req.body.yearJoinCollege)?.toString().trim();
+        let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString().trim();
+
+        let role = (req.body.role)?.toString().trim();
+        let roleInt = getRoleInt(role);
 
         let user = await SafeFindById(User, req.params.id);
         if (!user) {
@@ -163,13 +172,13 @@ module.exports = {
 
         if (email && email != user.email) {
             if (email.length > 64) {
-                return res.status(400).json( { email: "O campo 'Email' só aceita no máximo 64 caracteres" });
+                return res.status(400).json({ email: "O campo 'Email' só aceita no máximo 64 caracteres" });
             }
             else if (email.length) {
                 conflict1 = await SafeFindOne(User, { email });
                 conflict2 = await SafeFindOne(RequestUser, { email });
                 if (conflict1 || conflict2) {
-                    return res.status(409).json( {email: "Email já em uso" });
+                    return res.status(409).json({ email: "Email já em uso" });
                 }
                 user.email = email;
             }
@@ -189,26 +198,16 @@ module.exports = {
             }
         }
 
-        if (password && password != user.password) {
-            if (password.length > 64) {
-                return res.status(400).json({ password: "O campo 'Senha' só aceita no máximo 64 caracteres" });
-            }
-            else if (password.length > 0) {
-                password = bCrypt.createHash(password);
-                user.password = password;
-            }
-        }
-
-        if (name && name != user.name) {
+        if (name) {
             if (name.length > 64) {
-                return res.status(400).json({ name: "O campo 'Nome completo' é obrigatório" });
+                return res.status(400).json({ name: "O campo 'Nome completo' só aceita no máximo 64 caracteres" });
             }
             else if (name.length > 0) {
                 user.name = name;
             }
         }
 
-        if (course && course != user.course) {
+        if (course) {
             if (course.length > 64) {
                 return res.status(400).json({ course: "O campo 'Curso atual' só aceita no máximo 64 caracteres" });
             }
@@ -217,7 +216,7 @@ module.exports = {
             }
         }
         
-        if (institution && institution != user.institution) {
+        if (institution) {
             if (institution.length > 64) {
                 return res.status(400).json({ institution: "O campo 'Instituição' só aceita no máximo 64 caracteres" });
             }
@@ -253,14 +252,23 @@ module.exports = {
             } 
         }
 
+        if (roleInt != -1 && roleInt != user.roleInt) {
+            if (await canChangeRole(req, res)) {
+                user.roleInt = roleInt;
+            }
+            else {
+                return res.status(403).json({ roleInt: "Não é possível mudar o cargo" });
+            }
+        }
+
         try {
             await user.save();
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ user: "Não foi possível atualizar usuário" });
+            return res.status(500).json({ message: "Não foi possível atualizar usuário" });
         }
 
-        return res.status(200).end();
+        return res.status(200).json({ message: "Dados atualizados com sucesso!" });
     },
 
     async verify (email, password) {
