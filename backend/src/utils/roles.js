@@ -42,7 +42,8 @@ let roles = {
 
     getRoleInt (role) {
         let resp = roles.globals[role]?.roleInt;
-        if (!resp) {
+        console.log(roles.globals[role]?.roleInt);
+        if (resp === undefined) {
             return -1;
         }
         else {
@@ -52,18 +53,15 @@ let roles = {
     },
 
     getTitle (roleInt) {
-        role.globals.forEach((item) => {
+        for (let entry in roles.globals) {
+            let item = roles.globals[entry];
             if (item.roleInt == roleInt) {
                 return item.title;
             }
-        });
+        };
 
         return null;
     },
-
-    isCoordinator (roleInt) {
-        return (roleInt < 30);
-    }
 };
 
 module.exports = roles;
