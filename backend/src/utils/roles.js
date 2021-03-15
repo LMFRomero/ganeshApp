@@ -42,7 +42,6 @@ let roles = {
 
     getRoleInt (role) {
         let resp = roles.globals[role]?.roleInt;
-        console.log(roles.globals[role]?.roleInt);
         if (resp === undefined) {
             return -1;
         }
