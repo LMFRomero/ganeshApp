@@ -51,8 +51,9 @@ module.exports = {
             return (next) ? res.status(401).end() : false;
         }
         
-        let changedUser = await SafeFindOne(User, { email: req.body.email} );
-        if (!changedUser || getRoleInt(req.body?.role) == -1) {
+        let changedUser = await SafeFindById(User, req.params.id);
+        let newRoleInt = roles.getRoleInt(req.body?.role);
+        if (!changedUser || newRoleInt == -1) {
             return (next) ? res.status(400).end() : false;
         }
 
