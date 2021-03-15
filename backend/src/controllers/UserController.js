@@ -126,6 +126,8 @@ module.exports = {
         let title = getTitle(roleInt);
 
         user = await SafeCreateObj(User, {
+            createdAt: Date.now(),
+            
             email, 
             password, 
             name, 
