@@ -11,7 +11,7 @@ let isCoordinator = async function (req, res, next) {
         return (next) ? res.status(404).end() : false;
     }
 
-    if (user < 30) {
+    if (user.roleInt < 30) {
         return (next) ? next() : true;
     }
     else {
