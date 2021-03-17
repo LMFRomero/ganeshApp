@@ -74,7 +74,10 @@ function AppRoutes(props) {
         <PublicRoute path="/recuperar-senha"><ForgotPassword/></PublicRoute>
         
         {/* Rotas - Authenticated User*/}
+        <PrivateRoute path="/reunioes/:frontSlug/:pageNumber"><Timeline variant="meetings"/></PrivateRoute>
+        <PrivateRoute path="/reunioes/:pageNumber"><Timeline variant="meetings"/></PrivateRoute>
         <PrivateRoute path="/reunioes"><Timeline variant="meetings"/></PrivateRoute>
+
         <PrivateRoute path="/comunicados"><Timeline variant="announces"/></PrivateRoute>
         <PrivateRoute path="/minha-conta"><UserAccount variant="my-account"/></PrivateRoute>
         <PrivateRoute path="/criar-reuniao"><DefaultForm variant="register-meeting"/></PrivateRoute>

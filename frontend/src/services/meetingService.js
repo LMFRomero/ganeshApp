@@ -63,16 +63,26 @@ function getAll( page = 1, frontSlug = '') {
     // .catch(handleErrors)
     .catch(() => Promise.resolve('Return mockup Data'))
     .then((response) => {
-        return Promise.resolve([
-            {
+        return Promise.resolve({
+            currentPage: page,
+            maxPage: 19,
+            results: [{
                 id:'M337', title: 'Reunião de Web - SQL Injection + HackTheBox', 
                 date: '2021-03-14T18:02:00.694Z', duration: '2 horas', place: 'Online (Canal #web Discord)',
                 front:  { name: 'Segurança Web', slug: 'seguranca-web' },
                 author: { username: "Gabriel Van Loon", title: "Membro" },
-                publishDate: '2 de fevereiro de 2020, 13h37',
-                membersOnly: true, deleted: false
-            }
-        ])
+                publishDate: '2021-03-14T18:02:00.694Z',
+                members: [{username:"teste"}],
+            },
+            {
+                id:'M338', title: 'SSL Strip & HSTS', 
+                date: '2021-03-14T18:02:00.694Z', duration: '1 hora', place: 'Online (Canal #redes Discord)',
+                front:  { name: 'Redes & Pentest', slug: 'redes' },
+                author: { username: "Hiro", title: "Membro" },
+                publishDate: '2021-03-14T18:02:00.694Z',
+                members: [ ],
+            }]
+        })
     })
 }
 
