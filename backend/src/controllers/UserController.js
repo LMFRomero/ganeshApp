@@ -311,6 +311,42 @@ module.exports = {
         return res.status(200).json({ message: "Dados atualizados com sucesso!" });
     },
 
+    async updatePassword (req, res) {
+        let user = await SafeFindById(User, req.params?.id);
+        if (!user) {
+            return res.status(404).end();
+        }
+
+        let password = (req.body?.newPassword)?.toString()?.trim();
+        let resp = validateString(password, 'newPassword', 64);
+        if (resp) {
+            return res.status(400).json(resp);
+        }
+
+        let oldPassword = (req.body?.password)?.toString()?.trim();
+        let resp = validateString(oldPassword, 'password', 64);
+        if (resp) {
+            return res.status(400).json(resp);
+        }
+
+        if (!bCrypt.validateHash(user.password, oldPassword)) {
+            return res.status(403).json({ message: "Senha inválida" });
+        }
+
+        password = bCrypt.createHash(password);
+
+        user.password = password;
+
+        try {
+            user.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
+
+        return res.status(200).end();
+    },
+
     async destroy (req, res) {
         let user = await SafeFindById(User, req.params?.id);
         if (!user) {

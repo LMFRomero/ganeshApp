@@ -20,6 +20,7 @@ routes.use(permsMiddlewares.isAuth);
 routes.get('/', permsMiddlewares.isCoordOrIsSelf, UserController.show);
 routes.get('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.show);
 routes.put('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.update);
+routes.put('/:id/changePassword', permsMiddlewares.isSelf, UserController.updatePassword);
 routes.delete('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.destroy);
 
 routes.post('/acceptUser', permsMiddlewares.isCoordinator, RequestUserController.update);
