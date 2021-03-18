@@ -311,7 +311,7 @@ module.exports = {
         }
 
         let oldPassword = (req.body?.password)?.toString()?.trim();
-        let resp = validateString(oldPassword, 'password', 64);
+        resp = validateString(oldPassword, 'password', 64);
         if (resp) {
             return res.status(400).json(resp);
         }

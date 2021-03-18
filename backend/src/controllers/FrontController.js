@@ -54,7 +54,7 @@ module.exports = {
         }
 
 
-        let front = await SafeCreateObj(Front, { 
+        front = await SafeCreateObj(Front, { 
             name,
             slug,
             description,
