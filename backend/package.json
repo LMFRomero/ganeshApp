@@ -28,6 +28,7 @@
     "passport-local": "^1.0.0",
     "qrcode": "^1.4.4",
     "redis": "^3.0.2",
+    "regex": "^0.1.1",
     "response-time": "^2.3.2"
   }
 }
