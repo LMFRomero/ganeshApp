@@ -1,4 +1,4 @@
-const Regex = require('regex');
+// const Regex = require('regex');
 module.exports = {
 
     validateString(str, fieldName, maxLen, regex) {
@@ -10,12 +10,12 @@ module.exports = {
             return `O campo '${fieldName}' só aceita no máximo ${maxLen} caracteres`;
         }
     
-        if (regex) {
-            const reg = new Regex(regex);
-            if (reg.test(str) == false) {
-                return `O campo ${fieldName} contem caracteres inválidos`;
-            }
-        }
+        // if (regex) {
+        //     const reg = new Regex(regex);
+        //     if (reg.test(str) == false) {
+        //         return `O campo ${fieldName} contem caracteres inválidos`;
+        //     }
+        // }
     
         else {
             return null;
