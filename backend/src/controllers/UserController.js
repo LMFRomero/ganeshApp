@@ -6,20 +6,7 @@ const { SafeFindOne, SafeCreateObj, SafeFindById, SafeFind } = require('../servi
 
 const { canChangeRole } = require('../middlewares/perms');
 const { getRoleInt, getTitle } = require('../utils/roles');
-
-function validateString(str, fieldName, maxLen) {
-    if (!str) {
-        return `O campo '${fieldName}' é obrigatório`;
-    }
-
-    if (str.length > maxLen) {
-        return `O campo '${fieldName}' só aceita no máximo ${maxLen} caracteres`;
-    }
-
-    else {
-        return null;
-    }
-}
+const { validateString } = require('../utils/str');
 
 module.exports = {
     async show (req, res) {
