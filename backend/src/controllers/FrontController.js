@@ -2,25 +2,77 @@ const Front = require('../models/Front');
 const User = require('../models/User');
 const Meeting = require('../models/Meeting');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
+const { validateString } = require('../utils/str');
 
 
 module.exports = {
     async store (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
-        
-        if (!req.body || !req.body.name)
-            return res.status(400).end();
+        let name = (req.body?.name)?.toString()?.trim();
+        let slug = (req.body?.slug)?.toString()?.trim();
+        let description = (req.body?.description)?.toString()?.trim();
+        let type = (req.body?.type)?.toString()?.trim();
+        let membersOnly = ((req.body?.membersOnly)?.toString()?.trim() == 'true');
 
-        let front = await SafeFindOne(Front, { name: req.body.name });
-        if (front)
-            return res.status(400).end();
+        const frontTypes = ["study", "special", "internal"];
 
-        front = await SafeCreateObj(Front, { name: req.body.name, deleted: false });
-        if (!front)
-            return res.status(500).end();
+        const regexp = {
+            slugName: "/[a-zA-Z0-9-]*$/g",
+            alpha: "/[a-zA-Z]*$/g",
+            alNum: "/[a-zA-Z0-9]*$/g"
+        }
+
+        let resp = validateString(name, "name", 32, regexp.alNum);
+        if (resp) {
+            return res.status(400).json({ name: resp });
+        }
+
+        let front = await SafeFindOne(Front, { name });
+        if (front) {
+            return res.status(400).end({ name: "Nome já usado" });
+        }
+
+        resp = validateString(slug, "slug", 16, regexp.slugName);
+        if (resp) {
+            return res.status(400).json({ slug: resp });
+        }
+        if (slug.length < 3) {
+            return res.status(400).json({ slug: 'O campo slug só aceita no mínimo 3 caracteres'});
+        }
+
+        resp = validateString(description, "description", 512, regexp.alNum);
+        if (resp) {
+            return res.status(400).json({ description: resp });
+        }
+
+        resp = validateString(type, "type", 512, regexp.alNum);
+        if (resp) {
+            return res.status(400).json({ type: resp });
+        }
+
+        if (!(type in frontTypes)) {
+            return res.status(400).json({ type: 'O campo type tem valor inválido '});
+        }
+
+
+        let front = await SafeCreateObj(Front, { 
+            name,
+            slug,
+            description,
+            type,
+            membersOnly,
+            
+            createdAt: Date.now(),
+            isDeleted: false,
+
+            members: [],
+            meetings: []
+        });
+
+        if (!front) {
+            return res.status(500).end({ message: "Não foi possível criar a frente" });
+        }
         
-        return res.status(201).end();
+        return res.status(201).json({ message: "Frente criada com sucesso!!" });
     },
 
     async destroy (req, res) {
