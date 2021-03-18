@@ -3,22 +3,43 @@ const mongoose = require('mongoose');
 const frontSchema = new mongoose.Schema ({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        maxlength: 32,
     },
-    imgStr: {
-        type: String
+    slug: {
+        type: String,
+        required: true,
+        unique: true,
+        minlength: 3,
+        maxlength: 16,
     },
+    type: {
+        type: String,
+        required: true,
+    },
+    membersOnly: {
+        type: Boolean,
+        required: true,
+    },
+
+    createdAt: {
+        type: Date,
+        required: true,
+    },
+    isDeleted: {
+        type: Boolean,
+        required: true,
+    },
+
     members: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
     }],
     meetings: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Meeting'
+        ref: 'Meeting',
     }],
-    deleted: {
-        type: Boolean
-    }
 });
 
 module.exports = mongoose.model('Front', frontSchema);
