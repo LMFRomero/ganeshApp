@@ -9,6 +9,8 @@ routes.put('/user/:id', UserController.update);
 routes.post('/user/acceptUser', RequestUserController.update);
 routes.post('/user/rejectUser', RequestUserController.destroy);
 
+routes.post('/user/promoteUser', UserController.promoteUser);
+
 
 module.exports = routes;
 
