@@ -46,11 +46,9 @@ function AppRoutes(props) {
   }
   
   function PrivateRoute({children, component: RenderComponent, ...rest}) {
-    const isAuthenticated = () => true
-  
     return (
       <Route {...rest} render={( p => 
-        isAuthenticated() ? (
+        authService.isAuthenticated() ? (
           <>
             <Header darkTheme={props.darkTheme} handleTheme={props.handleTheme}/>
             { children }
