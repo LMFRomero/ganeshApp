@@ -27,7 +27,7 @@ function getById(userId) {
 
 function getAll() { 
     return api.get('/user/')
-    .then((response) => Promise.resolve(response.data))
+    .then((response) => Promise.resolve(response.data.users))
     .catch(handleErrors)
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then((response) => {
