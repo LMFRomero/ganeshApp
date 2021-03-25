@@ -1,10 +1,14 @@
 import { Box, Typography } from '@material-ui/core'
 import { TextField, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
 
+import { optionsHelper as optHelper } from '../../helpers/optionsHelper'
+
 // Variants: 'my-account' and 'coordinator'
 function FormAccountData({ variant, submitDisabled, setSubmitDisabled, formData, setFormData, 
   formSuccess, setFormSuccess, formErrors, setFormErrors }){
   
+  const rolesMenuOptions = optHelper.renderOptions(optHelper.optsRoles)
+
   const handleChange = (e) => {
     const {name, value} = e.target
     setFormData({...formData, [name]: value})
@@ -19,7 +23,8 @@ function FormAccountData({ variant, submitDisabled, setSubmitDisabled, formData,
       { variant === 'my-account' && 
       <>
         <TextField variant="filled" fullWidth label="Título do Usuário" name="title" value={formData.title} />
-        <TextField variant="filled" fullWidth label="Status da Conta" name="status" value="Solicitação Aprovada"/>
+        <TextField variant="filled" fullWidth label="Status da Conta" 
+          name="status" value={(formData.isDeleted) ? "Cadastro Desativado" : "Cadastro Ativo" }/>
       </>
       }
 
@@ -27,27 +32,14 @@ function FormAccountData({ variant, submitDisabled, setSubmitDisabled, formData,
       <>
         <FormControl variant="filled" fullWidth error={formErrors.title}>
           <InputLabel id="LabelTitle">Título do Usuário</InputLabel>
-          <Select labelId="LabelTitle" label="Título do Usuário" name="role" value={formData.role}
+          <Select labelId="LabelTitle" label="Título do Usuário" name="role" value={formData.role || 60}
             required onChange={handleChange}>
-              <MenuItem value="0">Administrador</MenuItem>
-              <MenuItem value="10">Coordenador Geral</MenuItem>
-              <MenuItem value="11">Vice-Coordenador Geral</MenuItem>
-              <MenuItem value="21">Coordenador RH</MenuItem>
-              <MenuItem value="22">Secretário</MenuItem>
-              <MenuItem value="23">Coordenador de Estudos</MenuItem>
-              <MenuItem value="60">Membro</MenuItem>
-              <MenuItem value="80">Colaborador</MenuItem>
-              <MenuItem value="100">Participante do Ping</MenuItem>
+              { rolesMenuOptions }
           </Select>
         </FormControl>
 
-        <FormControl variant="filled" fullWidth error={formErrors.title}>
-          <InputLabel id="LabelStatus">Status da Conta</InputLabel>
-          <Select labelId="LabelStatus" label="Status da Conta">
-              <MenuItem value="0">Solicitação em Análise</MenuItem>
-              <MenuItem value="1">Solicitação Aprovada</MenuItem>
-          </Select>
-        </FormControl>
+        <TextField variant="filled" fullWidth label="Status da Conta" 
+          name="status" value={(formData.isDeleted) ? "Cadastro Desativado" : "Cadastro Ativo" }/>
       </>
       }
     </Box>

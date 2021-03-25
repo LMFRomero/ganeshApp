@@ -35,6 +35,7 @@ function UserAccount({variant = "my-account"}){
     username: '',
     title: '',
     role: '',
+    isDeleted: false,
   })
 
   useEffect(() => { 
