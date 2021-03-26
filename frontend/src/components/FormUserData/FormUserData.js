@@ -8,6 +8,9 @@ import { optionsHelper as optHelper } from '../../helpers/optionsHelper'
 function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, setFormData, 
   formSuccess, setFormSuccess, formErrors, setFormErrors }){
   
+  const coursesMenuOptions = optHelper.renderOptions(optHelper.optsCourses)
+  const institutionsMenuOptions = optHelper.renderOptions(optHelper.optsInstitutions)
+
   const handleChange = (e) => {
     const {name, value} = e.target
     setFormData({...formData, [name]: value})
@@ -58,7 +61,7 @@ function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, se
         <InputLabel id="LabelCourse">Curso atual *</InputLabel>
         <Select labelId="LabelCourse" label="Curso atual *" name="course" value={formData.course}
           required onChange={handleChange}>
-            { optHelper.renderOptions(optHelper.optsCourses) }
+            { coursesMenuOptions }
         </Select>
       </FormControl>
 
@@ -71,7 +74,7 @@ function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, se
         <InputLabel id="LabelInstitute">Instituição *</InputLabel>
         <Select labelId="LabelInstitute" label="Instituição *" name="institution" value={formData.institution}
           required onChange={handleChange}>
-            { optHelper.renderOptions(optHelper.optsInstitutions) }
+            { institutionsMenuOptions }
         </Select>
       </FormControl>
 
