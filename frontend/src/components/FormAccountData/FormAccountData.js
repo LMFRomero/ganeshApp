@@ -11,7 +11,7 @@ function FormAccountData({ variant, submitDisabled, setSubmitDisabled, formData,
 
   const handleChange = (e) => {
     const {name, value} = e.target
-    setFormData({...formData, [name]: value})
+    setFormData({...formData, [name]: parseInt(value)})
   }
 
   return(
