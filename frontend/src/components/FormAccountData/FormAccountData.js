@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core'
-import { TextField, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
+import { TextField, InputLabel, Select, FormControl } from '@material-ui/core'
 
 import { optionsHelper as optHelper } from '../../helpers/optionsHelper'
 
