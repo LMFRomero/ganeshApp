@@ -331,7 +331,7 @@ module.exports = {
             return res.status(500).end();
         }
 
-        return res.status(200).end();
+        return res.status(200).json({ message: "Senha atualizada com sucesso!" });
     },
 
     async destroy (req, res) {
