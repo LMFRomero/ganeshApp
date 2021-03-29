@@ -396,7 +396,7 @@ module.exports = {
             return res.status(404).end();
         }
         
-        user.roleInt = req.body.roleInt;
+        user.role = req.body.role;
         
         try {
             user.save();
