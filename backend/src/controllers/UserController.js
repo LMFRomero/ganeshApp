@@ -387,5 +387,22 @@ module.exports = {
         };
         
         return res.status(200).json(user);
+    },
+        
+    async promoteUser (req, res) {
+        let user = await SafeFindOne (User, { email: req.body.email });
+        if (!user) {
+            return res.status(404).end();
+        }
+        
+        user.roleInt = req.body.roleInt;
+        
+        try {
+            user.save();
+        } catch (error) {
+            return res.status(500).end();
+        }
+        
+        return res.status(200).end();
     }
 }

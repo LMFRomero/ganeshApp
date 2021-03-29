@@ -26,13 +26,16 @@ function FormChangePassword({ userId, submitDisabled, setSubmitDisabled,
     setSubmitDisabled(true)
 
     if(formData.newPassword !== formData.repeatPassword){
-      setFormErrors({repeatPassword: "As senhas não são iguais!"})
+      setFormErrors({ repeatPassword: "As senhas não são iguais!" })
       setSubmitDisabled(false)
       return;
     }
 
     userService.updatePassword(userId, formData.password, formData.newPassword)
-    .then(   function(s) { setFormSuccess(s) })
+    .then(   function(s) { 
+      setFormSuccess(s) 
+      setFormData({ password: '',  newPassword: '',repeatPassword: '' })
+    })
     .catch(  function(e) { setFormErrors(e) })     
     .finally(function( ) { setSubmitDisabled(false) })
   }

@@ -11,6 +11,9 @@ import { optionsHelper as optHelper } from '../../../helpers/optionsHelper'
 
 function Register(){
 
+  const coursesMenuOptions = optHelper.renderOptions(optHelper.optsCourses)
+  const institutionsMenuOptions = optHelper.renderOptions(optHelper.optsInstitutions)
+
   const [submitDisabled, setSubmitDisabled] = useState(false)
   const [formSuccess, setFormSuccess]       = useState('')
   const [formErrors, setFormErrors]         = useState({})
@@ -88,7 +91,7 @@ function Register(){
                 <InputLabel id="LabelCourse">Curso atual *</InputLabel>
                 <Select labelId="LabelCourse" label="Curso atual *" name="course" value={formData.course}
                   required onChange={handleChange}>
-                    { optHelper.renderOptions(optHelper.optsCourses) }
+                    { coursesMenuOptions }
                 </Select>
               </FormControl>
 
@@ -101,7 +104,7 @@ function Register(){
                 <InputLabel id="LabelInstitute">Instituição *</InputLabel>
                 <Select labelId="LabelInstitute" label="Instituição *" name="institution" value={formData.institution}
                   required onChange={handleChange}>
-                    { optHelper.renderOptions(optHelper.optsInstitutions) }
+                    { institutionsMenuOptions }
                 </Select>
               </FormControl>
 

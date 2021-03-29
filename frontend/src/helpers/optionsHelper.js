@@ -21,6 +21,18 @@ export const optionsHelper = {
         "NENHUMA":  "Nenhuma",
         "CUSTOM_OPTION": "Outra instituição",
     },
+
+    optsRoles: { 
+        "0":  "Root",
+        "11": "Coordenador Geral",
+        "12": "Vice Coordenador Geral",
+        "23": "Coordenador de Estudos",
+        "21": "Coordenador de Recursos Humanos",
+        "22": "Secretário",
+        "60": "Membro",
+        "80": "Colaborador",
+        "100": "Ingressante",
+    },
     
     getDefaultOption: (options) => Object.keys(options)[0],
 
