@@ -14,6 +14,10 @@ const frontSchema = new mongoose.Schema ({
         minlength: 3,
         maxlength: 16,
     },
+    description: {
+        type: String,
+        maxlength: 512,
+    },
     frontType: {
         type: String,
         required: true,
