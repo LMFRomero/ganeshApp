@@ -5,97 +5,82 @@ const { SafeFindOne, SafeCreateObj, SafeFind, SafeDeleteOne } = require('../serv
 const { session } = require('passport');
 const { getRole, getTitle } = require('../utils/roles');
 
-function validateString(str, fieldName, maxLen) {
-    if (!str) {
-        return `O campo '${fieldName}' é obrigatório`;
-    }
-
-    if (str.length > maxLen) {
-        return `O campo '${fieldName}' só aceita no máximo ${maxLen} caracteres`;
-    }
-
-    else {
-        return null;
-    }
-}
+const { validateString } = require('../utils/str');
 
 module.exports = {
     async store (req, res) {
-        let email = (req.body.email)?.toString();
-        let username = (req.body.username)?.toString();
-        let password = (req.body.password)?.toString();
-        let pingParticipant = (req.body.pingParticipant)?.toString();
+        let email = (req.body.email)?.toString()?.trim();
+        let username = (req.body.username)?.toString()?.trim();
+        let password = (req.body.password)?.toString()?.trim();
+        let pingParticipant = (req.body.pingParticipant)?.toString()?.trim();
         
-        let name = (req.body.name)?.toString();
-        let institution = (req.body.institution)?.toString();
-        let course = (req.body.course)?.toString();
-        let collegeID = (req.body.collegeID)?.toString();
-        let yearJoinCollege = (req.body.yearJoinCollege)?.toString();
-        let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString();
+        let name = (req.body.name)?.toString()?.trim();
+        let institution = (req.body.institution)?.toString()?.trim();
+        let course = (req.body.course)?.toString()?.trim();
+        let collegeID = (req.body.collegeID)?.toString()?.trim();
+        let yearJoinCollege = (req.body.yearJoinCollege)?.toString()?.trim();
+        let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString()?.trim();
 
         if (pingParticipant) {
-            pingParticipant = pingParticipant.toString();
+            pingParticipant = pingParticipant.toString()?.trim();
         }
 
         pingParticipant = (pingParticipant == 'true');
 
         let resp;
         
-        resp = validateString(email, "Email", 64);
+        resp = validateString(email, "Email", true, 64);
         if (resp) {
             return res.status(400).json( { email: resp });
         }
 
-        resp = validateString(username, "Apelido", 64);
+        resp = validateString(username, "Apelido", true, 64);
         if (resp) {
             return res.status(400).json({ username: resp });
         }
 
-        resp = validateString(password, "Senha", 64);
+        resp = validateString(password, "Senha", true, 64);
         if (resp) {
-            return res.status(400).json( { password: resp });
+            return res.status(400).json({ password: resp });
         }
 
-        resp = validateString(name, "Nome", 64);
+        resp = validateString(name, "Nome", true, 64);
         if (resp) {
-            return res.status(400).json( { name: resp });
+            return res.status(400).json({ name: resp });
         }
 
-        resp = validateString(course, "Curso atual", 64);
+        resp = validateString(course, "Curso atual", true, 64);
         if (resp) {
-            return res.status(400).json( { course: resp });
+            return res.status(400).json({ course: resp });
         }
 
-        resp = validateString(institution, "Instituição", 64);
+        resp = validateString(institution, "Instituição", true, 64);
         if (resp) {
-            return res.status(400).json( { institution: resp });
+            return res.status(400).json({ institution: resp });
         }
 
-        if (!yearJoinCollege) {
-            yearJoinCollege = '-1';
-        }
-        else if (yearJoinCollege.length > 12) {
-            return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' só aceita no máximo 12 caracteres" });
+
+        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", (institution == 'NENHUMA' ? true : false), 12);
+        if (resp) {
+            return res.status(400).json({ yearJoinCollege: resp });
         }
         yearJoinCollege = parseInt(yearJoinCollege);
         if (isNaN(yearJoinCollege)) {
             return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' é inválido" });
         }
         
-        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", 12);
+        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12);
         if (resp) {
-            return res.status(400).json( { yearJoinGanesh: resp });
+            return res.status(400).json({ yearJoinGanesh: resp });
         }
         yearJoinGanesh = parseInt(yearJoinGanesh);
         if (isNaN(yearJoinGanesh)) {
             return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' é inválido" });
         }
-
-        if (!collegeID) {
-            collegeID = '-1';
-        }
-        else if (collegeID.length > 12) {
-            return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' só aceita no máximo 12 caracteres" });
+        
+        resp = validateString(collegeID, "Número de Matrícula", false, 12);
+        if (resp) {
+            return res.status(400).json({ collegeID: resp });
         }
         collegeID = parseInt(collegeID);
         if (isNaN(collegeID)) {

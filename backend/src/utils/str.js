@@ -1,8 +1,8 @@
 // const Regex = require('regex');
 module.exports = {
 
-    validateString(str, fieldName, maxLen, regex) {
-        if (!str) {
+    validateString(str, fieldName, isRequired, maxLen, regex) {
+        if (isRequired && !str) {
             return `O campo '${fieldName}' é obrigatório`;
         }
     

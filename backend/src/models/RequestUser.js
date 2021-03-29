@@ -38,7 +38,7 @@ const RequestUserSchema = new mongoose.Schema({
     },
     yearJoinCollege: {
         type: Number,
-        required: true
+        required: false
     },
     yearJoinGanesh: {
         type: Number,
