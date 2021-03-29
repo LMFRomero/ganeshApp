@@ -391,8 +391,15 @@ module.exports = {
         if (!user) {
             return res.status(404).end();
         }
-        
+        let role = parseInt(req.body?.role);
+        let title = getTitle(role);
+
+        if (!title) {
+            return res.status(400).end();
+        }
+
         user.role = req.body.role;
+        user.title = title;
         
         try {
             user.save();
