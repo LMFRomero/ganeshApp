@@ -282,6 +282,7 @@ module.exports = {
         if (role != -1 && role != user.role) {
             if (await canChangeRole(req, res)) {
                 user.role = role;
+                user.title = getTitle(user.role);
             }
             else {
                 return res.status(403).json({ role: "Não é possível mudar o cargo" });
