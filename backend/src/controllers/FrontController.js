@@ -21,7 +21,7 @@ module.exports = {
             alNum: "/[a-zA-Z0-9]*$/g"
         }
 
-        let resp = validateString(name, "name", 32, regexp.alNum);
+        let resp = validateString(name, "name", true, 32, regexp.alNum);
         if (resp) {
             return res.status(400).json({ name: resp });
         }
@@ -31,7 +31,7 @@ module.exports = {
             return res.status(400).end({ name: "Nome já usado" });
         }
 
-        resp = validateString(slug, "slug", 16, regexp.slugName);
+        resp = validateString(slug, "slug", true, 16, regexp.slugName);
         if (resp) {
             return res.status(400).json({ slug: resp });
         }
@@ -39,12 +39,12 @@ module.exports = {
             return res.status(400).json({ slug: 'O campo slug só aceita no mínimo 3 caracteres'});
         }
 
-        resp = validateString(description, "description", 512, regexp.alNum);
+        resp = validateString(description, "description", false, 512, regexp.alNum);
         if (resp) {
             return res.status(400).json({ description: resp });
         }
 
-        resp = validateString(type, "type", 512, regexp.alNum);
+        resp = validateString(type, "type", true, 512, regexp.alNum);
         if (resp) {
             return res.status(400).json({ type: resp });
         }
