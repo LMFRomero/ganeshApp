@@ -11,7 +11,7 @@ let isCoordinator = async function (req, res, next) {
         return (next) ? res.status(404).end() : false;
     }
 
-    if (user.roleInt < 30) {
+    if (user.role < 30) {
         return (next) ? next() : true;
     }
     else {
@@ -47,27 +47,27 @@ module.exports = {
         }
 
         //if the request user is not a coordinator
-        if (reqUser.roleInt >= 30) {
+        if (reqUser.role >= 30) {
             return (next) ? res.status(401).end() : false;
         }
         
         let changedUser = await SafeFindById(User, req.params.id);
-        let newRoleInt = roles.getRoleInt(req.body?.role);
-        if (!changedUser || newRoleInt == -1) {
+        let newRole = roles.getRole(req.body?.role);
+        if (!changedUser || newRole == -1) {
             return (next) ? res.status(400).end() : false;
         }
 
         //coordinator can't promote or demote coordinator
-        if (reqUser.roleInt >= 20 && changedUser.roleInt < 30) {
+        if (reqUser.role >= 20 && changedUser.role < 30) {
             return (next) ? res.status(401).end() : false;
         }
 
-        if (reqUser.roleInt > changedUser.roleInt) {
+        if (reqUser.role > changedUser.role) {
             return (next) ? res.status(401).end() : false;
         }
         
         //coodinator can't promote to a higher role than his own
-        if (reqUser.roleInt > newRoleInt) {
+        if (reqUser.role > newRole) {
             return (next) ? res.status(401).end() : false;
         }
 

@@ -53,7 +53,7 @@ const UserSchema = new mongoose.Schema({
         ref: 'Front'
     }],
 
-    roleInt: {
+    role: {
         type: Number,
         required: true
     },

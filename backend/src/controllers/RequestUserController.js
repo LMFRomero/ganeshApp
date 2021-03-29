@@ -3,7 +3,7 @@ const User = require('../models/User');
 const bCrypt = require('../services/hashes');
 const { SafeFindOne, SafeCreateObj, SafeFind, SafeDeleteOne } = require('../services/safe-exec');
 const { session } = require('passport');
-const { getRoleInt, getTitle } = require('../utils/roles');
+const { getRole, getTitle } = require('../utils/roles');
 
 function validateString(str, fieldName, maxLen) {
     if (!str) {
@@ -153,15 +153,15 @@ module.exports = {
         }
         
 
-        let roleInt;
+        let role;
         if (req.body.role == "pingParticipant" || req.body.role == "collaborator" || req.body.role == "member") {
-            roleInt = getRoleInt(req.body.role);
+            role = getRole(req.body.role);
         }
         else {
             return res.status(400).json({ role: "Função inválida" });
         }
 
-        let title = getTitle(roleInt);
+        let title = getTitle(role);
 
         let newUser = await SafeCreateObj(User, {
             email: user.email, 
@@ -175,7 +175,7 @@ module.exports = {
             yearJoinCollege: user.yearJoinCollege, 
             yearJoinGanesh: user.yearJoinGanesh,
 
-            roleInt,
+            role,
             title,
 
             isDeleted: false,

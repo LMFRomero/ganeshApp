@@ -5,7 +5,7 @@ const bCrypt = require('../services/hashes');
 const { SafeFindOne, SafeCreateObj, SafeFindById, SafeFind } = require('../services/safe-exec');
 
 const { canChangeRole } = require('../middlewares/perms');
-const { getRoleInt, getTitle } = require('../utils/roles');
+const { getRole, getTitle } = require('../utils/roles');
 const { validateString } = require('../utils/str');
 
 module.exports = {
@@ -140,15 +140,15 @@ module.exports = {
 
         password = bCrypt.createHash(password);
 
-        let roleInt;
+        let role;
         if (req.body.role == "pingParticipant" || req.body.role == "collaborator" || req.body.role == "member") {
-            roleInt = getRoleInt(req.body.role);
+            role = getRole(req.body.role);
         }
         else {
             return res.status(400).json({ role: "Função inválida" });
         }
 
-        let title = getTitle(roleInt);
+        let title = getTitle(role);
 
         user = await SafeCreateObj(User, {
             createdAt: Date.now(),
@@ -163,7 +163,7 @@ module.exports = {
             yearJoinCollege, 
             yearJoinGanesh,
 
-            roleInt,
+            role,
             title,
 
             isDeleted: false,
@@ -187,8 +187,8 @@ module.exports = {
         let yearJoinCollege = (req.body.yearJoinCollege)?.toString().trim();
         let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString().trim();
 
-        let role = (req.body.role)?.toString().trim();
-        let roleInt = getRoleInt(role);
+        let roleStr = (req.body.role)?.toString().trim();
+        let role = getRole(roleStr);
 
         let user = await SafeFindById(User, req.params.id);
         if (!user) {
@@ -279,12 +279,12 @@ module.exports = {
             } 
         }
 
-        if (roleInt != -1 && roleInt != user.roleInt) {
+        if (role != -1 && role != user.role) {
             if (await canChangeRole(req, res)) {
-                user.roleInt = roleInt;
+                user.role = role;
             }
             else {
-                return res.status(403).json({ roleInt: "Não é possível mudar o cargo" });
+                return res.status(403).json({ role: "Não é possível mudar o cargo" });
             }
         }
 
@@ -378,7 +378,7 @@ module.exports = {
         let user = {
             "username": dbUser.username,
             "title": dbUser.title,
-            "role": dbUser.roleInt,
+            "role": dbUser.role,
             "id": dbUser._id,
         };
         

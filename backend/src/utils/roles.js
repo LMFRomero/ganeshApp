@@ -3,45 +3,45 @@ const e = require("express");
 let roles = {
     globals: {
         root: {
-            roleInt: 0,
+            role: 0,
             title: "Root"
         },
         generalCoordinator: {
-            roleInt: 11,
+            role: 11,
             title: "Coordenador Geral"
         },
         viceGeneralCoordinator: {
-            roleInt: 12,
+            role: 12,
             title: "Vice Coordenador Geral"
         },
         HRCoordinator: {
-            roleInt: 21,
+            role: 21,
             title: "Coordenador de Recursos Humanos"
         },
         secretary: {
-            roleInt: 22,
+            role: 22,
             title: "Secretário"
         },
         estudiesCoordinator: {
-            roleInt: 23,
+            role: 23,
             title: "Coordenador de Estudos"
         },
         member: {
-            roleInt: 60,
+            role: 60,
             title: "Membro"
         },
         collaborator: {
-            roleInt: 80,
+            role: 80,
             title: "Colaborador"
         },
         pingParticipant: {
-            roleInt: 100,
+            role: 100,
             title: "Ingressante"
         },
     },
 
-    getRoleInt (role) {
-        let resp = roles.globals[role]?.roleInt;
+    getRole (role) {
+        let resp = roles.globals[role]?.role;
         if (resp === undefined) {
             return -1;
         }
@@ -51,10 +51,10 @@ let roles = {
         
     },
 
-    getTitle (roleInt) {
+    getTitle (role) {
         for (let entry in roles.globals) {
             let item = roles.globals[entry];
-            if (item.roleInt == roleInt) {
+            if (item.role == role) {
                 return item.title;
             }
         };
