@@ -52,7 +52,7 @@ function getById(frontId) {
 }
 
 function getAll() { 
-    return api.get('/fronts/')
+    return api.get('/front/')
     // .then((response) => Promise.resolve(response.data))
     // .catch(handleErrors)
     .catch(() => Promise.resolve('Return mockup Data'))
@@ -75,7 +75,7 @@ function getAll() {
 }
 
 function getOptions() { 
-    return api.get('/fronts/options/')
+    return api.get('/front/options/')
     // .then((response) => Promise.resolve(response.data))
     // .catch(handleErrors)
     .catch(() => Promise.resolve('Return mockup Data'))
