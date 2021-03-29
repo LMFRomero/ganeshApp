@@ -361,6 +361,10 @@ module.exports = {
         if (!user)
             return null;
 
+        if (user.isDeleted == true) {
+            return null;
+        }
+
         let passwordHash = user.password;
 
         if (bCrypt.validateHash(passwordHash, password))
