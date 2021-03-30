@@ -2,10 +2,14 @@
 module.exports = {
 
     validateString(str, fieldName, isRequired, maxLen, regex) {
-        if (isRequired && !str) {
+        if (!isRequired && !str) {
+            return null;
+        }
+
+        if (!str) {
             return `O campo '${fieldName}' é obrigatório`;
         }
-    
+        
         if (str.length > maxLen) {
             return `O campo '${fieldName}' só aceita no máximo ${maxLen} caracteres`;
         }
