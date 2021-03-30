@@ -112,7 +112,7 @@ module.exports = {
             name,
             slug,
             description,
-            frontType: type,
+            type,
             membersOnly,
             
             createdAt: Date.now(),
