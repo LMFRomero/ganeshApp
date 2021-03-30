@@ -49,7 +49,7 @@ module.exports = {
             return res.status(400).json({ type: resp });
         }
 
-        if (!(type in frontTypes)) {
+        if (frontTypes.includes(type) == false) {
             return res.status(400).json({ type: 'O campo type tem valor inválido '});
         }
 
