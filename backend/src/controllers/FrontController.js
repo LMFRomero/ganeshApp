@@ -26,9 +26,9 @@ module.exports = {
             return res.status(400).json({ name: resp });
         }
 
-        let front = await SafeFindOne(Front, { name });
+        let front = await SafeFindOne(Front, { name: name });
         if (front) {
-            return res.status(400).end({ name: "Nome já usado" });
+            return res.status(400).json({ name: "Nome já usado" });
         }
 
         resp = validateString(slug, "slug", true, 16, regexp.slugName);
@@ -37,6 +37,11 @@ module.exports = {
         }
         if (slug.length < 3) {
             return res.status(400).json({ slug: 'O campo slug só aceita no mínimo 3 caracteres'});
+        }
+
+        front = await SafeFindOne(Front, { slug });
+        if (front) {
+            return res.status(400).json({ slug: "Slug já usado" });
         }
 
         resp = validateString(description, "description", false, 512, regexp.alNum);
@@ -53,12 +58,11 @@ module.exports = {
             return res.status(400).json({ type: 'O campo type tem valor inválido '});
         }
 
-
         front = await SafeCreateObj(Front, { 
             name,
             slug,
             description,
-            type,
+            frontType: type,
             membersOnly,
             
             createdAt: Date.now(),
