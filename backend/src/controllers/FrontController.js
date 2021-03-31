@@ -25,7 +25,7 @@ module.exports = {
             return res.status(200).json(front);
         }
         else {
-            let fieldNames = ["name", "description", "type", "isDeleted"];
+            let fieldNames = ["name", "description", "type", "isDeleted", "slug"];
             let resp = await SafeFind(Front, {});
              
             if (!resp) {
