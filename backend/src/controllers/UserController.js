@@ -100,7 +100,20 @@ module.exports = {
         if (resp) {
             return res.status(400).json({ yearJoinCollege: resp });
         }
+        if (institution == 'NENHUMA' || !yearJoinCollege) {
+            yearJoinCollege = "";
+        }
+        else {
+            yearJoinCollege = parseInt(yearJoinCollege);
+            if (isNaN(yearJoinCollege)) {
+                return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' é inválido" });
+            }
+        }
 
+        resp = validateString(collegeID, "Número de Matrícula", false, 12);
+        if (resp) {
+            return res.status(400).json({ collegeID: resp });
+        }
         if (institution == 'NENHUMA' || !collegeID) {
             collegeID = "";
         }
