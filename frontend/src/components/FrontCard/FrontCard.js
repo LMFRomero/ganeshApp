@@ -14,7 +14,7 @@ const frontTypes = {
   internal: "Frente Interna"
 }
 
-function FrontCard({id, name, slug, type, description, initMembers, deleted, membersOnly, 
+function FrontCard({id, name, slug, type, description, initMembers, isDeleted, membersOnly, 
   authUsername, errorMessages, setErrorMessages }){
   
   const [submitDisabled, setSubmitDisabled] = useState(false)
@@ -31,7 +31,7 @@ function FrontCard({id, name, slug, type, description, initMembers, deleted, mem
 
   const renderSubtitle = () => {
     let subtitle = ''
-    subtitle += (deleted) ? 'Desativada | ' : ''
+    subtitle += (isDeleted) ? 'Desativada | ' : ''
     subtitle += `${frontTypes[type]} | `
     subtitle += (members.length) ? `${members.length} participantes` : 'Nenhum participante'
     return subtitle

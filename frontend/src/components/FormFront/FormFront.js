@@ -17,7 +17,7 @@ function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormEr
     slug: '',
     type: 'study',
     membersOnly: true,
-    deleted: false,
+    isDeleted: false,
   })
 
   useEffect(() => { 
@@ -103,9 +103,9 @@ function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormEr
           </Select>
         </FormControl>
 
-        <FormControl variant="filled" fullWidth error={formErrors.deleted}>
+        <FormControl variant="filled" fullWidth error={formErrors.isDeleted}>
           <InputLabel id="LabelStatus">Status *</InputLabel>
-          <Select labelId="LabelStatus" label="Status *" name="deleted" value={formData.deleted}
+          <Select labelId="LabelStatus" label="Status *" name="isDeleted" value={formData.isDeleted}
             required onChange={handleChange}>
               <MenuItem value={false}>Frente Ativa</MenuItem>
               <MenuItem value={true}>Frente Desativada</MenuItem>
