@@ -6,6 +6,56 @@ const { validateString } = require('../utils/str');
 
 
 module.exports = {
+    async show (req, res) {
+        if (req.params?.id) {
+            let fieldNames = ["name", "slug", "description", "type", "membersOnly", "isDeleted"];
+            let resp = await SafeFindById(Front, req.params.id);
+
+            if (!resp) {
+                return res.status(404).json({ message: "Frente não encontrada" });
+            }
+
+            let front = {};
+            front.id = resp._id;
+
+            for (let fieldName of fieldNames) {
+                front[fieldName] = resp[fieldName];
+            }
+            
+            return res.status(200).json(front);
+        }
+        else {
+            let fieldNames = ["name", "description", "type", "isDeleted"];
+            let resp = await SafeFind(Front, {});
+             
+            if (!resp) {
+                return res.status(200).json({});
+            }
+
+            let fronts = [];
+
+            for (let front of resp) {
+                let tmpFront = {};
+
+                tmpFront.id = front._id;
+
+                for (let fieldName of fieldNames) {
+                    tmpFront[fieldName] = front[fieldName];
+                }
+
+                for (let member of front.members) {
+                    member.populate();
+                }
+
+                tmpFront.members = front.members;
+
+                fronts.push(tmpFront);
+            }
+
+            return res.status(200).json({fronts});
+        }
+    },
+
     async store (req, res) {
         let name = (req.body?.name)?.toString()?.trim();
         let slug = (req.body?.slug)?.toString()?.trim();
@@ -26,9 +76,9 @@ module.exports = {
             return res.status(400).json({ name: resp });
         }
 
-        let front = await SafeFindOne(Front, { name });
+        let front = await SafeFindOne(Front, { name: name });
         if (front) {
-            return res.status(400).end({ name: "Nome já usado" });
+            return res.status(400).json({ name: "Nome já usado" });
         }
 
         resp = validateString(slug, "slug", true, 16, regexp.slugName);
@@ -37,6 +87,11 @@ module.exports = {
         }
         if (slug.length < 3) {
             return res.status(400).json({ slug: 'O campo slug só aceita no mínimo 3 caracteres'});
+        }
+
+        front = await SafeFindOne(Front, { slug });
+        if (front) {
+            return res.status(400).json({ slug: "Slug já usado" });
         }
 
         resp = validateString(description, "description", false, 512, regexp.alNum);
@@ -49,10 +104,9 @@ module.exports = {
             return res.status(400).json({ type: resp });
         }
 
-        if (!(type in frontTypes)) {
+        if (frontTypes.includes(type) == false) {
             return res.status(400).json({ type: 'O campo type tem valor inválido '});
         }
-
 
         front = await SafeCreateObj(Front, { 
             name,

@@ -137,10 +137,7 @@ module.exports = {
         password = bCrypt.createHash(password);
 
         let role;
-        if (req.body.role == "pingParticipant" || req.body.role == "collaborator" || req.body.role == "member") {
-            role = getRole(req.body.role);
-        }
-        else {
+        if (!(req.body.role == getRole("pingParticipant") || req.body.role == getRole("collaborator") || req.body.role == getRole("member"))) {
             return res.status(400).json({ role: "Função inválida" });
         }
 
@@ -183,8 +180,7 @@ module.exports = {
         let yearJoinCollege = (req.body.yearJoinCollege)?.toString().trim();
         let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString().trim();
 
-        let roleStr = (req.body.role)?.toString().trim();
-        let role = getRole(roleStr);
+        let role = parseInt(req.body.role);
 
         let user = await SafeFindById(User, req.params.id);
         if (!user) {

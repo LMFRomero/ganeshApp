@@ -6,7 +6,7 @@ module.exports = {
             answerFromDB = await collection.findOne(params);
         } catch (error) {
             console.log(error);
-            return -1;
+            return null;
         }
 
         return answerFromDB;
