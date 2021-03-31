@@ -60,13 +60,18 @@ module.exports = {
         }
 
 
-        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", (institution == 'NENHUMA' ? true : false), 12);
+        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", false, 12);
         if (resp) {
             return res.status(400).json({ yearJoinCollege: resp });
         }
-        yearJoinCollege = parseInt(yearJoinCollege);
-        if (isNaN(yearJoinCollege)) {
-            return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' é inválido" });
+        if (institution == 'NENHUMA' || !yearJoinCollege) {
+            yearJoinCollege = "";
+        }
+        else {
+            yearJoinCollege = parseInt(yearJoinCollege);
+            if (isNaN(yearJoinCollege)) {
+                return res.status(400).json({ yearJoinCollege: "O campo 'Ano de ingresso na instituição' é inválido" });
+            }
         }
         
         resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12);
@@ -82,11 +87,15 @@ module.exports = {
         if (resp) {
             return res.status(400).json({ collegeID: resp });
         }
-        collegeID = parseInt(collegeID);
-        if (isNaN(collegeID)) {
-            return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' é inválido" });
+        if (institution == 'NENHUMA' || !collegeID) {
+            collegeID = "";
         }
-
+        else {
+            collegeID = parseInt(collegeID);
+            if (isNaN(collegeID)) {
+                return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' é inválido" });
+            }
+        }
 
         let user = await SafeFindOne(User, { email });
         if (user) return res.status(409).json( {email: "Email já em uso" });
