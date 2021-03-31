@@ -44,7 +44,7 @@ function Fronts(props){
                       id={f.id} name={f.name} slug={f.slug} type={f.type} 
                       description={f.description} 
                       initMembers={f.members}
-                      deleted={f.deleted} membersOnly={f.membersOnly}
+                      isDeleted={f.isDeleted} membersOnly={f.membersOnly}
 
                       authUsername={authUsername}
                       errorMessages={errorMessages} setErrorMessages={setErrorMessages}

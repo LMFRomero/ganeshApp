@@ -12,7 +12,7 @@ export const meetingService = {
 }
 
 function register(meeting) { 
-    return api.post('/meeting', meeting)
+    return api.post('/meeting/', meeting)
     // .then((response) => Promise.resolve(response.data))
     // .catch(handleErrors)
     .catch(() => Promise.resolve('Return mockup Data'))
@@ -58,7 +58,7 @@ function getById(meetingId) {
 }
 
 function getAll( page = 1, frontSlug = '') { 
-    return api.get(`/meetings/${page}/${frontSlug}`)
+    return api.get(`/meeting/${page}/${frontSlug}`)
     // .then((response) => Promise.resolve(response.data))
     // .catch(handleErrors)
     .catch(() => Promise.resolve('Return mockup Data'))
