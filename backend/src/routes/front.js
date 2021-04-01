@@ -13,11 +13,11 @@ routes.use(permsMiddlewares.isAuth);
 routes.get('/', FrontController.show);
 routes.get('/:id', FrontController.show);
 routes.post('/', permsMiddlewares.isCoordinator, FrontController.store);
-routes.put('/:frontName', permsMiddlewares.isCoordinator, FrontController.update);
-routes.delete('/:frontName', permsMiddlewares.isCoordinator, FrontController.destroy);
-routes.post('/addUser/:frontName', permsMiddlewares.isCoordOrIsSelf, FrontController.addUser);
-routes.post('/removeUser/:frontName', permsMiddlewares.isCoordOrIsSelf, FrontController.removeUser);
-routes.post('/addMeeting/:frontName', FrontController.addMeeting);
-routes.post('/removeMeeting/:frontName', permsMiddlewares.isCoordinator, FrontController.removeMeeting);
+routes.put('/:slug', permsMiddlewares.isCoordinator, FrontController.update);
+routes.delete('/:slug', permsMiddlewares.isCoordinator, FrontController.destroy);
+routes.post('/addUser/:slug', permsMiddlewares.isCoordOrIsSelf, FrontController.addUser);
+routes.post('/removeUser/:slug', permsMiddlewares.isCoordOrIsSelf, FrontController.removeUser);
+routes.post('/addMeeting/:slug', FrontController.addMeeting);
+routes.post('/removeMeeting/:slug', permsMiddlewares.isCoordinator, FrontController.removeMeeting);
 
 module.exports = routes;
