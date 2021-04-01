@@ -155,9 +155,9 @@ module.exports = {
 
         password = bCrypt.createHash(password);
 
-        let role;
-        if (!(req.body.role == getRole("pingParticipant") || req.body.role == getRole("collaborator") || req.body.role == getRole("member"))) {
-            return res.status(400).json({ role: "Função inválida" });
+        let role = req.body?.role;
+        if (!(role == getRole("pingParticipant") || role == getRole("collaborator") || role == getRole("member"))) {
+            return res.status(400).json({ role: "Cargo inválido" });
         }
 
         let title = getTitle(role);

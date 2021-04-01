@@ -147,12 +147,9 @@ module.exports = {
         }
         
 
-        let role;
-        if (req.body.role == "pingParticipant" || req.body.role == "collaborator" || req.body.role == "member") {
-            role = getRole(req.body.role);
-        }
-        else {
-            return res.status(400).json({ role: "Função inválida" });
+        let role = req.body?.role;
+        if (!(role == getRole("pingParticipant") || role == getRole("collaborator") || role == getRole("member"))) {
+            return res.status(400).json({ role: "Cargo inválido" });
         }
 
         let title = getTitle(role);
