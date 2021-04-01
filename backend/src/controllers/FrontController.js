@@ -2,7 +2,7 @@ const Front = require('../models/Front');
 const User = require('../models/User');
 const Meeting = require('../models/Meeting');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
-const { validateString } = require('../utils/str');
+const { validateString, regexp } = require('../utils/str');
 
 
 module.exports = {
@@ -64,12 +64,6 @@ module.exports = {
         let membersOnly = ((req.body?.membersOnly)?.toString()?.trim() == 'true');
 
         const frontTypes = ["study", "special", "internal"];
-
-        const regexp = {
-            slugName: "/[a-zA-Z0-9-]*$/g",
-            alpha: "/[a-zA-Z]*$/g",
-            alNum: "/[a-zA-Z0-9]*$/g"
-        }
 
         let resp = validateString(name, "name", true, 32, regexp.alNum);
         if (resp) {
