@@ -124,48 +124,49 @@ module.exports = {
     },
 
     async destroy (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
+        let front = await SafeFindById(Front, req.params?.id);
+        if (!front) {
+            return res.status(404).json({ front: "Frente não encontrada" });
+        }
 
-        if (!req.body || !req.params.frontName)
-            return res.status(400).end();
-
-        let front = await SafeFindOne(Front, { name: req.params.frontName });
-        if (!front)
-            return res.status(404).end();
-
-        if (front.deleted)
-            return res.status(200).end();
+        if (front.isDeleted) {
+            return res.status(200).json({ front: "Frente excluída com sucesso" });
+        }
 
         let size = front.members.length;
         for (let i = 0; i < size; i++) {
             let userId = front.members[i];
             let user = await SafeFindById(User, userId);
-            if (!user)
+            if (!user) {
                 continue;
+            }
 
             let index = user.fronts.indexOf(user._id);
-            if (index > -1)
+            if (index > -1) {
                 user.fronts.splice(index, 1);
+            }
+            else {
+                continue;
+            }
             
             try {
                 await user.save();
             } catch (error) {
                 console.log(error);
-                return res.status(500).end();
+                return res.status(500).json({ message: "Erro ao remover usuário da frente" });
             }
         }
 
-        front.deleted = true;
+        front.isDeleted = true;
 
         try {
             await front.save();
         } catch (error) {
             console.log(error);
-            return res.status(500).end();
+            return res.status(500).json({ message: "Erro ao excluir a frente" });
         }
         
-        return res.status(200).end();
+        return res.status(200).json({ front: "Frente excluída com sucesso" });
     },
 
     async update (req, res) {
