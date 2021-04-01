@@ -15,8 +15,8 @@ routes.get('/:id', FrontController.show);
 routes.post('/', permsMiddlewares.isCoordinator, FrontController.store);
 routes.put('/:frontName', permsMiddlewares.isCoordinator, FrontController.update);
 routes.delete('/:frontName', permsMiddlewares.isCoordinator, FrontController.destroy);
-routes.post('/addUser/:frontName', permsMiddlewares.isSelf, FrontController.addUser);
-routes.post('/removeUser/:frontName', permsMiddlewares.isSelf, FrontController.removeUser);
+routes.post('/addUser/:frontName', permsMiddlewares.isCoordOrIsSelf, FrontController.addUser);
+routes.post('/removeUser/:frontName', permsMiddlewares.isCoordOrIsSelf, FrontController.removeUser);
 routes.post('/addMeeting/:frontName', FrontController.addMeeting);
 routes.post('/removeMeeting/:frontName', permsMiddlewares.isCoordinator, FrontController.removeMeeting);
 
