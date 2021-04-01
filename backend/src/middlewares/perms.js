@@ -52,7 +52,7 @@ module.exports = {
         }
         
         let changedUser = await SafeFindById(User, req.params.id);
-        let newRole = roles.getRole(req.body?.role);
+        let newRole = parseInt(req.body?.role);
         if (!changedUser || newRole == -1) {
             return (next) ? res.status(400).end() : false;
         }
