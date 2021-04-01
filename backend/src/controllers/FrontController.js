@@ -194,34 +194,36 @@ module.exports = {
     },
 
     async addUser (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
+        let slug = (req.params?.slug)?.toString()?.trim();
+        let username = (req.body?.username)?.toString()?.trim();
 
-        if (!req.params.frontName || !req.body || !req.body.name)
-            return res.status(400).end();
+        let front = await SafeFindOne(Front, { slug });
+        if (!front) {
+            return res.status(404).json({ message: "Frente não encontrada" });
+        }
 
-        let front = await SafeFindOne(Front, { name: req.params.frontName });
-        if (!front)
-            return res.status(404).end();
+        let user = await SafeFindOne(User, { username });
+        if (!user) {
+            return res.status(404).json({ message: "Usuário não encontrado" });
+        }
 
-        let user = await SafeFindOne(User, { name: req.body.name });
-        if (!user)
-            return res.status(404).end();
-
-        if (user.fronts.indexOf(front._id) == -1)
+        if (user.fronts.indexOf(front._id) == -1) {
             user.fronts.push(front._id);
-        if (front.members.indexOf(user._id) == -1)
+        }
+
+        if (front.members.indexOf(user._id) == -1) {
             front.members.push(user._id);
+        }
 
         try {
             await user.save();
             await front.save();
         } catch (error) {
             console.log(error);
-            return res.status(500).end();
+            return res.status(500).json({ message: "Não foi possível adicionar o usuário" });
         }
 
-        return res.status(200).end();
+        return res.status(200).json({ message: "Membro adicionado com sucesso!!" });
     },
 
     async removeUser (req, res) {
