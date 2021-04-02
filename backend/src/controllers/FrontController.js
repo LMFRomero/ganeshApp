@@ -26,16 +26,27 @@ module.exports = {
         }
         else {
             let fieldNames = ["name", "description", "type", "isDeleted", "slug"];
-            let resp = await SafeFind(Front, {});
-            // let resp = await Front.find( {} ).populate('members').exec();
+            let fronts = await SafeFind(Front, {});
              
-            if (!resp) {
+            if (!fronts) {
                 return res.status(200).json({});
             }
 
-            let fronts = [];
+            let resp = [];
 
-            for (let front of resp) {
+            for (let front of fronts) {
+                if (front.isDeleted && req.user?.role > 30) {
+                    continue;
+                }
+    
+                if (front.membersOnly && req.user?.role > 60) {
+                    continue;
+                }
+    
+                if (front.type == 'internal' && req.user?.role > 30) {
+                    continue;
+                }
+
                 let tmpFront = {};
 
                 tmpFront.id = front._id;
@@ -49,10 +60,10 @@ module.exports = {
 
                 tmpFront.members = front.members;
 
-                fronts.push(tmpFront);
+                resp.push(tmpFront);
             }
 
-            return res.status(200).json({fronts});
+            return res.status(200).json({resp});
         }
     },
 
