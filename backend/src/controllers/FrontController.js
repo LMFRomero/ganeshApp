@@ -76,6 +76,10 @@ module.exports = {
                 continue;
             }
 
+            if (front.type == 'internal' && req.user?.role > 30) {
+                continue;
+            }
+
             let tmpFront = {};
             tmpFront.id = front._id;
 
