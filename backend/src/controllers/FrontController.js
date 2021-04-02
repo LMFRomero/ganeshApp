@@ -179,12 +179,13 @@ module.exports = {
             return res.status(404).json({ message: "Frente não encontrada" });
         }
 
-        if (front.isDeleted) {
-            return res.status(200).json({ message: "Frente excluída com sucesso" });
+        let meetingsSize = front.meetings.length;
+        if (meetingsSize > 0) {
+            return res.status(400).json({ message: "A frente ainda possui reuniões vinculadas. Desvincule as reuniões ou as exclua." })
         }
 
-        let size = front.members.length;
-        for (let i = 0; i < size; i++) {
+        let membersSize = front.members.length;
+        for (let i = 0; i < membersSize; i++) {
             let userId = front.members[i];
             let user = await SafeFindById(User, userId);
             if (!user) {
@@ -207,10 +208,8 @@ module.exports = {
             }
         }
 
-        front.isDeleted = true;
-
         try {
-            await front.save();
+            await SafeDeleteOne(Front, { slug });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: "Erro ao excluir a frente" });
