@@ -225,6 +225,7 @@ module.exports = {
         let description = (req.body?.description)?.toString()?.trim();
         let type = (req.body?.type)?.toString()?.trim();
         let membersOnly = (req.body?.membersOnly)?.toString()?.trim();
+        let isDeleted = (req.body?.isDeleted)?.toString()?.trim();
 
         let currFront = await SafeFindOne(Front, { slug: req.params?.slug });
         if (!currFront) {
@@ -289,6 +290,10 @@ module.exports = {
 
         if (membersOnly) {
             currFront.membersOnly = (membersOnly == 'true');
+        }
+
+        if (isDeleted) {
+            currFront.isDeleted = (isDeleted == 'true');
         }
         
         try {
