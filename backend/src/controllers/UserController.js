@@ -81,7 +81,7 @@ module.exports = {
             return res.status(400).json({ username: resp });
         }
 
-        resp = validateString(password, "Senha", true, 64, regexp.password);
+        resp = validateString(password, "Senha", true, 64);
         if (resp) {
             return res.status(400).json({ password: resp });
         }
@@ -313,7 +313,7 @@ module.exports = {
         }
 
         let password = (req.body?.newPassword)?.toString()?.trim();
-        let resp = validateString(password, 'newPassword', true, 64, regexp.password);
+        let resp = validateString(password, 'newPassword', true, 64);
         if (resp) {
             return res.status(400).json(resp);
         }
