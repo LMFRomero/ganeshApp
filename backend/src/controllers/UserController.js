@@ -6,14 +6,19 @@ const { SafeFindOne, SafeCreateObj, SafeFindById, SafeFind } = require('../servi
 
 const { canChangeRole } = require('../middlewares/perms');
 const { getRole, getTitle } = require('../utils/roles');
-const { validateString } = require('../utils/str');
+const { validateString, regexp } = require('../utils/str');
 
 module.exports = {
     async show (req, res) {
         let resp;
+        let id = (req.params?.id)?.toString()?.trim();
+        resp = validateString(id, "userId", false, 100, regexp.alNum);
+        if (resp) {
+            return res.status(400).json({ message: resp });
+        }
         
-        if (req.params?.id) {
-            resp = await SafeFindById(User, req.params.id);
+        if (id) {
+            resp = await SafeFindById(User, id);
             if (!resp) {
                 return res.status(404).json({ userId: "Usuário não encontrado" });
             }
@@ -66,37 +71,37 @@ module.exports = {
 
         let resp;
         
-        resp = validateString(email, "Email", true, 64);
+        resp = validateString(email, "Email", true, 64, regexp.email);
         if (resp) {
             return res.status(400).json( { email: resp });
         }
 
-        resp = validateString(username, "Apelido", true, 64);
+        resp = validateString(username, "Apelido", true, 64, regexp.alNum);
         if (resp) {
             return res.status(400).json({ username: resp });
         }
 
-        resp = validateString(password, "Senha", true, 64);
+        resp = validateString(password, "Senha", true, 64, regexp.password);
         if (resp) {
             return res.status(400).json({ password: resp });
         }
 
-        resp = validateString(name, "Nome", true, 64);
+        resp = validateString(name, "Nome", true, 64, regexp.alpha);
         if (resp) {
             return res.status(400).json({ name: resp });
         }
 
-        resp = validateString(course, "Curso atual", true, 64);
+        resp = validateString(course, "Curso atual", true, 64, regexp.alNum);
         if (resp) {
             return res.status(400).json({ course: resp });
         }
 
-        resp = validateString(institution, "Instituição", true, 64);
+        resp = validateString(institution, "Instituição", true, 64, regexp.alNum);
         if (resp) {
             return res.status(400).json({ institution: resp });
         }
 
-        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", false, 12);
+        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", false, 12, regexp.num);
         if (resp) {
             return res.status(400).json({ yearJoinCollege: resp });
         }
@@ -110,7 +115,7 @@ module.exports = {
             }
         }
 
-        resp = validateString(collegeID, "Número de Matrícula", false, 12);
+        resp = validateString(collegeID, "Número de Matrícula", false, 12, regexp.alNum);
         if (resp) {
             return res.status(400).json({ collegeID: resp });
         }
@@ -124,22 +129,13 @@ module.exports = {
             }
         }
         
-        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12);
+        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12, regexp.num);
         if (resp) {
             return res.status(400).json({ yearJoinGanesh: resp });
         }
         yearJoinGanesh = parseInt(yearJoinGanesh);
         if (isNaN(yearJoinGanesh)) {
             return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' é inválido" });
-        }
-
-        resp = validateString(collegeID, "Número de Matrícula", false, 12);
-        if (resp) {
-            return res.status(400).json({ collegeID: resp });
-        }
-        collegeID = parseInt(collegeID);
-        if (isNaN(collegeID)) {
-            return res.status(400).json({ collegeID: "O campo 'Número de Matrícula' é inválido" });
         }
 
 
@@ -317,7 +313,7 @@ module.exports = {
         }
 
         let password = (req.body?.newPassword)?.toString()?.trim();
-        let resp = validateString(password, 'newPassword', true, 64);
+        let resp = validateString(password, 'newPassword', true, 64, regexp.password);
         if (resp) {
             return res.status(400).json(resp);
         }
@@ -347,6 +343,12 @@ module.exports = {
     },
 
     async destroy (req, res) {
+        let id = (req.params?.id)?.toString()?.trim();
+        let resp = validateString(id, "userId", true, 100, regexp.alNum);
+        if (resp) {
+            return res.status(400).json({ message: resp });
+        }
+        
         let user = await SafeFindById(User, req.params?.id);
         if (!user) {
             return res.status(404).json({ userId: "Usuário não encontrado" });
