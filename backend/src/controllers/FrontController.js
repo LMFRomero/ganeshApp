@@ -58,10 +58,32 @@ module.exports = {
 
     async showOptions (req, res) {
         try {
-            var resp = await Front.find({}, 'name slug');
+            var fronts = await Front.find({}, 'name slug isDeleted membersOnly');
         } catch (error) {
             console.log(error);
             return res.status(500).end();
+        }
+
+        let resp = [];
+        let fieldNames = ["name", "slug"];
+    
+        for (let front of fronts) {
+            if (front.isDeleted && req.user?.role > 30) {
+                continue;
+            }
+
+            if (front.membersOnly && req.user?.role > 60) {
+                continue;
+            }
+
+            let tmpFront = {};
+            tmpFront.id = front._id;
+
+            for (let fieldName of fieldNames) {
+                tmpFront[fieldName] = front[fieldName];
+            }
+
+            resp.push(tmpFront);
         }
 
         return res.status(200).json({ options: resp });
@@ -183,27 +205,85 @@ module.exports = {
     },
 
     async update (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
+        let name = (req.body?.name)?.toString()?.trim();
+        let slug = (req.body?.slug)?.toString()?.trim();
+        let description = (req.body?.description)?.toString()?.trim();
+        let type = (req.body?.type)?.toString()?.trim();
+        let membersOnly = (req.body?.membersOnly)?.toString()?.trim();
 
-        if (!req.body || !req.body.name || !req.params.frontName)
-            return res.status(400).end();
+        let currFront = await SafeFindOne(Front, { slug: req.params?.slug });
+        if (!currFront) {
+            return res.status(404).json({ message: "Frente não encontrada" });
+        }
 
-        let front = await SafeFindOne(Front, { name: req.params.frontName });
-        if (!front)
-            return res.status(404).end();
+        const frontTypes = ["study", "special", "internal"];
 
-        front.name = req.body.name;
-        front.imgStr = req.body.imgStr;
+        if (name) {
+            let resp = validateString(name, "name", true, 32, regexp.alNum);
+            if (resp) {
+                return res.status(400).json({ name: resp });
+            }
 
+            let front = await SafeFindOne(Front, { name: name });
+            if (front) {
+                return res.status(400).json({ name: "Nome já usado" });
+            }
+
+            currFront.name = name;
+        }
+        
+
+        if (slug) {
+            resp = validateString(slug, "slug", true, 16, regexp.slugName);
+            if (resp) {
+                return res.status(400).json({ slug: resp });
+            }
+            if (slug.length < 3) {
+                return res.status(400).json({ slug: 'O campo slug só aceita no mínimo 3 caracteres'});
+            }
+
+            let front = await SafeFindOne(Front, { slug });
+            if (front) {
+                return res.status(400).json({ slug: "Slug já usado" });
+            }
+
+            currFront.slug = slug;
+        }
+        
+        if (description) {
+            resp = validateString(description, "description", false, 512, regexp.alNum);
+            if (resp) {
+                return res.status(400).json({ description: resp });
+            }
+            
+           currFront.description =  description;
+        }
+        
+        if (type) {
+            resp = validateString(type, "type", true, 512, regexp.alNum);
+            if (resp) {
+                return res.status(400).json({ type: resp });
+            }
+            
+            if (frontTypes.includes(type) == false) {
+                return res.status(400).json({ type: 'O campo type tem valor inválido '});
+            }
+
+            currFront.type = type;
+        }
+
+        if (membersOnly) {
+            currFront.membersOnly = (membersOnly == 'true');
+        }
+        
         try {
-            await front.save();
+            currFront.save();
         } catch (error) {
             console.log(error);
             return res.status(500).end();
         }
 
-        return res.status(200).end();
+        return res.status(200).json({ message: "Frente atualizada com sucesso!!" });
     },
 
     async addUser (req, res) {
