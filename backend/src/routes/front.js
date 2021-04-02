@@ -11,6 +11,7 @@ const permsMiddlewares = require('../middlewares/perms');
 routes.use(permsMiddlewares.isAuth);
 
 routes.get('/', FrontController.show);
+routes.get('/options', FrontController.showOptions);
 routes.get('/:id', FrontController.show);
 routes.post('/', permsMiddlewares.isCoordinator, FrontController.store);
 routes.put('/:slug', permsMiddlewares.isCoordinator, FrontController.update);

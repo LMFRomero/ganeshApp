@@ -56,6 +56,17 @@ module.exports = {
         }
     },
 
+    async showOptions (req, res) {
+        try {
+            var resp = await Front.find({}, 'name slug');
+        } catch (error) {
+            console.log(error);
+            return res.status(500).end();
+        }
+
+        return res.status(200).json({ options: resp });
+    },
+
     async store (req, res) {
         let name = (req.body?.name)?.toString()?.trim();
         let slug = (req.body?.slug)?.toString()?.trim();
