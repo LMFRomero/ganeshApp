@@ -27,6 +27,7 @@ module.exports = {
         else {
             let fieldNames = ["name", "description", "type", "isDeleted", "slug"];
             let resp = await SafeFind(Front, {});
+            // let resp = await Front.find( {} ).populate('members').exec();
              
             if (!resp) {
                 return res.status(200).json({});
@@ -43,9 +44,8 @@ module.exports = {
                     tmpFront[fieldName] = front[fieldName];
                 }
 
-                for (let member of front.members) {
-                    member.populate();
-                }
+                await Front.populate(front, { path: 'members', select: 'username' });
+                tmpFront.members = front.members;
 
                 tmpFront.members = front.members;
 
@@ -123,16 +123,17 @@ module.exports = {
         return res.status(201).json({ message: "Frente criada com sucesso!!" });
     },
 
-    async destroy (req, res) {
+    async destroy (req, res) {        
         let slug = (req.params.slug)?.toString()?.trim();
         let front = await SafeFindOne(Front, { slug });
+
         if (!front) {
             return res.status(404).json({ front: "Frente não encontrada" });
         }
 
-        if (front.isDeleted) {
-            return res.status(200).json({ front: "Frente excluída com sucesso" });
-        }
+        // if (front.isDeleted) {
+        //     return res.status(200).json({ front: "Frente excluída com sucesso" });
+        // }
 
         let size = front.members.length;
         for (let i = 0; i < size; i++) {
@@ -142,7 +143,7 @@ module.exports = {
                 continue;
             }
 
-            let index = user.fronts.indexOf(user._id);
+            let index = user.fronts.indexOf(front._id);
             if (index > -1) {
                 user.fronts.splice(index, 1);
             }
