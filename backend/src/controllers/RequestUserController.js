@@ -5,7 +5,7 @@ const { SafeFindOne, SafeCreateObj, SafeFind, SafeDeleteOne } = require('../serv
 const { session } = require('passport');
 const { getRole, getTitle } = require('../utils/roles');
 
-const { validateString } = require('../utils/str');
+const { validateString, regexp } = require('../utils/str');
 
 module.exports = {
     async store (req, res) {
@@ -21,20 +21,16 @@ module.exports = {
         let yearJoinCollege = (req.body.yearJoinCollege)?.toString()?.trim();
         let yearJoinGanesh = (req.body.yearJoinGanesh)?.toString()?.trim();
 
-        if (pingParticipant) {
-            pingParticipant = pingParticipant.toString()?.trim();
-        }
-
         pingParticipant = (pingParticipant == 'true');
 
         let resp;
         
-        resp = validateString(email, "Email", true, 64);
+        resp = validateString(email, "Email", true, 64, regexp.email);
         if (resp) {
             return res.status(400).json( { email: resp });
         }
 
-        resp = validateString(username, "Apelido", true, 64);
+        resp = validateString(username, "Apelido", true, 64, regexp.alNum);
         if (resp) {
             return res.status(400).json({ username: resp });
         }
@@ -44,23 +40,23 @@ module.exports = {
             return res.status(400).json({ password: resp });
         }
 
-        resp = validateString(name, "Nome", true, 64);
+        resp = validateString(name, "Nome", true, 64, regexp.alpha);
         if (resp) {
             return res.status(400).json({ name: resp });
         }
 
-        resp = validateString(course, "Curso atual", true, 64);
+        resp = validateString(course, "Curso atual", true, 64, regexp.alNum);
         if (resp) {
             return res.status(400).json({ course: resp });
         }
 
-        resp = validateString(institution, "Instituição", true, 64);
+        resp = validateString(institution, "Instituição", true, 64, regexp.alNum);
         if (resp) {
             return res.status(400).json({ institution: resp });
         }
 
 
-        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", false, 12);
+        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", false, 12, regexp.num);
         if (resp) {
             return res.status(400).json({ yearJoinCollege: resp });
         }
@@ -74,7 +70,7 @@ module.exports = {
             }
         }
         
-        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12);
+        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12, regexp.num);
         if (resp) {
             return res.status(400).json({ yearJoinGanesh: resp });
         }
@@ -83,7 +79,7 @@ module.exports = {
             return res.status(400).json({ yearJoinGanesh: "O campo 'Ano de ingresso no Ganesh' é inválido" });
         }
         
-        resp = validateString(collegeID, "Número de Matrícula", false, 12);
+        resp = validateString(collegeID, "Número de Matrícula", false, 12, regexp.alNum);
         if (resp) {
             return res.status(400).json({ collegeID: resp });
         }
