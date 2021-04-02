@@ -139,12 +139,12 @@ module.exports = {
         let front = await SafeFindOne(Front, { slug });
 
         if (!front) {
-            return res.status(404).json({ front: "Frente não encontrada" });
+            return res.status(404).json({ message: "Frente não encontrada" });
         }
 
-        // if (front.isDeleted) {
-        //     return res.status(200).json({ front: "Frente excluída com sucesso" });
-        // }
+        if (front.isDeleted) {
+            return res.status(200).json({ message: "Frente excluída com sucesso" });
+        }
 
         let size = front.members.length;
         for (let i = 0; i < size; i++) {
@@ -179,7 +179,7 @@ module.exports = {
             return res.status(500).json({ message: "Erro ao excluir a frente" });
         }
         
-        return res.status(200).json({ front: "Frente excluída com sucesso" });
+        return res.status(200).json({ message: "Frente excluída com sucesso" });
     },
 
     async update (req, res) {
