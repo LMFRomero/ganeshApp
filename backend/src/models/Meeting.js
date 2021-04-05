@@ -47,7 +47,12 @@ const meetingSchema = new mongoose.Schema({
     members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }],
+
+    isDeleted: {
+        type: Boolean,
+        required: true,
+    }
 });
 
 module.exports = mongoose.model('Meeting', meetingSchema);

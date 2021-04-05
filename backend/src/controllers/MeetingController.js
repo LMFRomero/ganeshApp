@@ -71,6 +71,8 @@ module.exports = {
             creator: req.user._id,
             createdAt: new Date(),
             members: [],
+
+            isDeleted: false,
         });
 
         if (!meeting) {
