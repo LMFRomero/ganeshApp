@@ -2,74 +2,82 @@ const { frequencyClient } = require('../services/redis-store');
 const Meeting = require('../models/Meeting');
 const User = require('../models/User');
 const Front = require('../models/Front');
-const transporter = require('../services/nodemailer-auth');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
+const { validateString, regexp } = require('../utils/str');
 
 function getRandomInt (max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
 module.exports = {
-    //this function will store new Meetings into the database
     async store (req, res) {
-        //verify if there is a body and if there is a session assigned to that request
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
+        const title = (req.body?.title)?.toString()?.trim();
+        const content = (req.body?.content)?.toString()?.trim();
+        const frontSlug = (req.body?.frontSlug)?.toString()?.trim();
+        const duration = (req.body?.duration)?.toString()?.trim();
+        const place = (req.body?.place)?.toString()?.trim();
+        const membersOnly = (((req.body?.membersOnly)?.toString()?.trim()) == 'true');
 
-        const passportUser = req.session.passport.user;
+        const date = new Date(req.body?.date);
         
-        //find the user that will be defined as creator of the meeting request
-        const user = await SafeFindById(User, passportUser.id);
-        if (!user)
-            return res.status(401).end();
+        let front;   
+        let resp;        
 
-        //get the attributes of the meeting from the front
-        const { title, front, room, duration } = req.body;
-        const creator = user._id;
-        let date = req.body.date;
-        let now = new Date();
-        now.setHours(now.getHours()-3);
-        
-        //parse body params
-        if (!title || !front || isNaN(room) || !date || isNaN(duration))
-            return res.status(400).json({ message: "Missing information"});
-        
-        try {
-            date = new Date(date);
-            if (Object.prototype.toString.call(date) !== "[object Date]" || date == "Invalid Date")
-                return res.status(400).json({ meeting: "Invalid date" });
-        } catch (error) {
-            console.log(error);
-            return res.status(400).json({ message: "Invalid date" });
+        resp = validateString(title, "título", true, 64, regexp.alNumWithSymb);
+        if (resp) {
+            return res.status(400).json({ title: resp });
         }
 
-        if (now > date)
-            return res.status(400).json({ message: "Date not allowed" });
-        
-        let front_obj = await SafeFindOne(Front, { name: front });
-        if (!front_obj)
-            return res.status(400).json({ message: "Invalid front" });
-
-        let tmp = await SafeFindOne(Meeting, { title: title });
-        if (tmp)
-            return res.status(400).json({ message: "Meeting already exists" });
-
-        // create a meeting in database
-        let meeting = await SafeCreateObj(Meeting, {title: title, front: front_obj._id, room: room, frequencyCode: -1, date: date, creator: creator, duration: duration });
-        if (!meeting)
-            return res.status(500).end();
-            
-        front_obj.meetings.push(meeting._id);
-        
-        try {
-            await front_obj.save()
-        } catch (error) {
-            console.log(error)
-            return res.status(500).end();
+        resp = validateString(content, "conteúdo", false, 1024, regexp.alNumWithSymb);
+        if (resp) {
+            return res.status(400).json({ content: resp });
         }
 
-        return res.status(200).end();
+        resp = validateString(frontSlug, "frontSlug", true, 16, regexp.slugName);
+        if (resp) {
+            return res.status(400).json({ frontSlug: resp });
+        }
+
+        front = await SafeFindOne(Front, { slug: frontSlug });
+        if (!front) {
+            return res.status(404).json({ frontSlug: "Frente não encontrada" });
+        }
+
+        resp = validateString(duration, "duração", false, 64, regexp.num);
+        if (resp) {
+            return res.status(400).json({ duration: resp });
+        }
+
+        resp = validateString(place, "local", false, 64, regexp.alNum);
+        if (resp) {
+            return res.status(400).json({ place: resp });
+        }
+
+        resp = !(date instanceof Date && !isNaN(date));
+        if (resp || date < new Date()) {
+            return res.status(400).json({ date: "Data da reunião inválida" });
+        }
+
+        let meeting = await SafeCreateObj (Meeting, {
+            title,
+            content,
+            front: front._id,
+            date,
+            duration,
+            place,
+            membersOnly,
+
+            creator: req.user._id,
+            createdAt: new Date(),
+            members: [],
+        });
+
+        if (!meeting) {
+            return res.status(500).json({ message: "Não foi possível criar a reunião" })
+        }
+
+        return res.status(201).json({ message: "Reunião criada com sucesso!!" })
     },
     
     async update (req, res) {
