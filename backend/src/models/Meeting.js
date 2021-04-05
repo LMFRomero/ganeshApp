@@ -36,7 +36,7 @@ const meetingSchema = new mongoose.Schema({
         type: Number,
     },
 
-    creator: {
+    author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },

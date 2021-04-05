@@ -29,9 +29,9 @@ module.exports = {
             }
             
             let meeting = await Meeting.findById(id)
-                                       .select("title date duration place content front membersOnly isDeleted members creator createdAt")
+                                       .select("title date duration place content front membersOnly isDeleted members author createdAt")
                                        .populate({ path: 'front', select: 'name slug' })
-                                       .populate({ path: 'creator', select: 'username title' })
+                                       .populate({ path: 'author', select: 'username title' })
                                        .populate({ path: 'members', select: 'username' })
                                        .lean();
             if (!meeting) {
@@ -108,7 +108,7 @@ module.exports = {
             place,
             membersOnly,
 
-            creator: req.user._id,
+            author: req.user._id,
             createdAt: new Date(),
             members: [],
 
