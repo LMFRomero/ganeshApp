@@ -10,7 +10,47 @@ function getRandomInt (max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
+function generateObjectToSend (object, fieldNames) {
+    let resp = object;
+
+    for (let fieldName in fieldNames) {
+    }
+
+    return resp;
+}
+
 module.exports = {
+    async show (req, res) {
+        if (req.params?.id) {
+            const id = req.params.id;
+            let resp = validateString(id, "id", true, 100, regexp.alNum);
+            if (resp) {
+                return res.status(400).json({ meetingId: resp });
+            }
+            
+            let meeting = await Meeting.findById(id)
+                                       .select("title date duration place content front membersOnly isDeleted members creator createdAt")
+                                       .populate({ path: 'front', select: 'name slug' })
+                                       .populate({ path: 'creator', select: 'username title' })
+                                       .populate({ path: 'members', select: 'username' })
+                                       .lean();
+            if (!meeting) {
+                return res.status(404).json({ message: "Reunião não encontrada" });
+            }
+
+            meeting.id = meeting._id;
+            delete meeting._id;
+
+            return res.status(200).json(meeting);
+        }
+        else {
+            const now = new Date();
+            const meetings = await SafeFind(Meeting, { date: { $gt: now } });
+
+            return res.status(200).json(meetings);
+        }
+    },
+    
     async store (req, res) {
         const title = (req.body?.title)?.toString()?.trim();
         const content = (req.body?.content)?.toString()?.trim();
@@ -198,13 +238,6 @@ module.exports = {
         }
         
         return res.status(200).end();
-    },
-
-    async show (req, res) {
-        const now = new Date();
-        const objects = await SafeFind(Meeting, { date: { $gt: now } });
-
-        return res.status(200).json(objects);
     },
 
     async checkTime (req, res, next) {
