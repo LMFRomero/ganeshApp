@@ -30,9 +30,9 @@ module.exports = {
             
             let meeting = await Meeting.findById(id)
                                        .select("title date duration place content front membersOnly isDeleted members author createdAt")
-                                       .populate({ path: 'front', select: 'name slug' })
-                                       .populate({ path: 'author', select: 'username title' })
-                                       .populate({ path: 'members', select: 'username' })
+                                       .populate({ path: 'front', select: 'name slug id' })
+                                       .populate({ path: 'author', select: 'username title id' })
+                                       .populate({ path: 'members', select: 'username id' })
                                        .lean();
             if (!meeting) {
                 return res.status(404).json({ message: "Reunião não encontrada" });
@@ -46,6 +46,10 @@ module.exports = {
         else {
             const now = new Date();
             const meetings = await SafeFind(Meeting, { date: { $gt: now } });
+
+            Meeting.collection.getIndexes({ full: true }).then((indexes) => {
+                console.log(indexes);
+            }).catch(console.error);
 
             return res.status(200).json(meetings);
         }
