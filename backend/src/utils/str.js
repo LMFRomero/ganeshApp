@@ -1,10 +1,10 @@
 const regexp = {
     slugName: /^[a-zA-Z0-9-]*$/g,
-    alpha: /^[a-zA-Z ]*$/g,
+    alpha: /^[a-zA-ZáéíóúâêôãõçÁÉÍÓÚÂÊÔÃÕÇüñÜÑ ]*$/g,
     num: /^[0-9]*$/g,
-    alNum: /^[a-zA-Z0-9 ]*$/g,
+    alNum: /^[a-zA-Z0-9áéíóúâêôãõçÁÉÍÓÚÂÊÔÃÕÇüñÜÑ ]*$/g,
     email: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-    password: /^[a-zA-Z0-9@$!%*#?&]*$/g,
+    alNumWithSymb: /^[a-zA-Z0-9áéíóúâêôãõçÁÉÍÓÚÂÊÔÃÕÇüñÜÑ@!%*#?&/() -]*$/g,
 };
 
 module.exports = {

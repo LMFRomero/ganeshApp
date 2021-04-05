@@ -8,10 +8,11 @@ const permsMiddlewares = require('../middlewares/perms');
 
 //route: /api/meeting
 
-routes.use((req, res, next) => { permsMiddlewares.isAuth });
+routes.use(permsMiddlewares.isAuth);
 
+routes.get('/:id', MeetingController.show);
 routes.get('/', MeetingController.show);
-routes.post('/', MeetingController.store);
+routes.post('/', permsMiddlewares.isCoordinator, MeetingController.store);
 routes.put('/:id', MeetingController.update);
 routes.delete('/:id', MeetingController.destroy);
 routes.post('/generate/:id', MeetingController.generateMeetingCode)

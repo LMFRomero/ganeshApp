@@ -157,7 +157,7 @@ module.exports = {
             type,
             membersOnly,
             
-            createdAt: Date.now(),
+            createdAt: new Date(),
             isDeleted: false,
 
             members: [],
