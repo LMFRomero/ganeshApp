@@ -20,7 +20,7 @@ const meetingSchema = new mongoose.Schema({
         required: true,
     },
     duration: {
-        type: Number,
+        type: String,
         maxlength: 64,
     },
     place: {
