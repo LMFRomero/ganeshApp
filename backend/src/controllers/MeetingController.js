@@ -30,16 +30,12 @@ module.exports = {
             
             let meeting = await Meeting.findById(id)
                                        .select("title date duration place content front membersOnly isDeleted members author createdAt")
-                                       .populate({ path: 'front', select: 'name slug id' })
-                                       .populate({ path: 'author', select: 'username title id' })
-                                       .populate({ path: 'members', select: 'username id' })
-                                       .lean();
+                                       .populate({ path: 'front', select: 'name slug' })
+                                       .populate({ path: 'author', select: 'username title' })
+                                       .populate({ path: 'members', select: 'username' })
             if (!meeting) {
                 return res.status(404).json({ message: "Reunião não encontrada" });
             }
-
-            meeting.id = meeting._id;
-            delete meeting._id;
 
             return res.status(200).json(meeting);
         }
