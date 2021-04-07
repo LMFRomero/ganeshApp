@@ -10,49 +10,31 @@ const { validateString } = require('../utils/str');
 
 module.exports = {
     async show (req, res) {
-        let resp;
-        let id = (req.params?.id)?.toString()?.trim();
-        resp = validateString(id, "userId", false, 100);
-        if (resp) {
-            return res.status(400).json({ message: resp });
-        }
-        
-        if (id) {
-            resp = await SafeFindById(User, id);
-            if (!resp) {
+        if (req.params?.id) {
+            try {
+                var user = await User.findById(req.params.id)
+                                     .select("name course institution collegeID yearJoinCollege yearJoinGaneshemail username role title isDeleted");
+            } catch (err) {
+                console.log(err);
+                return res.status(500).end();
+            }
+
+            if (!user) {
                 return res.status(404).json({ userId: "Usuário não encontrado" });
             }
 
-            let fieldNames = ['name', 'course', 'institution', 'collegeID', 'yearJoinCollege', 'yearJoinGanesh','email', 'username', 'role', 'title', 'isDeleted']
-            let user = {};
-            
-            user.id = resp._id;
-
-            for (let fieldName of fieldNames) {
-                user[fieldName] = resp[fieldName];
-            }
-
             return res.status(200).json(user);
-            
         }
         else {
-            resp = await SafeFind(User, {});
-            
-            let users = [];
-            let fieldNames = ['email', 'username', 'yearJoinGanesh', 'title'];
+            try {
+                var users = await User.find({})
+                                      .select("email username yearJoinGanesh title");
+            } catch (err) {
+                console.log(err);
+                return res.status(500).end();
+            }
 
-            resp.forEach((item) => {
-                let user = {};
-                user.id = item._id;
-
-                for (let fieldName of fieldNames) {
-                    user[fieldName] = item[fieldName];
-                }
-
-                users.push(user);
-            });
-
-            return res.status(200).json({ users });
+            return res.status(200).json(users);
         }
     },
 
@@ -388,17 +370,17 @@ module.exports = {
     },
 
     async getLoginInfo (req, res) {
-        let dbUser = await SafeFindOne (User, { email: req.body.email });
-        if (!dbUser) {
-            return res.status(400).json({ "email": "Email não encontrado" });
+        try {
+            var user = await User.findOne({ email: req.body.email })
+                                 .select("username title role");
+        } catch (err) {
+            console.log(err);
+            return res.status(500).end();
         }
 
-        let user = {
-            "username": dbUser.username,
-            "title": dbUser.title,
-            "role": dbUser.role,
-            "id": dbUser._id,
-        };
+        if (!user) {
+            return res.status(400).json({ "email": "Email não encontrado" });
+        }
         
         return res.status(200).json(user);
     },

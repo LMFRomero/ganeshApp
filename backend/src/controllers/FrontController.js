@@ -2,106 +2,65 @@ const Front = require('../models/Front');
 const User = require('../models/User');
 const Meeting = require('../models/Meeting');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
-const { validateString } = require('../utils/str');
+const { validateString, regexp } = require('../utils/str');
 
 
 module.exports = {
     async show (req, res) {
         if (req.params?.id) {
-            let fieldNames = ["name", "slug", "description", "type", "membersOnly", "isDeleted"];
-            let resp = await SafeFindById(Front, req.params.id);
+            try {
+                var front = await Front.findById(req.params.id)
+                                       .select("name slug description type membersOnly isDeleted");
+            } catch (err) {
+                console.log(err);
+                return res.status(500).end();
+            }
 
-            if (!resp) {
+            if (!front) {
                 return res.status(404).json({ message: "Frente não encontrada" });
             }
 
-            let front = {};
-            front.id = resp._id;
-
-            for (let fieldName of fieldNames) {
-                front[fieldName] = resp[fieldName];
-            }
-            
             return res.status(200).json(front);
         }
         else {
-            let fieldNames = ["name", "description", "type", "isDeleted", "slug"];
-            let fronts = await SafeFind(Front, {});
-             
+            try {
+                var fronts = await Front.find({})
+                                        .select("name description type isDeleted slug")
+                                        .populate({ path: 'members', select: 'username' });
+            } catch (err) {
+                console.log(err);
+                return res.status(500).end();
+            } 
+
             if (!fronts) {
                 return res.status(200).json({});
             }
 
-            let resp = [];
-
-            for (let front of fronts) {
-                if (front.isDeleted && req.user?.role > 30) {
-                    continue;
-                }
-    
-                if (front.membersOnly && req.user?.role > 60) {
-                    continue;
-                }
-    
-                if (front.type == 'internal' && req.user?.role > 30) {
-                    continue;
-                }
-
-                let tmpFront = {};
-
-                tmpFront.id = front._id;
-
-                for (let fieldName of fieldNames) {
-                    tmpFront[fieldName] = front[fieldName];
-                }
-
-                await Front.populate(front, { path: 'members', select: 'username' });
-                tmpFront.members = front.members;
-
-                tmpFront.members = front.members;
-
-                resp.push(tmpFront);
-            }
-
-            return res.status(200).json({resp});
+            return res.status(200).json(fronts);
         }
     },
 
     async showOptions (req, res) {
+        let filter = {};
+
+        if (req.user.role > 30) {
+            filter.isDeleted = { $eq: false };
+            filter.type = { $ne: 'internal' };
+        }
+
+        if (req.user.role > 80) {
+            filter.membersOnly = { $eq: false };
+        }
+
         try {
-            var fronts = await Front.find({}, 'name slug isDeleted membersOnly');
+            var fronts = await Front.find(filter)
+                                    .select("name slug");
         } catch (error) {
             console.log(error);
             return res.status(500).end();
         }
 
-        let resp = [];
-        let fieldNames = ["name", "slug"];
-    
-        for (let front of fronts) {
-            if (front.isDeleted && req.user?.role > 30) {
-                continue;
-            }
-
-            if (front.membersOnly && req.user?.role > 60) {
-                continue;
-            }
-
-            if (front.type == 'internal' && req.user?.role > 30) {
-                continue;
-            }
-
-            let tmpFront = {};
-            tmpFront.id = front._id;
-
-            for (let fieldName of fieldNames) {
-                tmpFront[fieldName] = front[fieldName];
-            }
-
-            resp.push(tmpFront);
-        }
-
-        return res.status(200).json({ options: resp });
+        return res.status(200).json({ options: fronts });
     },
 
     async store (req, res) {
@@ -373,65 +332,4 @@ module.exports = {
 
         return res.status(200).json({ message: "Membro removido com sucesso!!" });
     },
-
-    async addMeeting (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
-
-        if (!req.body || !req.body.meetingId || !req.params.frontName)
-            return res.status(400).end();
-
-        let front = await SafeFindOne(Front, { name: req.params.frontName });
-        if (!front)
-            return res.status(404).end();
-
-        let meeting = await SafeFindById(Meeting, req.body.meetingId);
-        if (!meeting)
-            return res.status(404).end();
-
-        meeting.front = front._id;
-        front.meetings.push(meeting._id);
-
-        try {
-            await meeting.save();
-            await front.save();
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
-        }
-
-        return res.status(200).end();
-    },
-
-    async removeMeeting (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-        return res.status(401).end();
-
-        if (!req.body || !req.body.meetingId || !req.params.frontName)
-            return res.status(400).end();
-
-        let front = await SafeFindOne(Front, { name: req.params.frontName });
-        if (!front)
-            return res.status(404).end();
-
-        let meeting = await SafeFindById(Meeting, req.body.meetingId);
-        if (!meeting)
-            return res.status(404).end();
-
-        meeting.front = "";
-
-        index = front.meetings.indexOf(meeting._id);
-        if (index > -1)
-            front.meetings.splice(index, 1);
-
-        try {
-            await meeting.save();
-            await front.save();
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
-        }
-
-        return res.status(200).end();
-    }
 };

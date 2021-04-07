@@ -22,17 +22,17 @@ function generateObjectToSend (object, fieldNames) {
 module.exports = {
     async show (req, res) {
         if (req.params?.id) {
-            const id = req.params.id;
-            let resp = validateString(id, "id", true, 100);
-            if (resp) {
-                return res.status(400).json({ meetingId: resp });
+            try {
+                var meeting = await Meeting.findById(req.params.id)
+                                    .select("title date duration place content front membersOnly isDeleted members author createdAt")
+                                    .populate({ path: 'front', select: 'name slug' })
+                                    .populate({ path: 'author', select: 'username title' })
+                                    .populate({ path: 'members', select: 'username' });
+            } catch (err) {
+                console.log(err);
+                return res.status(500).end();
             }
             
-            let meeting = await Meeting.findById(id)
-                                       .select("title date duration place content front membersOnly isDeleted members author createdAt")
-                                       .populate({ path: 'front', select: 'name slug' })
-                                       .populate({ path: 'author', select: 'username title' })
-                                       .populate({ path: 'members', select: 'username' })
             if (!meeting) {
                 return res.status(404).json({ message: "Reunião não encontrada" });
             }

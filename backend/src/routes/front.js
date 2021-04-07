@@ -18,7 +18,5 @@ routes.put('/:slug', permsMiddlewares.isCoordinator, FrontController.update);
 routes.delete('/:slug', permsMiddlewares.isCoordinator, FrontController.destroy);
 routes.post('/addUser/:slug', permsMiddlewares.isCoordOrIsSelf, FrontController.addUser);
 routes.post('/removeUser/:slug', permsMiddlewares.isCoordOrIsSelf, FrontController.removeUser);
-routes.post('/addMeeting/:slug', FrontController.addMeeting);
-routes.post('/removeMeeting/:slug', permsMiddlewares.isCoordinator, FrontController.removeMeeting);
 
 module.exports = routes;
