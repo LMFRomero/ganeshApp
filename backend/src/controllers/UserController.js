@@ -6,13 +6,13 @@ const { SafeFindOne, SafeCreateObj, SafeFindById, SafeFind } = require('../servi
 
 const { canChangeRole } = require('../middlewares/perms');
 const { getRole, getTitle } = require('../utils/roles');
-const { validateString, regexp } = require('../utils/str');
+const { validateString } = require('../utils/str');
 
 module.exports = {
     async show (req, res) {
         let resp;
         let id = (req.params?.id)?.toString()?.trim();
-        resp = validateString(id, "userId", false, 100, regexp.alNum);
+        resp = validateString(id, "userId", false, 100);
         if (resp) {
             return res.status(400).json({ message: resp });
         }
@@ -71,12 +71,12 @@ module.exports = {
 
         let resp;
         
-        resp = validateString(email, "Email", true, 64, regexp.email);
+        resp = validateString(email, "Email", true, 64);
         if (resp) {
             return res.status(400).json( { email: resp });
         }
 
-        resp = validateString(username, "Apelido", true, 64, regexp.alNum);
+        resp = validateString(username, "Apelido", true, 64);
         if (resp) {
             return res.status(400).json({ username: resp });
         }
@@ -86,22 +86,22 @@ module.exports = {
             return res.status(400).json({ password: resp });
         }
 
-        resp = validateString(name, "Nome", true, 64, regexp.alpha);
+        resp = validateString(name, "Nome", true, 64);
         if (resp) {
             return res.status(400).json({ name: resp });
         }
 
-        resp = validateString(course, "Curso atual", true, 64, regexp.alNum);
+        resp = validateString(course, "Curso atual", true, 64);
         if (resp) {
             return res.status(400).json({ course: resp });
         }
 
-        resp = validateString(institution, "Instituição", true, 64, regexp.alNum);
+        resp = validateString(institution, "Instituição", true, 64);
         if (resp) {
             return res.status(400).json({ institution: resp });
         }
 
-        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", false, 12, regexp.num);
+        resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", false, 12);
         if (resp) {
             return res.status(400).json({ yearJoinCollege: resp });
         }
@@ -115,7 +115,7 @@ module.exports = {
             }
         }
 
-        resp = validateString(collegeID, "Número de Matrícula", false, 12, regexp.alNum);
+        resp = validateString(collegeID, "Número de Matrícula", false, 12);
         if (resp) {
             return res.status(400).json({ collegeID: resp });
         }
@@ -129,7 +129,7 @@ module.exports = {
             }
         }
         
-        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12, regexp.num);
+        resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12);
         if (resp) {
             return res.status(400).json({ yearJoinGanesh: resp });
         }
@@ -344,7 +344,7 @@ module.exports = {
 
     async destroy (req, res) {
         let id = (req.params?.id)?.toString()?.trim();
-        let resp = validateString(id, "userId", true, 100, regexp.alNum);
+        let resp = validateString(id, "userId", true, 100);
         if (resp) {
             return res.status(400).json({ message: resp });
         }
