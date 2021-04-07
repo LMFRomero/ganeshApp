@@ -4,7 +4,7 @@ const User = require('../models/User');
 const Front = require('../models/Front');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
-const { validateString, regexp } = require('../utils/str');
+const { validateString} = require('../utils/str');
 
 function getRandomInt (max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -23,7 +23,7 @@ module.exports = {
     async show (req, res) {
         if (req.params?.id) {
             const id = req.params.id;
-            let resp = validateString(id, "id", true, 100, regexp.alNum);
+            let resp = validateString(id, "id", true, 100);
             if (resp) {
                 return res.status(400).json({ meetingId: resp });
             }
@@ -68,17 +68,17 @@ module.exports = {
         let front;   
         let resp;        
 
-        resp = validateString(title, "título", true, 64, regexp.alNumWithSymb);
+        resp = validateString(title, "título", true, 64);
         if (resp) {
             return res.status(400).json({ title: resp });
         }
 
-        resp = validateString(content, "conteúdo", false, 1024, regexp.alNumWithSymb);
+        resp = validateString(content, "conteúdo", false, 1024);
         if (resp) {
             return res.status(400).json({ content: resp });
         }
 
-        resp = validateString(frontSlug, "frontSlug", true, 16, regexp.slugName);
+        resp = validateString(frontSlug, "frontSlug", true, 16);
         if (resp) {
             return res.status(400).json({ frontSlug: resp });
         }
@@ -88,12 +88,12 @@ module.exports = {
             return res.status(404).json({ frontSlug: "Frente não encontrada" });
         }
 
-        resp = validateString(duration, "duração", false, 64, regexp.num);
+        resp = validateString(duration, "duração", false, 64);
         if (resp) {
             return res.status(400).json({ duration: resp });
         }
 
-        resp = validateString(place, "local", false, 64, regexp.alNum);
+        resp = validateString(place, "local", false, 64);
         if (resp) {
             return res.status(400).json({ place: resp });
         }

@@ -2,7 +2,7 @@ const Front = require('../models/Front');
 const User = require('../models/User');
 const Meeting = require('../models/Meeting');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
-const { validateString, regexp } = require('../utils/str');
+const { validateString } = require('../utils/str');
 
 
 module.exports = {
@@ -113,7 +113,7 @@ module.exports = {
 
         const frontTypes = ["study", "special", "internal"];
 
-        let resp = validateString(name, "name", true, 32, regexp.alNum);
+        let resp = validateString(name, "name", true, 32);
         if (resp) {
             return res.status(400).json({ name: resp });
         }
@@ -141,7 +141,7 @@ module.exports = {
             return res.status(400).json({ description: resp });
         }
 
-        resp = validateString(type, "type", true, 512, regexp.alNum);
+        resp = validateString(type, "type", true, 512);
         if (resp) {
             return res.status(400).json({ type: resp });
         }
@@ -234,7 +234,7 @@ module.exports = {
         const frontTypes = ["study", "special", "internal"];
 
         if (name) {
-            let resp = validateString(name, "name", true, 32, regexp.alNum);
+            let resp = validateString(name, "name", true, 32);
             if (resp) {
                 return res.status(400).json({ name: resp });
             }
@@ -275,7 +275,7 @@ module.exports = {
         }
         
         if (type) {
-            resp = validateString(type, "type", true, 512, regexp.alNum);
+            resp = validateString(type, "type", true, 512);
             if (resp) {
                 return res.status(400).json({ type: resp });
             }
