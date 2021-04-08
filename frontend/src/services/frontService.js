@@ -28,13 +28,10 @@ function update(frontId, front) {
     // .then(() => Promise.resolve({message: "Frente atualizada com sucesso!" }) )
  }
 
-function _delete() { 
-    // return api.delete('/user/' + userId)
-    // .then( () => {
-    //     authService.logout()
-    //     .then(() => { document.location.reload() })
-    // })
-    // .catch(handleErrors) 
+function _delete(frontId) { 
+    return api.delete('/front/' + frontId)
+    .then((response) => Promise.resolve(response.data))
+    .catch(handleErrors) 
 }
 
 function getById(frontId) { 

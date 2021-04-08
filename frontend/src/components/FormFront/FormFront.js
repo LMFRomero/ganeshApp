@@ -3,6 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Grid, Button, FormControl, Select, MenuItem, InputLabel, TextField } from '@material-ui/core'
 
 import { frontService } from '../../services/frontService'
+import DeleteDialog from '../../components/DeleteDialog/DeleteDialog'
 
 // Variants: "register" and "edit"
 function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormErrors }){
@@ -11,6 +12,7 @@ function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormEr
   const history   = useHistory();
 
   const [submitDisabled, setSubmitDisabled] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [formData, setFormData]             = useState({
     _id:   '',
     name: '',
@@ -65,6 +67,12 @@ function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormEr
     } 
   }
 
+  const handleDelete = (e) => {
+    frontService._delete(frontId)
+    .then( function(s) { history.push('/frentes') })
+    .catch(  function(e) { setFormErrors(e) })     
+    .finally(function( ) { setSubmitDisabled(false) })
+  }
 
   return(
     <Grid item xs={12} container spacing={3} justify="center" 
@@ -117,7 +125,27 @@ function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormEr
           type="submit" disabled={submitDisabled}>
           <strong>{variant === "register" ? "Publicar Frente" : "Salvar Alterações"}</strong>
         </Button>
+        
+        { variant === "edit" && 
+        <Button variant="contained" size="large" fullWidth color="primary"
+          onClick={() => setShowDeleteDialog(true)} >
+          <strong>Excluir Frente</strong>
+        </Button>
+        }
 
+        { variant === "edit" && 
+        <DeleteDialog 
+          title="Excluir Frente" 
+          securityString={formData.slug}  
+          successCallback={handleDelete}
+          
+          showDialog={showDeleteDialog} setShowDialog={setShowDeleteDialog}
+          submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
+          formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
+          formErrors={formErrors} setFormErrors={setFormErrors}
+        />
+        }
+        
       </Grid>
     </Grid>   
   )
