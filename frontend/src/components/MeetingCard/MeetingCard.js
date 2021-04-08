@@ -73,7 +73,7 @@ function MeetingCard({ authUsername, variant, _id, title, content, date, duratio
   return(
     <Card className={"MeetingCard MeetingCard-" + (variant || 'small')} elevation={2}>
       <CardHeader
-        avatar={<Avatar>{author.username[0].toUpperCase()}</Avatar>}
+        avatar={<Avatar>{(author.username) && author.username[0].toUpperCase()}</Avatar>}
         title={`${author.username} (${author.title})`}
         subheader={getFormattedDate(createdAt)}
         action={renderActionIcon()}
