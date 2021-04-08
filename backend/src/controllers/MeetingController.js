@@ -4,7 +4,7 @@ const User = require('../models/User');
 const Front = require('../models/Front');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
-const { validateString} = require('../utils/str');
+const { validateString } = require('../utils/str');
 
 function getRandomInt (max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -243,6 +243,7 @@ module.exports = {
     },
 
     async destroy (req, res) {
+
         let id = req.params?.id;
         let resp = validateString(id, "meetingId", true, 100);
         if (resp) {
