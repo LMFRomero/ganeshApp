@@ -16,7 +16,7 @@ function FormAccountDelete({ variant, userId, confirmEmail, submitDisabled, setS
   const handleSubmit = (e) => {
     userService.deleteAccount(userId)
     .then(   function(s) {
-      if (variant == 'my-account'){
+      if (variant === 'my-account'){
         authService.logout()
         history.push('/')
       } else {
