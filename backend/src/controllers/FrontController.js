@@ -203,7 +203,7 @@ module.exports = {
 
         const frontTypes = ["study", "special", "internal"];
 
-        if (name) {
+        if (name && currFront.name != name) {
             let resp = validateString(name, "name", true, 32);
             if (resp) {
                 return res.status(400).json({ name: resp });
@@ -217,7 +217,7 @@ module.exports = {
             currFront.name = name;
         }
 
-        if (slug) {
+        if (slug && currFront.slug != slug) {
             resp = validateString(slug, "slug", true, 16, regexp.slugName);
             if (resp) {
                 return res.status(400).json({ slug: resp });
