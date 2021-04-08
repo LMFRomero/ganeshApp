@@ -10,6 +10,7 @@ const permsMiddlewares = require('../middlewares/perms');
 
 routes.use(permsMiddlewares.isAuth);
 
+
 routes.get('/:id', MeetingController.show);
 routes.get('/', MeetingController.show);
 routes.post('/', permsMiddlewares.isCoordinator, MeetingController.store);

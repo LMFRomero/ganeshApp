@@ -23,8 +23,9 @@ routes.put('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.update);
 routes.put('/:id/changePassword', permsMiddlewares.isSelf, UserController.updatePassword);
 routes.delete('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.destroy);
 
-routes.post('/acceptUser', permsMiddlewares.isCoordinator, RequestUserController.update);
-routes.post('/rejectUser', permsMiddlewares.isCoordinator, RequestUserController.destroy);
+routes.get('/requestUser', permsMiddlewares.isCoordinator, RequestUserController.show);
+routes.post('/requestUser/acceptUser', permsMiddlewares.isCoordinator, RequestUserController.update);
+routes.post('/requestUser/rejectUser', permsMiddlewares.isCoordinator, RequestUserController.destroy);
 
 
 module.exports = routes;
