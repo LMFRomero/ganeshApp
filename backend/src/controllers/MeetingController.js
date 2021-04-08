@@ -40,14 +40,63 @@ module.exports = {
             return res.status(200).json(meeting);
         }
         else {
-            const now = new Date();
-            const meetings = await SafeFind(Meeting, { date: { $gt: now } });
+            let filter = {};
 
-            Meeting.collection.getIndexes({ full: true }).then((indexes) => {
-                console.log(indexes);
-            }).catch(console.error);
+            if (req.user.role > 30) {
+                filter.isDeleted = { $eq: false };
+            }
 
-            return res.status(200).json(meetings);
+            if (req.user.role > 80) {
+                filter.membersOnly = { $eq: false };
+            }
+
+            let slug = req.query.slug;
+            let currentPage = parseInt(req.query.page);
+
+            if (slug) {
+                let front = await SafeFindOne(Front, { slug });
+                if (front) {
+                    filter.front = front._id;
+                }
+            }
+
+            const docsSize = await Meeting.countDocuments(filter);
+            const pageSize = 10;
+            const div = docsSize/pageSize;
+
+            const maxPage = Math.floor(div) + (Math.floor(div) != div);
+
+            if (isNaN(currentPage) || currentPage < 1) {
+                currentPage = 1;
+            }
+
+            if (currentPage > maxPage) {
+                currentPage = maxPage;
+            }
+
+            let resp = { currentPage, maxPage };
+
+            if (maxPage == 0) {
+                resp.results = [];
+                return res.status(200).json(resp);
+            }
+
+            try {
+                var meetings = await Meeting.find(filter)
+                                            .select("title date duration place front author createdAt members isDeleted")
+                                            .populate({ path: "front", select: "name slug -_id" })
+                                            .populate({ path: "author", select: "username title -_id" })
+                                            .populate({ path: "members", select: "username -_id" })
+                                            .skip(pageSize*(currentPage-1))
+                                            .limit(pageSize)
+                                            .sort({ isDeleted: 1, createdAt: -1 });
+                resp.results = meetings;
+            } catch (err) {
+                console.log(err);
+                return res.status(500).end();
+            }
+
+            return res.status(200).json(resp);
         }
     },
     
