@@ -70,7 +70,7 @@ function getAll() {
 
 function getOptions() { 
     return api.get('/front/options/')
-    .then((response) => Promise.resolve(response.data))
+    .then((response) => Promise.resolve(response.data.options))
     .catch(handleErrors)
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then((response) => {
