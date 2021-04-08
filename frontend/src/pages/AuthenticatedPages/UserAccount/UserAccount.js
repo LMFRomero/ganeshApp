@@ -22,7 +22,7 @@ function UserAccount({variant = "my-account"}){
   const [formErrors, setFormErrors]         = useState({})
   const [confirmEmail, setConfirmEmail]     = useState("membro@ganesh.com")
   const [formData, setFormData]             = useState({
-    id: '',
+    _id: '',
     name: '',
     course: optHelper.getDefaultOption(optHelper.optsCourses),
     otherCourse: '',
@@ -39,7 +39,7 @@ function UserAccount({variant = "my-account"}){
   })
 
   useEffect(() => { 
-    userService.getById(variant === 'my-account' ? authService.getAuth().id : userId)
+    userService.getById(variant === 'my-account' ? authService.getAuth()._id : userId)
     .then(   function(u) { 
 
       let userData = { ...u }
@@ -91,12 +91,12 @@ function UserAccount({variant = "my-account"}){
                 formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
                 formErrors={formErrors} setFormErrors={setFormErrors} />
             
-              <FormChangePassword variant={variant} userId={formData.id}
+              <FormChangePassword variant={variant} userId={formData._id}
                 submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
                 formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
                 formErrors={formErrors} setFormErrors={setFormErrors} />
 
-              <FormAccountDelete variant={variant} userId={formData.id} confirmEmail={confirmEmail}
+              <FormAccountDelete variant={variant} userId={formData._id} confirmEmail={confirmEmail}
                 submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
                 formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
                 formErrors={formErrors} setFormErrors={setFormErrors} />

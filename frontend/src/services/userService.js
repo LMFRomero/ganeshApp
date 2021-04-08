@@ -18,7 +18,7 @@ function getById(userId) {
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then(() => {
     //     return Promise.resolve({
-    //         id: "123abc", name: 'Zézinho 013', course: 'BCC', institution: 'USP/ICMC',
+    //         _id: "123abc", name: 'Zézinho 013', course: 'BCC', institution: 'USP/ICMC',
     //         collegeID: '1337013', yearJoinCollege: "2021", yearJoinGanesh:  "2021",
     //         email: 'ze@zinho.com', username: 'Z3z1nh013', title: 'Membro', role:  60,
     //     })
@@ -32,7 +32,7 @@ function getAll() {
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then((response) => {
     //     return Promise.resolve([{
-    //         id: "123abc", username: 'Z3z1nh013', email: 'ze@zinho.com',  title: 'Membro',
+    //         _id: "123abc", username: 'Z3z1nh013', email: 'ze@zinho.com',  title: 'Membro',
     //         yearJoinGanesh:  "2021", status: true 
     //     }])
     // })
@@ -50,7 +50,7 @@ function updatePassword(userId, password, newPassword) {
     .catch(handleErrors) 
 }
 
-function deleteAccount(userId, email) { 
+function deleteAccount(userId) { 
     return api.delete('/user/' + userId)
     .then( () => {
         authService.logout()

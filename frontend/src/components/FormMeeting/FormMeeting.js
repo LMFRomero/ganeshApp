@@ -14,7 +14,7 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
   const [submitDisabled, setSubmitDisabled] = useState(false)
   const [frontOptions,   setFrontOptions]   = useState([])
   const [formData, setFormData]             = useState({
-    id:   '', 
+    _id:   '', 
     title: '', 
     content: '',
     frontSlug: '',
@@ -23,7 +23,7 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
     duration: '',
     place: '',
     membersOnly: true,
-    // deleted: false,
+    // isDeleted: false,
   })
 
   useEffect(() => { 

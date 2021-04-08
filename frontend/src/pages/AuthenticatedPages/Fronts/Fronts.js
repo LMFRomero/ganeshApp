@@ -41,7 +41,7 @@ function Fronts(props){
               return(
                 <Grid key={i} item xs={12} sm={12} md={8}>
                   <FrontCard
-                      id={f.id} name={f.name} slug={f.slug} type={f.type} 
+                      _id={f._id} name={f.name} slug={f.slug} type={f.type} 
                       description={f.description} 
                       initMembers={f.members}
                       isDeleted={f.isDeleted} membersOnly={f.membersOnly}

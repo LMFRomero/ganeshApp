@@ -16,7 +16,7 @@ function Meeting(){
   const [ authUsername, setUsername ]      = useState('')
   const [ errorMessages, setErrorMessages] = useState({})
   const [meeting, setMeetingData] = useState({
-    id: ' ', title: ' ', content: ' ',
+    _id: ' ', title: ' ', content: ' ',
     date: ' ', duration: ' ', place: ' ',
     front: { name: ' ', slug: ' '},
     author: {username: ' ', title: ' '},
@@ -44,7 +44,7 @@ function Meeting(){
           <Grid item xs={12} sm={12} md={12} lg={10}>
             <MeetingCard variant="large"
                 authUsername={authUsername}
-                id={meeting.id}
+                _id={meeting._id}
                 author={meeting.author} 
                 publishDate={meeting.publishDate}
 

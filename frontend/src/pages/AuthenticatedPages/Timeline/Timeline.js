@@ -108,18 +108,19 @@ function Timeline({ variant }){
               results.map((meeting,i) => {
                 return (
                   <Grid item xs={12} sm={12} md={8}>
-                    <MeetingCard  key={meeting.id} variant="small"
+                    <MeetingCard  key={meeting._id} variant="small"
                       authUsername={authUsername}
-                      id={meeting.id}
+                      id={meeting._id}
                       author={meeting.author} 
-                      publishDate={meeting.publishDate}
-
+                      createdAt={meeting.createdAt}
+                      
                       title={meeting.title}
                       date={meeting.date}
                       duration={meeting.duration}
                       place={meeting.place}
                       initMembers={meeting.members}
 
+                      isDeleted={meeting.isDeleted}
                       errorMessages={errorMessages} setErrorMessages={setErrorMessages}
                       />
                   </Grid>

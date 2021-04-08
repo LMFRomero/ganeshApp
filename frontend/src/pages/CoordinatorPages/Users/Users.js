@@ -39,7 +39,7 @@ function Users(){
   const [rows, setRows]               = useState([])
 
   const userToRow = (user, index) => { 
-    return { ...user, id: index, linkPath: user.id, status: true }
+    return { ...user, id: index, linkPath: user._id, status: true }
   }
 
   useEffect(() => { 

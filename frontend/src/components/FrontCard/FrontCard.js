@@ -14,7 +14,7 @@ const frontTypes = {
   internal: "Frente Interna"
 }
 
-function FrontCard({id, name, slug, type, description, initMembers, isDeleted, membersOnly, 
+function FrontCard({_id, name, slug, type, description, initMembers, isDeleted, membersOnly, 
   authUsername, errorMessages, setErrorMessages }){
   
   const [submitDisabled, setSubmitDisabled] = useState(false)
@@ -23,7 +23,7 @@ function FrontCard({id, name, slug, type, description, initMembers, isDeleted, m
 
   const renderActionIcon = () => {
     if(true) { return (
-        <IconButton aria-label="settings" component={RouterLink} to={`/editar-frente/${id}`}>
+        <IconButton aria-label="settings" component={RouterLink} to={`/editar-frente/${_id}`}>
           <EditIcon/>
         </IconButton>
     )} else return <></>

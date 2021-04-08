@@ -85,7 +85,7 @@ function resetPassword(password, token) {
 function isAuthenticated() {
     try {
         const user = JSON.parse(localStorage.getItem("user"))
-        const validToken = (user.id && user.username && user.title)
+        const validToken = (user._id && user.username && user.title)
         return validToken
     } catch (e) {
         return false

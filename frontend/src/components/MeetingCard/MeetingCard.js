@@ -16,8 +16,8 @@ const monthNames = [" ", "janeiro", "fevereiro", "março", "abril", "maio", "jun
   "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
 ];
 
-function MeetingCard({ authUsername, variant, id, title, content, date, duration, place, front, author, 
-    publishDate, initMembers, membersOnly, deleted, errorMessages, setErrorMessages }){
+function MeetingCard({ authUsername, variant, _id, title, content, date, duration, place, front, author, 
+    createdAt, initMembers, membersOnly, isDeleted, errorMessages, setErrorMessages }){
 
   const [ submitDisabled, setSubmitDisabled] = useState(false)
   const [ isMember, setIsMember] = useState(initMembers.find((m) => m.username === authUsername))
@@ -35,7 +35,7 @@ function MeetingCard({ authUsername, variant, id, title, content, date, duration
   
   const renderActionIcon = () => {
     if(variant === "large") { return (
-        <IconButton aria-label="settings" component={RouterLink} to={`/editar-reuniao/${id}`}>
+        <IconButton aria-label="settings" component={RouterLink} to={`/editar-reuniao/${_id}`}>
           <EditIcon/>
         </IconButton>
     )} else return <></>
@@ -46,7 +46,7 @@ function MeetingCard({ authUsername, variant, id, title, content, date, duration
     
     setSubmitDisabled(true)
 
-    meetingService.addMember(id, authUsername)
+    meetingService.addMember(_id, authUsername)
     .then(   function(s) {  
       setIsMember(true)
       setMembers([...members, {username: authUsername}])
@@ -61,7 +61,7 @@ function MeetingCard({ authUsername, variant, id, title, content, date, duration
     setErrorMessages({})
     setSubmitDisabled(true)
 
-    meetingService.removeMember(id, authUsername)
+    meetingService.removeMember(_id, authUsername)
     .then(   function(s) {  
       setIsMember(false)
       setMembers([...members.filter((m) => m.username !== authUsername)])
@@ -75,7 +75,7 @@ function MeetingCard({ authUsername, variant, id, title, content, date, duration
       <CardHeader
         avatar={<Avatar>{author.username[0].toUpperCase()}</Avatar>}
         title={`${author.username} (${author.title})`}
-        subheader={getFormattedDate(publishDate)}
+        subheader={getFormattedDate(createdAt)}
         action={renderActionIcon()}
         />
       <Divider/>
@@ -141,7 +141,7 @@ function MeetingCard({ authUsername, variant, id, title, content, date, duration
 
         { variant !== "large" && 
         <Button color="primary" variant="contained" size="medium" startIcon={<AddSharpIcon/>}
-          component={RouterLink} to={`/reuniao/${id}`}>
+          component={RouterLink} to={`/reuniao/${_id}`}>
             Detalhes
         </Button>
         }

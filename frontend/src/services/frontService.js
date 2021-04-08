@@ -44,7 +44,7 @@ function getById(frontId) {
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then(() => {
     //     return Promise.resolve({
-    //         id:   '123FRONT45', name: 'Segurança Web', slug: 'seguranca-web',
+    //         _id:   '123FRONT45', name: 'Segurança Web', slug: 'seguranca-web',
     //         description: 'Estudo de vulnerabilidades mais comuns como OWASP TOP 10 e outras.',
     //         type: 'study', membersOnly: false, isDeleted: false
     //     })
@@ -59,13 +59,13 @@ function getAll() {
     // .then((response) => {
     //     return Promise.resolve([
     //         { 
-    //             id:   '123FRONT45', name: 'Segurança Web', slug: 'seguranca-web',
+    //             _id:   '123FRONT45', name: 'Segurança Web', slug: 'seguranca-web',
     //             description: 'Estudo de vulnerabilidades mais comuns como OWASP TOP 10 e outras.',
     //             type: 'study', membersOnly: false, isDeleted: false,
     //             members: [ {username:"teste"}, {username:"Gabriel"}, {username:"Kairi"}, {username:"Axel"}]
     //         },
     //         { 
-    //             id:   '133FRONT45', name: 'Sh1v4', slug: 'sh1v4-ctfs',
+    //             _id:   '133FRONT45', name: 'Sh1v4', slug: 'sh1v4-ctfs',
     //             description: 'Frente para prática de CTFs do Ganesh',
     //             type: 'special', membersOnly: true, isDeleted: false,
     //             members: [ {username:"Xemnas"}, {username:"Naminé"}, {username:"2B"}]
