@@ -142,8 +142,8 @@ module.exports = {
     },
 
     async destroy (req, res) {        
-        let slug = (req.params.slug)?.toString()?.trim();
-        let front = await SafeFindOne(Front, { slug });
+        let id = (req.params.id)?.toString()?.trim();
+        let front = await SafeFindById(Front, { id });
 
         if (!front) {
             return res.status(404).json({ message: "Frente não encontrada" });
@@ -196,7 +196,7 @@ module.exports = {
         let membersOnly = (req.body?.membersOnly)?.toString()?.trim();
         let isDeleted = (req.body?.isDeleted)?.toString()?.trim();
 
-        let currFront = await SafeFindOne(Front, { slug: req.params?.slug });
+        let currFront = await SafeFindById(Front, req.params?.id );
         if (!currFront) {
             return res.status(404).json({ message: "Frente não encontrada" });
         }

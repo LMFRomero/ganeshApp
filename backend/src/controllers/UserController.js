@@ -13,7 +13,7 @@ module.exports = {
         if (req.params?.id) {
             try {
                 var user = await User.findById(req.params.id)
-                                     .select("name course institution collegeID yearJoinCollege yearJoinGaneshemail username role title isDeleted");
+                                     .select("name course institution collegeID yearJoinCollege yearJoinGanesh email username role title isDeleted");
             } catch (err) {
                 console.log(err);
                 return res.status(500).end();
@@ -28,7 +28,7 @@ module.exports = {
         else {
             try {
                 var users = await User.find({})
-                                      .select("email username yearJoinGanesh title");
+                                      .select("email username yearJoinGanesh title isDeleted");
             } catch (err) {
                 console.log(err);
                 return res.status(500).end();
