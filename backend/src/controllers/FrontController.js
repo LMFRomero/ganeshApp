@@ -143,8 +143,8 @@ module.exports = {
 
     async destroy (req, res) {        
         let id = (req.params.id)?.toString()?.trim();
-        let front = await SafeFindById(Front, { id });
-
+        
+        let front = await SafeFindById(Front, id);
         if (!front) {
             return res.status(404).json({ message: "Frente não encontrada" });
         }
