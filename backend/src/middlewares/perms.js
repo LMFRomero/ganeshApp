@@ -5,25 +5,6 @@ const roles = require('../utils/roles');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec'); 
 
-let isCoordinator = async function (req, res, next) {
-    if (req.user?.role < 30) {
-        return (next) ? next() : true;
-    }
-    else {
-        return (next) ? res.status(401).end() : false;
-    }
-}
-
-let isSelf = function (req, res, next) {
-    if (req.session?.passport?.user?.id != req.params?.id) {
-        return (next) ? res.status(401).end() : false;
-    }
-    else {
-        return (next) ? next() : true;
-    }
-}
-
-
 module.exports = {
     isAuth (req, res, next) {
         if (req.isAuthenticated()) {
@@ -31,9 +12,32 @@ module.exports = {
         } else res.status(401).end();
     },
 
-    isCoordinator,
+    isCoordinator (req, res, next) {
+        if (req.user?.role <= 30) {
+            return (next) ? next() : true;
+        }
+        else {
+            return (next) ? res.status(401).end() : false;
+        }
+    },
 
-    isSelf,
+    isMember (req, res, next) {
+        if (req.user?.role <= 80) {
+            return (next) ? next() : true;
+        }
+        else {
+            return (next) ? res.status(401).end() : false;
+        }
+    },
+
+    isSelf (req, res, next) {
+        if (req.session?.passport?.user?.id != req.params?.id) {
+            return (next) ? res.status(401).end() : false;
+        }
+        else {
+            return (next) ? next() : true;
+        }
+    },
 
     async canChangeRole (req, res, next) {
         let reqUser = req.user?.role;
@@ -70,7 +74,7 @@ module.exports = {
     },
 
     async isCoordOrIsSelf (req, res, next) {
-        if (await isCoordinator(req, res) || isSelf(req, res)) {
+        if (isCoordinator(req, res) || isSelf(req, res)) {
             next();
         }
         else {
