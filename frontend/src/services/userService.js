@@ -1,6 +1,5 @@
 import api from './_api'
 import handleErrors from './_handlers'
-import { authService } from './authService'
 
 export const userService = { 
     getById,
