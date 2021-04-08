@@ -14,8 +14,8 @@ routes.get('/', FrontController.show);
 routes.get('/options', FrontController.showOptions);
 routes.get('/:id', permsMiddlewares.isCoordinator, FrontController.show);
 routes.post('/', permsMiddlewares.isCoordinator, FrontController.store);
-routes.put('/:slug', permsMiddlewares.isCoordinator, FrontController.update);
-routes.delete('/:slug', permsMiddlewares.isCoordinator, FrontController.destroy);
+routes.put('/:id', permsMiddlewares.isCoordinator, FrontController.update);
+routes.delete('/:id', permsMiddlewares.isCoordinator, FrontController.destroy);
 routes.post('/addUser/:slug', permsMiddlewares.isCoordOrIsSelf, FrontController.addUser);
 routes.post('/removeUser/:slug', permsMiddlewares.isCoordOrIsSelf, FrontController.removeUser);
 
