@@ -17,11 +17,11 @@ const columns = [
   { field: 'email',    headerName: 'E-mail',   width: 160, flex: 1 },
   { field: 'title',    headerName: 'Título',   width: 160},
   { field: 'yearJoinGanesh', headerName: 'Ingresso', width: 140},
-  { field: 'status',   headerName: 'Ativo',    width: 120, 
+  { field: 'isDeleted',      headerName: 'Ativo',    width: 120, 
     renderCell: (params) => ( 
       <>
-        { params.value === true  && <CheckIcon color="primary"/>}
-        { params.value === false && <ClearIcon color="secondary"/>}
+        { params.value === false && <CheckIcon color="primary"/>}
+        { params.value !== false && <ClearIcon color="secondary"/>}
       </>
   )},
   { field: 'linkPath', headerName: 'Editar', width: 120, 

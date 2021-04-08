@@ -27,13 +27,13 @@ function getById(userId) {
 
 function getAll() { 
     return api.get('/user/')
-    .then((response) => Promise.resolve(response.data.users))
+    .then((response) => Promise.resolve(response.data))
     .catch(handleErrors)
     // .catch(() => Promise.resolve('Return mockup Data'))
     // .then((response) => {
     //     return Promise.resolve([{
     //         _id: "123abc", username: 'Z3z1nh013', email: 'ze@zinho.com',  title: 'Membro',
-    //         yearJoinGanesh:  "2021", status: true 
+    //         yearJoinGanesh:  "2021", isDelete: false 
     //     }])
     // })
 }

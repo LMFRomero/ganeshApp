@@ -32,7 +32,7 @@ function FormAccountData({ variant, submitDisabled, setSubmitDisabled, formData,
       <>
         <FormControl variant="filled" fullWidth error={formErrors.title}>
           <InputLabel id="LabelTitle">Título do Usuário</InputLabel>
-          <Select labelId="LabelTitle" label="Título do Usuário" name="role" value={formData.role || 60}
+          <Select labelId="LabelTitle" label="Título do Usuário" name="role" value={formData.role}
             required onChange={handleChange}>
               { rolesMenuOptions }
           </Select>
