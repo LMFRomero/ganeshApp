@@ -5,6 +5,7 @@ const Front = require('../models/Front');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
 const { validateString } = require('../utils/str');
+const { isCoordinator, isMember } = require('../middlewares/perms');
 
 function getRandomInt (max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -84,11 +85,11 @@ module.exports = {
         else {
             let filter = {};
 
-            if (req.user.role > 30) {
+            if (isCoordinator(req) == false) {
                 filter.isDeleted = { $eq: false };
             }
 
-            if (req.user.role > 80) {
+            if (isMember(req) == false) {
                 filter.membersOnly = { $eq: false };
             }
 
@@ -211,6 +212,15 @@ module.exports = {
         if (resp) {
             return res.status(400).json({ meetingId: resp });
         }
+        
+        let meeting = await SafeFindById(Meeting, id);
+        if (!meeting) {
+            return res.status(404).json({ message: "Frente não encontrada" });
+        }
+        
+        if (meeting.isDeleted != isDeleted && isCoordinator(req) == false) {
+            return res.status(403).json({ message: "Não é possível mudar o estado da reunião" });
+        }
 
         title = title.trim();
         content = content.trim();
@@ -243,7 +253,6 @@ module.exports = {
     },
 
     async destroy (req, res) {
-
         let id = req.params?.id;
         let resp = validateString(id, "meetingId", true, 100);
         if (resp) {
@@ -253,6 +262,19 @@ module.exports = {
         let meeting = await SafeFindById(Meeting, id);
         if (!meeting) {
             return res.status(404).json({ message: "Frente não encontrada" });
+        }
+
+        if (isCoordinator(req) == false) {
+            meeting.isDeleted = true;
+            
+            try {
+                meeting.save();
+            } catch (error) {
+                console.log(error);
+                return res.status(500).end();
+            }
+
+            return res.status(200).end();
         }
 
         let size = meeting.members.length;
