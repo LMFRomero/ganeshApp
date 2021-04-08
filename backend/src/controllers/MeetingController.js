@@ -103,7 +103,7 @@ module.exports = {
             }
 
             const docsSize = await Meeting.countDocuments(filter);
-            const pageSize = 10;
+            const pageSize = 8;
             const div = docsSize/pageSize;
 
             const maxPage = Math.floor(div) + (Math.floor(div) != div);
