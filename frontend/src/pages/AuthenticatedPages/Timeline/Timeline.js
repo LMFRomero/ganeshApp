@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useHistory, Link as RouterLink } from 'react-router-dom';
-import { Box, Container, Grid, Button, Link, Menu, MenuItem } from '@material-ui/core'
+import { Typography, Box, Container, Grid, Button, Link, Menu, MenuItem } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination';
 import AddSharpIcon from '@material-ui/icons/AddSharp';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -17,12 +17,12 @@ import SnackAlerts from '../../../components/SnackAlerts/SnackAlerts'
 function Timeline({ variant }){
 
   const history = useHistory()
-  const {frontSlug, pageNumber}     = useParams()
+  const {frontSlug, pageNumber} = useParams()
   const pathStart = history.location.pathname.split("/")[1]
 
   const [authUsername, setUsername]       = useState('')
   const [errorMessages, setErrorMessages] = useState({})
-  const [frontOptions,   setFrontOptions] = useState([])
+  const [frontOptions, setFrontOptions] = useState([])
   const [pagination, setPagination]     = useState({ currentPage: pageNumber, maxPage: pageNumber })
   const [results, setResults]           = useState([])
   const [filterAnchor, setFilterAnchor] = useState(null)
@@ -85,6 +85,14 @@ function Timeline({ variant }){
               }
             </Grid>
             
+            { results.length === 0 && 
+            <Grid item xs={12} sm={12} md={8}>
+              <Typography variant="h4" align="center" style={{marginTop: 32, }} >
+                {variant === "meetings" ? "Nenhuma reunião disponível!" : "Nenhum comunicado disponível"}
+              </Typography>
+            </Grid>
+            }
+
             { variant === "announces" &&
             <Grid item xs={12} sm={12} md={8}>
               <AnnounceCard avatar="P" author="Pedro Guerra (Coordenador Geral)"
@@ -110,7 +118,7 @@ function Timeline({ variant }){
                   <Grid item xs={12} sm={12} md={8}>
                     <MeetingCard  key={meeting._id} variant="small"
                       authUsername={authUsername}
-                      id={meeting._id}
+                      _id={meeting._id}
                       author={meeting.author} 
                       createdAt={meeting.createdAt}
                       
@@ -128,12 +136,14 @@ function Timeline({ variant }){
               )
             }
 
+            { results.length >=0 && pagination.maxPage >= 2 &&
             <Grid item xs={12} sm={12} md={8} container justify="center">
               <Pagination 
                 page={pagination.currentPage} 
                 count={pagination.maxPage} 
                 onChange={handlePageChange} />
             </Grid>
+            }
 
           </Grid>
       </Container>

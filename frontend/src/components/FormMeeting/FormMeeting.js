@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Grid, Button } from '@material-ui/core'
 import { TextField, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
 
@@ -10,6 +10,7 @@ import { frontService } from '../../services/frontService'
 function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setFormErrors }){
 
   let { meetingId } = useParams()
+  const history = useHistory()
 
   const [submitDisabled, setSubmitDisabled] = useState(false)
   const [frontOptions,   setFrontOptions]   = useState([])
@@ -23,7 +24,6 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
     duration: '',
     place: '',
     membersOnly: true,
-    // isDeleted: false,
   })
 
   useEffect(() => { 
@@ -68,15 +68,17 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
     delete meeting.author
     delete meeting.front
 
-    if ( isNaN(meeting.date.valueOf()) ) {
+    if ( (formData.date || formData.time) && isNaN(meeting.date.valueOf()) ) {
       setFormErrors({date: "Data ou Hora inválida!"})
       setSubmitDisabled(false)
       return;
-    } else { meeting.date = meeting.date.toISOString() }
+    } else { 
+      meeting.date = ( isNaN(meeting.date.valueOf()) ) ? "" : meeting.date.toISOString() 
+    } 
     
     if(variant === "register"){ 
       meetingService.register(meeting)
-      .then(   function(s) { setFormSuccess(s) })
+      .then(   function(s) { history.push("/reunioes") })
       .catch(  function(e) { setFormErrors(e) })     
       .finally(function( ) { setSubmitDisabled(false) })
     
@@ -115,13 +117,13 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
         <Grid container spacing={3}>
           <Grid item xs={6} style={{paddingTop: 0, paddingBottom: 0 }}>
           <TextField type="date" variant="filled" fullWidth label="Data" name="date" value={formData.date}
-            required inputProps={{maxLength:64}} error={!!formErrors.date} onChange={handleChange} 
+            inputProps={{maxLength:64}} error={!!formErrors.date} onChange={handleChange} 
             InputLabelProps={{ shrink: true }} />
           </Grid>
           
           <Grid item xs={6} style={{paddingTop: 0, paddingBottom: 0 }}>
           <TextField type="time" variant="filled" fullWidth label="Horário" name="time" value={formData.time}
-            required inputProps={{maxLength:64}} error={!!formErrors.date} onChange={handleChange} 
+            inputProps={{maxLength:64}} error={!!formErrors.date} onChange={handleChange} 
             InputLabelProps={{ shrink: true }}/>
           </Grid>
         </Grid>
