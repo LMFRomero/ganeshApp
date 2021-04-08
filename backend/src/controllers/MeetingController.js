@@ -4,30 +4,73 @@ const User = require('../models/User');
 const Front = require('../models/Front');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec');
-const { validateString} = require('../utils/str');
+const { validateString } = require('../utils/str');
+const { isCoordinator, isMember } = require('../middlewares/perms');
 
 function getRandomInt (max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function generateObjectToSend (object, fieldNames) {
-    let resp = object;
+function validateMeetingFields (title, content, frontSlug, duration, place, date) {
+    let resp;
 
-    for (let fieldName in fieldNames) {
+    let ans = {};
+    let hasError = false;
+
+    resp = validateString(title, "título", true, 64);
+    if (resp) {
+        hasError = true;
+        ans.title = resp;
     }
 
-    return resp;
+    resp = validateString(content, "conteúdo", false, 1024);
+    if (resp) {
+        hasError = true;
+        ans.content = resp;
+    }
+
+    resp = validateString(frontSlug, "frontSlug", true, 16);
+    if (resp) {
+        hasError = true;
+        ans.frontSlug = resp;
+    }
+
+    resp = validateString(duration, "duração", false, 64);
+    if (resp) {
+        hasError = true;
+        ans.duration = resp;
+    }
+
+    resp = validateString(place, "local", false, 64);
+    if (resp) {
+        hasError = true;
+        ans.place = resp;
+    }
+
+    //TODO: fazer data nao obrigatoria
+    resp = !(date instanceof Date && !isNaN(date));
+    if (resp || date < new Date()) {
+        hasError = true;
+        ans.date = "Data da reunião inválida";
+    }
+
+    return (hasError) ? ans : null;
 }
 
 module.exports = {
     async show (req, res) {
         if (req.params?.id) {
+            let resp = validateString(req.params.id, "userId", false, 100);
+            if (resp) {
+                return res.status(400).json({ userId: resp });
+            }
+
             try {
                 var meeting = await Meeting.findById(req.params.id)
                                            .select("title date duration place content front membersOnly isDeleted members author createdAt")
-                                           .populate({ path: 'front', select: 'name slug' })
-                                           .populate({ path: 'author', select: 'username title' })
-                                           .populate({ path: 'members', select: 'username' });
+                                           .populate({ path: 'front', select: 'name slug -_id' })
+                                           .populate({ path: 'author', select: 'username title -_id' })
+                                           .populate({ path: 'members', select: 'username -_id' });
             } catch (err) {
                 console.log(err);
                 return res.status(500).end();
@@ -42,11 +85,11 @@ module.exports = {
         else {
             let filter = {};
 
-            if (req.user.role > 30) {
+            if (isCoordinator(req) == false) {
                 filter.isDeleted = { $eq: false };
             }
 
-            if (req.user.role > 80) {
+            if (isMember(req) == false) {
                 filter.membersOnly = { $eq: false };
             }
 
@@ -61,7 +104,7 @@ module.exports = {
             }
 
             const docsSize = await Meeting.countDocuments(filter);
-            const pageSize = 10;
+            const pageSize = 8;
             const div = docsSize/pageSize;
 
             const maxPage = Math.floor(div) + (Math.floor(div) != div);
@@ -83,7 +126,7 @@ module.exports = {
 
             try {
                 var meetings = await Meeting.find(filter)
-                                            .select("title date duration place front author createdAt members isDeleted")
+                                            .select("title date duration place front author createdAt members")
                                             .populate({ path: "front", select: "name slug -_id" })
                                             .populate({ path: "author", select: "username title -_id" })
                                             .populate({ path: "members", select: "username -_id" })
@@ -101,52 +144,28 @@ module.exports = {
     },
     
     async store (req, res) {
-        const title = (req.body?.title)?.toString()?.trim();
-        const content = (req.body?.content)?.toString()?.trim();
-        const frontSlug = (req.body?.frontSlug)?.toString()?.trim();
-        const duration = (req.body?.duration)?.toString()?.trim();
-        const place = (req.body?.place)?.toString()?.trim();
-        const membersOnly = (((req.body?.membersOnly)?.toString()?.trim()) == 'true');
+        let title = req.body?.title;
+        let content = req.body?.content;
+        let frontSlug = req.body?.frontSlug;
+        let duration = req.body?.duration;
+        let place = req.body?.place;
+        let date = new Date(req.body?.date);
+        let membersOnly = (req.body?.membersOnly === true);
 
-        const date = new Date(req.body?.date);
-        
-        let front;   
-        let resp;        
-
-        resp = validateString(title, "título", true, 64);
+        let resp = validateMeetingFields(title, content, frontSlug, duration, place, date);
         if (resp) {
-            return res.status(400).json({ title: resp });
+            return res.status(400).json(resp);
         }
 
-        resp = validateString(content, "conteúdo", false, 1024);
-        if (resp) {
-            return res.status(400).json({ content: resp });
-        }
+        title = title.trim();
+        content = content.trim();
+        frontSlug = frontSlug.trim();
+        duration = duration.trim();
+        place = place.trim();
 
-        resp = validateString(frontSlug, "frontSlug", true, 16);
-        if (resp) {
-            return res.status(400).json({ frontSlug: resp });
-        }
-
-        front = await SafeFindOne(Front, { slug: frontSlug });
+        let front = await SafeFindOne(Front, { slug: frontSlug });
         if (!front) {
             return res.status(404).json({ frontSlug: "Frente não encontrada" });
-        }
-
-        resp = validateString(duration, "duração", false, 64);
-        if (resp) {
-            return res.status(400).json({ duration: resp });
-        }
-
-        resp = validateString(place, "local", false, 64);
-        if (resp) {
-            return res.status(400).json({ place: resp });
-        }
-
-        //TODO: fazer data nao obrigatoria
-        resp = !(date instanceof Date && !isNaN(date));
-        if (resp || date < new Date()) {
-            return res.status(400).json({ date: "Data da reunião inválida" });
         }
 
         let meeting = await SafeCreateObj (Meeting, {
@@ -173,95 +192,105 @@ module.exports = {
     },
     
     async update (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
+        let id = req.params?.id;
 
-        if (!req.body || !req.params.id)
-            return res.status(400).end();
+        let title = req.body?.title;
+        let content = req.body?.content;
+        let frontSlug = req.body?.frontSlug;
+        let duration = req.body?.duration;
+        let place = req.body?.place;
+        let date = new Date(req.body?.date);
+        let membersOnly = (req.body?.membersOnly === true);
+        let isDeleted = (req.body?.isDeleted === true);
 
-        const { title, front, room, duration } = req.body;
-        let date = req.body.date;
-
-        if (!title || !front || !date || isNaN(room) || isNaN(duration))
-            return res.status(400).json({ message: "Missing information" });
-
-        try {
-            date = new Date(date);
-            if (Object.prototype.toString.call(date) !== "[object Date]" || date == "Invalid Date")
-                return res.status(400).json({ meeting: "Invalid date" });
-        } catch (error) {
-            console.log(error);
-            return res.status(400).json({ message: "Invalid date" });
+        let resp = validateMeetingFields(title, content, frontSlug, duration, place, date);
+        if (resp) {
+            return res.status(400).json(resp);
         }
 
-        let now = new Date();
-        now.setHours(now.getHours()-3);
-        if (now > date)
-            return res.status(400).json({ message: "Date not allowed" });
-
-
-        let meeting = await SafeFindById(Meeting, req.params.id);
-        if (!meeting)
-            return res.status(404).json({ message: "Meeting not found" });
-
-        let previousFront = await SafeFindById(Front, meeting.front);
-        if (!previousFront)
-            return res.status(404).json({ message: "Previous front not found" });
-
-        let different = (previousFront.name != front);
-        let nextFront = null;
-        if (different) {
-            nextFront = await SafeFindOne(Front, { name: front });
-            if (!nextFront)
-                return res.status(404).json({ message: "New front not found" });
-
-            let index = previousFront.meetings.indexOf(meeting._id);
-            if (index > -1)
-                previousFront.meetings.splice(index, 1);
-    
-            nextFront.meetings.push(meeting._id);
-            meeting.front = nextFront._id;
+        resp = validateString(id, "meetingId", true, 100);
+        if (resp) {
+            return res.status(400).json({ meetingId: resp });
+        }
+        
+        let meeting = await SafeFindById(Meeting, id);
+        if (!meeting) {
+            return res.status(404).json({ message: "Frente não encontrada" });
+        }
+        
+        if (meeting.isDeleted != isDeleted && isCoordinator(req) == false) {
+            return res.status(403).json({ message: "Não é possível mudar o estado da reunião" });
         }
 
-        meeting.title = title;
-        meeting.date = date;
-        meeting.room = room;
-        meeting.duration = duration;
+        title = title.trim();
+        content = content.trim();
+        frontSlug = frontSlug.trim();
+        duration = duration.trim();
+        place = place.trim();
+
+        let front = await SafeFindOne(Front, { slug: frontSlug });
+        if (!front) {
+            return res.status(404).json({ frontSlug: "Frente não encontrada" });
+        }
 
         try {
-            await meeting.save();
-            if (different) {
-                await nextFront.save();
-                await previousFront.save();
-            }
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
+            await Meeting.updateOne({ _id: id }, {
+                title,
+                content,
+                front: front._id,
+                date,
+                duration,
+                place,
+                membersOnly,
+                isDeleted
+            });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ message: "Não foi possível atualizar reunião" });
         }
 
         return res.status(200).end();
     },
 
     async destroy (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
+        let id = req.params?.id;
+        let resp = validateString(id, "meetingId", true, 100);
+        if (resp) {
+            return res.status(400).json({ meetingId: resp });
+        }
 
-        if (!req.params.id)
-            return res.status(400).end();
+        let meeting = await SafeFindById(Meeting, id);
+        if (!meeting) {
+            return res.status(404).json({ message: "Frente não encontrada" });
+        }
 
-        let meeting = await SafeFindById(Meeting, req.params.id);
-        if (!meeting)
-            return res.status(404).end();
+        if (isCoordinator(req) == false) {
+            meeting.isDeleted = true;
+            
+            try {
+                meeting.save();
+            } catch (error) {
+                console.log(error);
+                return res.status(500).end();
+            }
+
+            return res.status(200).end();
+        }
 
         let size = meeting.members.length;
         for (let i = 0; i < size; i++) {
             let user = await SafeFindById(User, meeting.members[i]);
-            if (!user)
+            if (!user) {
                 continue;
+            }
 
             let index = user.meetings.indexOf(meeting._id);
-            if (index > -1)
+            if (index > -1) {
                 user.meetings.splice(index, 1);
+            }
+            else {
+                continue;
+            }
 
             try {
                 await user.save();
@@ -270,24 +299,13 @@ module.exports = {
                 return res.status(500).end();
             }
         }
-
-        let front = await SafeFindById(Front, meeting.front);
-        if (!front)
-            return res.status(404).end();
-
-        let index = front.meetings.indexOf(meeting._id);
-        if (index > -1)
-            front.meetings.splice(index, 1);
-
-        try {
-            await front.save();
-            await SafeDeleteOne(Meeting, { _id: meeting._id });
-        } catch (error) {
-            console.log(error);
-            return res.status(500).end();
-        }
         
-        return res.status(200).end();
+        let ans = await SafeDeleteOne(Meeting, { _id: meeting._id });
+        if (ans.deletedCount < 1) {
+            return res.status(500).json({ message: "Erro ao excluir a reunião" })
+        }
+
+        return res.status(200).json({ message: "Reunião excluída com sucesso" });
     },
 
     async checkTime (req, res, next) {

@@ -18,6 +18,14 @@ module.exports = {
         if (!str) {
             return `O campo '${fieldName}' é obrigatório`;
         }
+
+        if (typeof str !== 'string') {
+            return `O campo ${fieldName} tem tipo inválido`
+        }
+
+        if (!str.trim()) {
+            return `O campo '${fieldName}' é obrigatório`;
+        }
         
         if (str.length > maxLen) {
             return `O campo '${fieldName}' só aceita no máximo ${maxLen} caracteres`;

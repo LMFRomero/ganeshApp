@@ -179,7 +179,7 @@ module.exports = {
         }
 
         try {
-            await SafeDeleteOne(Front, { slug });
+            await Front.deleteOne({ _id: id });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: "Erro ao excluir a frente" });
