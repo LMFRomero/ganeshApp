@@ -52,9 +52,6 @@ function updatePassword(userId, password, newPassword) {
 
 function deleteAccount(userId) { 
     return api.delete('/user/' + userId)
-    .then( () => {
-        authService.logout()
-        .then(() => { document.location.reload() })
-    })
+    .then((response) => Promise.resolve(response.data))
     .catch(handleErrors) 
 }
