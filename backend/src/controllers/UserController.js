@@ -345,6 +345,8 @@ module.exports = {
             return res.status(500).json({ message: "Não foi possível excluir a conta" });
         }
 
+        //TODO: tirar a sessao do usuario depois de deletar
+
         return res.status(200).json({ message: "Conta excluída com sucesso!" });
     },
 

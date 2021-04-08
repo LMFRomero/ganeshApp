@@ -24,10 +24,10 @@ module.exports = {
         if (req.params?.id) {
             try {
                 var meeting = await Meeting.findById(req.params.id)
-                                    .select("title date duration place content front membersOnly isDeleted members author createdAt")
-                                    .populate({ path: 'front', select: 'name slug' })
-                                    .populate({ path: 'author', select: 'username title' })
-                                    .populate({ path: 'members', select: 'username' });
+                                           .select("title date duration place content front membersOnly isDeleted members author createdAt")
+                                           .populate({ path: 'front', select: 'name slug' })
+                                           .populate({ path: 'author', select: 'username title' })
+                                           .populate({ path: 'members', select: 'username' });
             } catch (err) {
                 console.log(err);
                 return res.status(500).end();
@@ -94,6 +94,7 @@ module.exports = {
             return res.status(400).json({ place: resp });
         }
 
+        //TODO: fazer data nao obrigatoria
         resp = !(date instanceof Date && !isNaN(date));
         if (resp || date < new Date()) {
             return res.status(400).json({ date: "Data da reunião inválida" });

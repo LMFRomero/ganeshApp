@@ -6,12 +6,7 @@ const roles = require('../utils/roles');
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec'); 
 
 let isCoordinator = async function (req, res, next) {
-    let user = await SafeFindById(User, req.session?.passport?.user?.id);
-    if (!user) {
-        return (next) ? res.status(404).end() : false;
-    }
-
-    if (user.role < 30) {
+    if (req.user?.role < 30) {
         return (next) ? next() : true;
     }
     else {
@@ -41,7 +36,7 @@ module.exports = {
     isSelf,
 
     async canChangeRole (req, res, next) {
-        let reqUser = await SafeFindById(User, req.session?.passport?.user?.id);
+        let reqUser = req.user?.role;
         if (!reqUser) {
             return (next) ? res.status(404).end() : false;
         }

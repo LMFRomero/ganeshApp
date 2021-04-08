@@ -23,10 +23,21 @@ module.exports = {
             return res.status(200).json(front);
         }
         else {
+            let filter = {};
+
+            if (req.user.role > 30) {
+                filter.isDeleted = { $eq: false };
+                filter.type = { $ne: 'internal' };
+            }
+
+            if (req.user.role > 80) {
+                filter.membersOnly = { $eq: false };
+            }
+
             try {
-                var fronts = await Front.find({})
-                                        .select("name description type isDeleted slug")
-                                        .populate({ path: 'members', select: 'username' });
+                var fronts = await Front.find(filter)
+                                        .select(`name description type isDeleted slug ${ (req.session?.passport?.user?.role > 30) ? "-_id" : "" }`)
+                                        .populate({ path: 'members', select: 'username -_id' });
             } catch (err) {
                 console.log(err);
                 return res.status(500).end();
@@ -54,7 +65,7 @@ module.exports = {
 
         try {
             var fronts = await Front.find(filter)
-                                    .select("name slug");
+                                    .select("name slug -_id");
         } catch (error) {
             console.log(error);
             return res.status(500).end();
@@ -205,7 +216,6 @@ module.exports = {
 
             currFront.name = name;
         }
-        
 
         if (slug) {
             resp = validateString(slug, "slug", true, 16, regexp.slugName);

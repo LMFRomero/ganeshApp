@@ -12,7 +12,7 @@ routes.use(permsMiddlewares.isAuth);
 
 routes.get('/', FrontController.show);
 routes.get('/options', FrontController.showOptions);
-routes.get('/:id', FrontController.show);
+routes.get('/:id', permsMiddlewares.isCoordinator, FrontController.show);
 routes.post('/', permsMiddlewares.isCoordinator, FrontController.store);
 routes.put('/:slug', permsMiddlewares.isCoordinator, FrontController.update);
 routes.delete('/:slug', permsMiddlewares.isCoordinator, FrontController.destroy);

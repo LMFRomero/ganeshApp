@@ -33,6 +33,9 @@ app.use(cors({
 const assetsPath = path.join(__dirname, './public');
 app.use(express.static(assetsPath));
 
+
+//TODO: prologar a sessao server-side do usuario quando manda requisicao
+//      -resetar o cookie e mandar com o novo maxage
 app.use(session({
     resave: true,
     name: "ganeshSession",
@@ -62,6 +65,11 @@ try {
 
 app.use(timeout('10s'));
 app.use(express.json());
+
+app.use((req, res, next) => {
+    console.log(req.method, req.path);
+    next();
+});
 
 app.use('/api/session', sessionRoutes);
 app.use('/api/user', userRoutes);
