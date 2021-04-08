@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Grid, Button, FormControl, Select, MenuItem, InputLabel, TextField } from '@material-ui/core'
 
 import { frontService } from '../../services/frontService'
@@ -8,6 +8,7 @@ import { frontService } from '../../services/frontService'
 function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormErrors }){
 
   let { frontId } = useParams()
+  const history   = useHistory();
 
   const [submitDisabled, setSubmitDisabled] = useState(false)
   const [formData, setFormData]             = useState({
@@ -52,7 +53,7 @@ function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormEr
     
     if(variant === "register"){ 
       frontService.register(formData)
-      .then(   function(s) { setFormSuccess(s) })
+      .then(   function(s) { history.push("/frentes") })
       .catch(  function(e) { setFormErrors(e) })     
       .finally(function( ) { setSubmitDisabled(false) })
     
@@ -98,11 +99,11 @@ function FormFront({ variant, formSuccess, setFormSuccess, formErrors, setFormEr
           <InputLabel id="LabelMembersOnly">Visibilidade *</InputLabel>
           <Select labelId="LabelMembersOnly" label="Visibilidade *" name="membersOnly" value={formData.membersOnly}
             required onChange={handleChange}>
-              <MenuItem value={false}>Todos os Usuários</MenuItem>
               <MenuItem value={true}>Apenas Membros Ativos</MenuItem>
+              <MenuItem value={false}>Todos os Usuários</MenuItem>
           </Select>
         </FormControl>
-
+        
         <FormControl variant="filled" fullWidth error={formErrors.isDeleted}>
           <InputLabel id="LabelStatus">Status *</InputLabel>
           <Select labelId="LabelStatus" label="Status *" name="isDeleted" value={formData.isDeleted}
