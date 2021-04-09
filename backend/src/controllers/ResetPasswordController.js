@@ -81,7 +81,7 @@ module.exports = {
         }
         else {
             if (password.trim().length < 8) {
-                ans.password = "A senha precisa ter pelo menos 8 caracteres";
+                return res.status(400).json({ password: "A senha precisa ter pelo menos 8 caracteres" });
             }
         }
 
