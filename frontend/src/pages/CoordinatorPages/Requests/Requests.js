@@ -74,14 +74,12 @@ function Requests(){
       
       reqPromise
       .then( function(s) {  
-
         setFormSuccess(s)
         setRows(rows.map((u) => { 
           if(rowChange.email === u.email)
             u.requestStatus = rowChange.accept
           return u
         }))
-
       })
       .catch( function(e) { setFormErrors(e) }) 
       .finally(function() { 
@@ -90,7 +88,7 @@ function Requests(){
       })
 
     }
-  }, [rowChange])
+  }, [rowChange, rows, submitDisabled])
 
   return(
     <Box className="RequestsPage" flexGrow={1} component="main">
