@@ -15,7 +15,7 @@ let isCoordinator = function (req, res, next) {
 }
 
 let isSelf = function (req, res, next) {
-    if (req.session?.passport?.user?.id != req.params?.id) {
+    if (req.user?.id != req.params?.id) {
         return (next) ? res.status(401).end() : false;
     }
     else {
