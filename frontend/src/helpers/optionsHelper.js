@@ -32,6 +32,7 @@ export const optionsHelper = {
         "60": "Membro",
         "80": "Colaborador",
         "100": "Ingressante",
+        "120": "Aprovação Pendente",
     },
     
     getDefaultOption: (options) => Object.keys(options)[0],
