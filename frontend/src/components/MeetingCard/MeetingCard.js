@@ -73,7 +73,7 @@ function MeetingCard({ authUsername, variant, _id, title, content, date, duratio
   return(
     <Card className={"MeetingCard MeetingCard-" + (variant || 'small')} elevation={2}>
       <CardHeader
-        avatar={<Avatar>{author.username[0].toUpperCase()}</Avatar>}
+        avatar={<Avatar>{(author.username) && author.username[0].toUpperCase()}</Avatar>}
         title={`${author.username} (${author.title})`}
         subheader={getFormattedDate(createdAt)}
         action={renderActionIcon()}
@@ -90,15 +90,15 @@ function MeetingCard({ authUsername, variant, _id, title, content, date, duratio
             <TableBody>
               <TableRow>
                   <TableCell padding="none"><strong>Data:</strong></TableCell>
-                  <TableCell>{getFormattedDate(date)}</TableCell>
+                  <TableCell>{(date) ? getFormattedDate(date) : "a combinar"}</TableCell>
               </TableRow>
               <TableRow>
                   <TableCell padding="none"><strong>Duração:</strong></TableCell>
-                  <TableCell>{duration}</TableCell>
+                  <TableCell>{(duration) ? duration : "a combinar"}</TableCell>
               </TableRow>
               <TableRow>
                   <TableCell padding="none"><strong>Local:</strong></TableCell>
-                  <TableCell>{place}</TableCell>
+                  <TableCell>{(place) ? place : "a combinar"}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

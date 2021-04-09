@@ -16,11 +16,11 @@ function Meeting(){
   const [ authUsername, setUsername ]      = useState('')
   const [ errorMessages, setErrorMessages] = useState({})
   const [meeting, setMeetingData] = useState({
-    _id: ' ', title: ' ', content: ' ',
-    date: ' ', duration: ' ', place: ' ',
-    front: { name: ' ', slug: ' '},
-    author: {username: ' ', title: ' '},
-    publishDate: ' ',
+    _id: "", title: "", content: "",
+    date: "", duration: "", place: "",
+    front: { name: "", slug: ""},
+    author: {username: "", title: ""},
+    createdAt: "",
     members: [],
     membersOnly: true, deleted: false,
   })
@@ -46,7 +46,7 @@ function Meeting(){
                 authUsername={authUsername}
                 _id={meeting._id}
                 author={meeting.author} 
-                publishDate={meeting.publishDate}
+                createdAt={meeting.createdAt}
 
                 title={meeting.title}
                 content={meeting.content}
