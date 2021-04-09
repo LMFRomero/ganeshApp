@@ -10,6 +10,10 @@ const resetPasswordSchema = new mongoose.Schema ({
         type: String,
         unique: true,
         required: true
+    },
+    createdAt: {
+        type: Date,
+        required: true,
     }
 });
 
