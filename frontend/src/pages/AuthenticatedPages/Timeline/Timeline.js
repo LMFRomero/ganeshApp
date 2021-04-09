@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useHistory, Link as RouterLink } from 'react-router-dom';
-import { Typography, Box, Container, Grid, Button, Link, Menu, MenuItem } from '@material-ui/core'
+import { Typography, Box, Container, Grid, Button, Menu, MenuItem } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination';
 import AddSharpIcon from '@material-ui/icons/AddSharp';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -9,7 +9,7 @@ import './Timeline.css'
 import { authService } from '../../../services/authService'
 import { frontService } from '../../../services/frontService'
 import { meetingService } from '../../../services/meetingService'
-import AnnounceCard from '../../../components/AnnounceCard/AnnounceCard'
+// import AnnounceCard from '../../../components/AnnounceCard/AnnounceCard'
 import MeetingCard from '../../../components/MeetingCard/MeetingCard'
 import SnackAlerts from '../../../components/SnackAlerts/SnackAlerts'
 
@@ -93,7 +93,7 @@ function Timeline({ variant }){
             </Grid>
             }
 
-            { variant === "announces" &&
+            {/* { variant === "announces" &&
             <Grid item xs={12} sm={12} md={8}>
               <AnnounceCard avatar="P" author="Pedro Guerra (Coordenador Geral)"
                 dateHour="6 de fevereiro de 2020, 13h37"
@@ -110,7 +110,7 @@ function Timeline({ variant }){
                     </>
                   }/>
             </Grid>
-            }
+            } */}
             
             { variant === "meetings" &&
               results.map((meeting,i) => {

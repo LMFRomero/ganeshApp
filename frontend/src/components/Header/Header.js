@@ -9,7 +9,7 @@ import SunIcon from '@material-ui/icons/WbSunny';
 import MoonIcon from '@material-ui/icons/NightsStay';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import FlagIcon from '@material-ui/icons/Flag';
-import AnnouncementIcon from '@material-ui/icons/Announcement';
+// import AnnouncementIcon from '@material-ui/icons/Announcement';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import GroupIcon from '@material-ui/icons/Group';
@@ -22,7 +22,7 @@ import { authService } from '../../services/authService'
 
 const menuItems = [
   { text: "Reuniões",     link: "/reunioes",      icon: () => <ScheduleIcon/> },
-  { text: "Comunicados",  link: "/comunicados",   icon: () => <AnnouncementIcon/> },
+  // { text: "Comunicados",  link: "/comunicados",   icon: () => <AnnouncementIcon/> },
   { text: "Frentes",      link: "/frentes",       icon: () => <FlagIcon/> },
   { text: "Minha Conta",  link: "/minha-conta",   icon: () => <PersonIcon/> },
 ]

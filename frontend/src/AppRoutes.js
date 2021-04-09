@@ -74,7 +74,7 @@ function AppRoutes(props) {
         <PrivateRoute path="/reunioes/:pageNumber"><Timeline variant="meetings"/></PrivateRoute>
         <PrivateRoute path="/reunioes"><Timeline variant="meetings"/></PrivateRoute>
 
-        <PrivateRoute path="/comunicados"><Timeline variant="announces"/></PrivateRoute>
+        {/* <PrivateRoute path="/comunicados"><Timeline variant="announces"/></PrivateRoute> */}
         <PrivateRoute path="/minha-conta"><UserAccount variant="my-account"/></PrivateRoute>
         <PrivateRoute path="/criar-reuniao"><DefaultForm variant="register-meeting"/></PrivateRoute>
         <PrivateRoute path="/editar-reuniao/:meetingId"><DefaultForm variant="edit-meeting"/></PrivateRoute>
@@ -82,8 +82,8 @@ function AppRoutes(props) {
         <PrivateRoute path="/frentes"><Fronts/></PrivateRoute>
         
         {/* Routes - Coordinator Pages*/}
-        <PrivateRoute path="/criar-comunicado"><DefaultForm variant="register-announce"/></PrivateRoute>
-        <PrivateRoute path="/editar-comunicado/:announceId"><DefaultForm variant="edit-announce"/></PrivateRoute>
+        {/* <PrivateRoute path="/criar-comunicado"><DefaultForm variant="register-announce"/></PrivateRoute> */}
+        {/* <PrivateRoute path="/editar-comunicado/:announceId"><DefaultForm variant="edit-announce"/></PrivateRoute> */}
         <PrivateRoute path="/criar-frente"><DefaultForm variant="register-front"/></PrivateRoute>
         <PrivateRoute path="/editar-frente/:frontId"><DefaultForm variant="edit-front"/></PrivateRoute>
         <PrivateRoute path="/usuario/:userId"><UserAccount variant="coordinator"/></PrivateRoute>
