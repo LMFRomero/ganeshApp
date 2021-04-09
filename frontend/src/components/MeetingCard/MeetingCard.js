@@ -75,7 +75,7 @@ function MeetingCard({ authUsername, variant, _id, title, content, date, duratio
       <CardHeader
         avatar={<Avatar>{(author.username) && author.username[0].toUpperCase()}</Avatar>}
         title={`${author.username} (${author.title})`}
-        subheader={getFormattedDate(createdAt)}
+        subheader={(isDeleted ? "Desativada | " : "")+ getFormattedDate(createdAt)}
         action={renderActionIcon()}
         />
       <Divider/>

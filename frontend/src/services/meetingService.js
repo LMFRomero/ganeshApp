@@ -27,13 +27,10 @@ function update(meetingId, meeting) {
     // .then(() => Promise.resolve({message: "Reunião atualizada com sucesso!" }) )
  }
 
-function _delete() { 
-    // return api.delete('/user/' + userId)
-    // .then( () => {
-    //     authService.logout()
-    //     .then(() => { document.location.reload() })
-    // })
-    // .catch(handleErrors) 
+ function _delete(meetingId) { 
+    return api.delete('/meeting/' + meetingId)
+    .then((response) => Promise.resolve(response.data))
+    .catch(handleErrors) 
 }
 
 function getById(meetingId) { 
