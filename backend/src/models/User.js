@@ -68,6 +68,11 @@ const UserSchema = new mongoose.Schema({
     },
     deletedAt: {
         type: Date,
+    },
+
+    needsApproval: {
+        type: Boolean,
+        required: true,
     }
 });
 
