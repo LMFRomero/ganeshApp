@@ -10,7 +10,7 @@ const permsMiddlewares = require('../middlewares/perms');
 
 //route: /api/user
 
-routes.post('/register', RequestUserController.store);
+routes.post('/register', UserController.store);
 routes.post('/forgotPassword', ResetPasswordController.store);
 routes.post('/resetPassword/:token', ResetPasswordController.update);
 
