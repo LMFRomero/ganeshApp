@@ -71,7 +71,11 @@ module.exports = {
                                            .populate({ path: 'front', select: 'name slug -_id' })
                                            .populate({ path: 'author', select: 'username title -_id' })
                                            .populate({ path: 'members', select: 'username -_id' });
-            } catch (err) {
+            } catch (error) {
+                if (error.kind == "ObjectId") {
+                    return res.status(404).json({ userId: "Usuário não encontrado" });
+                }
+
                 console.log(err);
                 return res.status(500).end();
             }
