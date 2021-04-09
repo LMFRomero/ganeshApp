@@ -5,6 +5,7 @@ import { TextField, InputLabel, Select, MenuItem, FormControl } from '@material-
 
 import { meetingService } from '../../services/meetingService'
 import { frontService } from '../../services/frontService'
+import DeleteDialog from '../../components/DeleteDialog/DeleteDialog'
 
 // Variants: "register" and "edit"
 function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setFormErrors }){
@@ -13,6 +14,7 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
   const history = useHistory()
 
   const [submitDisabled, setSubmitDisabled] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [frontOptions,   setFrontOptions]   = useState([])
   const [formData, setFormData]             = useState({
     _id:   '', 
@@ -24,6 +26,7 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
     duration: '',
     place: '',
     membersOnly: true,
+    isDeleted: false,
   })
 
   useEffect(() => { 
@@ -90,6 +93,13 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
     } 
   }
 
+  const handleDelete = (e) => {
+    meetingService._delete(meetingId)
+    .then( function(s) { history.push('/reunioes') })
+    .catch(  function(e) { setFormErrors(e) })     
+    .finally(function( ) { setSubmitDisabled(false) })
+  }
+
   return(
     <Grid item xs={12} container spacing={3} justify="center" 
       component="form" onSubmit={handleSubmit} style={{paddingLeft: 0, paddingRight: 0}}>
@@ -128,12 +138,18 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
           </Grid>
         </Grid>
 
-        <TextField variant="filled" fullWidth label="Duração" name="duration" value={formData.duration}
-          inputProps={{maxLength:64}} error={!!formErrors.duration} onChange={handleChange} />
-
-        <TextField variant="filled" fullWidth label="Local" name="place" value={formData.place}
+        <Grid container spacing={3}>
+          <Grid item xs={6} style={{paddingTop: 0, paddingBottom: 0 }}>
+          <TextField variant="filled" fullWidth label="Duração" name="duration" value={formData.duration}
+            inputProps={{maxLength:64}} error={!!formErrors.duration} onChange={handleChange} />
+          </Grid>
+          
+          <Grid item xs={6} style={{paddingTop: 0, paddingBottom: 0 }}>
+          <TextField variant="filled" fullWidth label="Local" name="place" value={formData.place}
           inputProps={{maxLength:64}} error={!!formErrors.place} onChange={handleChange} />
-        
+          </Grid>
+        </Grid>
+
         <FormControl variant="filled" fullWidth error={formErrors.membersOnly}>
           <InputLabel id="LabelMembersOnly">Visibilidade *</InputLabel>
           <Select labelId="LabelMembersOnly" label="Visibilidade *" name="membersOnly" value={formData.membersOnly}
@@ -142,11 +158,40 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
               <MenuItem value={true}>Apenas Membros Ativos</MenuItem>
           </Select>
         </FormControl>
+
+        <FormControl variant="filled" fullWidth error={formErrors.isDeleted}>
+          <InputLabel id="LabelStatus">Status *</InputLabel>
+          <Select labelId="LabelStatus" label="Status *" name="isDeleted" value={formData.isDeleted}
+            required onChange={handleChange}>
+              <MenuItem value={false}>Reunião Ativa</MenuItem>
+              <MenuItem value={true}>Reunião Desativada</MenuItem>
+          </Select>
+        </FormControl>
         
         <Button variant="contained" size="large" fullWidth color="secondary"
           type="submit" disabled={submitDisabled}>
           <strong>{variant === "register" ? "Publicar Reunião" : "Salvar Alterações"}</strong>
         </Button>
+
+        { variant === "edit" && 
+        <Button variant="contained" size="large" fullWidth color="primary"
+          onClick={() => setShowDeleteDialog(true)} >
+          <strong>Excluir Reunião</strong>
+        </Button>
+        }
+
+        { variant === "edit" && 
+        <DeleteDialog 
+          title="Excluir Reunião" 
+          securityString={`reuniao-${formData._id.substr(0,6)}`}  
+          successCallback={handleDelete}
+          
+          showDialog={showDeleteDialog} setShowDialog={setShowDeleteDialog}
+          submitDisabled={submitDisabled} setSubmitDisabled={setSubmitDisabled}
+          formSuccess={formSuccess} setFormSuccess={setFormSuccess} 
+          formErrors={formErrors} setFormErrors={setFormErrors}
+        />
+        }
       </Grid>
 
     </Grid>

@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { Box, Container, Grid } from '@material-ui/core'
+import { Box, Container, Grid, Button } from '@material-ui/core'
 import './Meeting.css'
+
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { authService } from '../../../services/authService'
 import { meetingService } from '../../../services/meetingService'
 import MeetingCard from '../../../components/MeetingCard/MeetingCard'
 import SnackAlerts from '../../../components/SnackAlerts/SnackAlerts'
+
+
 
 function Meeting(){
   
@@ -27,7 +31,7 @@ function Meeting(){
 
   useEffect(() => { 
     setUsername(authService.getAuth().username)
-
+    
     meetingService.getById(meetingId)
     .then(function(m) { setMeetingData({ ...m }) })
     .catch(function(e) { history.push("/404") }) 
@@ -36,10 +40,17 @@ function Meeting(){
   return(
     <Box className="MeetingPage" flexGrow={1} component="main">
       <Container>
-        <Grid container spacing={3} justify="center">
+        <Grid container spacing={1} justify="center">
 
           <SnackAlerts formSuccess={{}} setFormSuccess={()=>undefined} 
             formErrors={errorMessages} setFormErrors={setErrorMessages}/>
+
+          <Grid item xs={12} sm={12} md={12} lg={10}>
+            <Button color="primary" variant="" size="small" startIcon={<ArrowBackIcon/>}
+              onClick={() => history.goBack()}  style={{textTransform: "none"}}>
+              Voltar
+            </Button>
+          </Grid>
 
           <Grid item xs={12} sm={12} md={12} lg={10}>
             <MeetingCard variant="large"
