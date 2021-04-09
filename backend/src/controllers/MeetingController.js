@@ -187,9 +187,16 @@ module.exports = {
 
             isDeleted: false,
         });
-
         if (!meeting) {
             return res.status(500).json({ message: "Não foi possível criar a reunião" })
+        }
+
+        front.meetings.push(meeting._id);
+        try {
+            await front.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: "Não foi possível salvar reunião na frente" });
         }
 
         return res.status(201).json({ message: "Reunião criada com sucesso!!" })
