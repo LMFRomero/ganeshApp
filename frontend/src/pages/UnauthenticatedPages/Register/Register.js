@@ -85,7 +85,7 @@ function Register(){
                 autoFocus required inputProps={{maxLength:64}} error={formErrors.name} onChange={handleChange} />
 
               <TextField variant="outlined" fullWidth label="Número de Matrícula" name="collegeID" value={formData.collegeID}
-                inputProps={{maxLength:12}} error={formErrors.collegeID} onChange={handleChange} />
+                inputProps={{pattern:"[0-9]{0,12}", maxLength:12}} error={formErrors.collegeID} onChange={handleChange} />
               
               <FormControl variant="outlined" fullWidth error={formErrors.course}>
                 <InputLabel id="LabelCourse">Curso atual *</InputLabel>
