@@ -1,8 +1,6 @@
 const express = require('express');
 const routes = express.Router();
 
-
-const RequestUserController = require('../controllers/RequestUserController');
 const UserController = require('../controllers/UserController');
 const ResetPasswordController = require('../controllers/ResetPasswordController');
 
@@ -23,9 +21,8 @@ routes.put('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.update);
 routes.put('/:id/changePassword', permsMiddlewares.isSelf, UserController.updatePassword);
 routes.delete('/:id', permsMiddlewares.isCoordOrIsSelf, UserController.destroy);
 
-routes.get('/requestUser', permsMiddlewares.isCoordinator, RequestUserController.show);
-routes.post('/requestUser/acceptUser', permsMiddlewares.isCoordinator, RequestUserController.update);
-routes.post('/requestUser/rejectUser', permsMiddlewares.isCoordinator, RequestUserController.destroy);
+routes.post('/requestUser/acceptUser', permsMiddlewares.isCoordinator, UserController.acceptUser);
+routes.post('/requestUser/rejectUser', permsMiddlewares.isCoordinator, UserController.rejectUser);
 
 
 module.exports = routes;

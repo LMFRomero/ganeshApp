@@ -232,7 +232,7 @@ module.exports = {
                     return res.status(409).json({ email: "Email já em uso" });
                 }
                 if (error.keyValue.username) {
-                    return res.status(409).json( {username: "Apelido já em uso" });
+                    return res.status(409).json({ username: "Apelido já em uso" });
                 }
             } 
             console.log(error);
@@ -331,7 +331,7 @@ module.exports = {
                     return res.status(409).json({ email: "Email já em uso" });
                 }
                 if (error.keyValue.username) {
-                    return res.status(409).json( {username: "Apelido já em uso" });
+                    return res.status(409).json({ username: "Apelido já em uso" });
                 }
             } 
             console.log(error);
@@ -484,10 +484,48 @@ module.exports = {
     },
 
     async acceptUser (req, res) {
+        let email = req.body.email;
+        let role = 80;
+        let title = getTitle(role);
 
+        let resp = validateString(email, "Email", true, 64);
+        if (resp) {
+            return res.status(400).json({ email: resp });
+        }
+    
+        let user = await SafeFindOne(User, { email });
+        if (!user) {
+            return res.status(404).json({ message: "Usuário não encontrado" });
+        }
+
+        user.role = role;
+        user.title = title;
+        user.needsApproval = false;
+
+        try {
+            user.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: "Houve um erro ao aprovar usuário" });
+        }
+
+        return res.status(200).json({ message: "Usuário aprovado com sucesso" });
     },
 
     async rejectUser (req, res) {
-        
+        let email = req.body.email;
+
+        let resp = validateString(email, "Email", true, 64);
+        if (resp) {
+            return res.status(400).json({ email: resp });
+        }
+
+        try {
+            await User.deleteOne({ email });
+        } catch (error) {
+            return res.status(500).json({ message: "Não foi possível deletar o usuário" });
+        }
+
+        return res.status(200).json({ message: "Usuário deletado com sucesso" });
     }
 }
