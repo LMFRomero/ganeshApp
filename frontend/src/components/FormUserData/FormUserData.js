@@ -55,7 +55,7 @@ function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, se
         required inputProps={{maxLength:32}} error={formErrors.username} onChange={handleChange} />
       
       <TextField variant="filled" fullWidth label="Número de Matrícula" name="collegeID" value={formData.collegeID}
-                inputProps={{maxLength:12}} error={formErrors.collegeID} onChange={handleChange} />
+                inputProps={{pattern:"[0-9]{0,12}", maxLength:12}} error={formErrors.collegeID} onChange={handleChange} />
               
       <FormControl variant="filled" fullWidth error={formErrors.course}>
         <InputLabel id="LabelCourse">Curso atual *</InputLabel>
