@@ -126,7 +126,7 @@ module.exports = {
 
             try {
                 var meetings = await Meeting.find(filter)
-                                            .select("title date duration place front author createdAt members")
+                                            .select("title date duration place front author createdAt members isDeleted")
                                             .populate({ path: "front", select: "name slug -_id" })
                                             .populate({ path: "author", select: "username title -_id" })
                                             .populate({ path: "members", select: "username -_id" })
@@ -249,7 +249,7 @@ module.exports = {
             return res.status(500).json({ message: "Não foi possível atualizar reunião" });
         }
 
-        return res.status(200).end();
+        return res.status(200).json({ message: "Reunião criada com sucesso!!" });
     },
 
     async destroy (req, res) {

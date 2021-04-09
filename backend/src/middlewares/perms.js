@@ -5,20 +5,29 @@ const roles = require('../utils/roles');
 
 const { SafeFindOne, SafeDeleteOne, SafeUpdateOne, SafeFindById, SafeCreateObj, SafeFind } = require('../services/safe-exec'); 
 
+let isCoordinator = function (req, res, next) {
+    if (req.user?.role <= 30) {
+        return (next) ? next() : true;
+    }
+    else {
+        return (next) ? res.status(401).end() : false;
+    }
+}
+
+let isSelf = function (req, res, next) {
+    if (req.user?.id != req.params?.id) {
+        return (next) ? res.status(401).end() : false;
+    }
+    else {
+        return (next) ? next() : true;
+    }
+}
+
 module.exports = {
     isAuth (req, res, next) {
         if (req.isAuthenticated()) {
             return next();
         } else res.status(401).end();
-    },
-
-    isCoordinator (req, res, next) {
-        if (req.user?.role <= 30) {
-            return (next) ? next() : true;
-        }
-        else {
-            return (next) ? res.status(401).end() : false;
-        }
     },
 
     isMember (req, res, next) {
@@ -30,14 +39,9 @@ module.exports = {
         }
     },
 
-    isSelf (req, res, next) {
-        if (req.session?.passport?.user?.id != req.params?.id) {
-            return (next) ? res.status(401).end() : false;
-        }
-        else {
-            return (next) ? next() : true;
-        }
-    },
+    isCoordinator,
+
+    isSelf,
 
     async canChangeRole (req, res, next) {
         let reqUser = req.user?.role;
