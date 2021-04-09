@@ -84,10 +84,10 @@ function FormUserData({ variant, submitDisabled, setSubmitDisabled, formData, se
       }
 
       <TextField variant="filled" fullWidth label="Ano de ingresso na instituição" name="yearJoinCollege" value={formData.yearJoinCollege}
-        inputProps={{maxLength:4}} error={formErrors.yearJoinCollege} onChange={handleChange} />
+        inputProps={{pattern:"[0-9]{0,4}", maxLength:4}} error={formErrors.yearJoinCollege} onChange={handleChange} />
 
       <TextField variant="filled" fullWidth label="Ano de ingresso no Ganesh" name="yearJoinGanesh" value={formData.yearJoinGanesh}
-        inputProps={{maxLength:4}} error={formErrors.yearJoinGanesh} onChange={handleChange} />
+        inputProps={{pattern:"[0-9]{0,4}", maxLength:4}} error={formErrors.yearJoinGanesh} onChange={handleChange} />
 
       <Button variant="contained" size="large" fullWidth color="primary"
         type="submit" disabled={submitDisabled}>

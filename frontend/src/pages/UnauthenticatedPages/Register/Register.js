@@ -114,10 +114,10 @@ function Register(){
               }
 
               <TextField variant="outlined" fullWidth label="Ano de ingresso na instituição" name="yearJoinCollege" value={formData.yearJoinCollege}
-                inputProps={{maxLength:4}} error={formErrors.yearJoinCollege} onChange={handleChange} />
+                inputProps={{pattern:"[0-9]{0,4}", maxLength:4}} error={formErrors.yearJoinCollege} onChange={handleChange} />
 
               <TextField variant="outlined" fullWidth label="Ano de ingresso no Ganesh" name="yearJoinGanesh" value={formData.yearJoinGanesh}
-                inputProps={{maxLength:4}} error={formErrors.yearJoinGanesh} onChange={handleChange} />
+                inputProps={{pattern:"[0-9]{0,4}", maxLength:4}} error={formErrors.yearJoinGanesh} onChange={handleChange} />
             </Grid>
 
             <Grid className="FormSection" item xs={12} sm={6} md={5} lg={4}>
