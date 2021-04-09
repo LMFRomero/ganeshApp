@@ -58,6 +58,7 @@ function Meeting(){
                 _id={meeting._id}
                 author={meeting.author} 
                 createdAt={meeting.createdAt}
+                isDeleted={meeting.isDeleted}
 
                 title={meeting.title}
                 content={meeting.content}
