@@ -126,7 +126,7 @@ module.exports = {
 
             try {
                 var meetings = await Meeting.find(filter)
-                                            .select("title date duration place front author createdAt members")
+                                            .select("title date duration place front author createdAt members isDeleted")
                                             .populate({ path: "front", select: "name slug -_id" })
                                             .populate({ path: "author", select: "username title -_id" })
                                             .populate({ path: "members", select: "username -_id" })
