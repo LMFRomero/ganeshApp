@@ -39,15 +39,14 @@ function Users(){
   const [rows, setRows]               = useState([])
 
   const userToRow = (user, index) => { 
-    return { ...user, id: index, linkPath: user._id, status: true }
+    return { ...user, id: index, linkPath: user._id }
   }
 
   useEffect(() => { 
     userService.getAll()
     .then( function(u) { setRows(u.map(userToRow)) })
-    .catch(  function(e) { setFormErrors(e) }) 
+    .catch( function(e) { setFormErrors(e) }) 
   }, [])
-
 
   return(
     <Box className="UsersPage" flexGrow={1} component="main">
