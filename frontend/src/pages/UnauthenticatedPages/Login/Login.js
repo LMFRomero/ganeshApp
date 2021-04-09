@@ -58,7 +58,7 @@ function Login(){
                 required inputProps={{maxLength:64}} error={formErrors.email} onChange={handleChange} />
               
               <TextField type="password" variant="outlined" fullWidth label="Senha" name="password" value={formData.password}
-                required inputProps={{maxLength:64}} error={formErrors.password} onChange={handleChange} />
+                required inputProps={{minLength:8, maxLength:64}} error={formErrors.password} onChange={handleChange} />
               
               <Button variant="contained" size="large" fullWidth color="primary"
                 type="submit" disabled={submitDisabled}>

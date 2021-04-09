@@ -132,10 +132,10 @@ function Register(){
                 required inputProps={{maxLength:32}} error={formErrors.username} onChange={handleChange} />
 
               <TextField type="password" variant="outlined" fullWidth label="Senha" name="password" value={formData.password}
-                required inputProps={{maxLength:64}} error={formErrors.password} onChange={handleChange} />
+                required inputProps={{minLength:8, maxLength:64}} error={formErrors.password} onChange={handleChange} />
 
               <TextField type="password" variant="outlined" fullWidth label="Confirmar senha" name="repeatPassword" value={formData.repeatPassword}
-                required inputProps={{maxLength:64}} error={formErrors.repeatPassword} onChange={handleChange} />
+                required inputProps={{minLength:8, maxLength:64}} error={formErrors.repeatPassword} onChange={handleChange} />
               
               <FormControl component="fieldset">
                 <FormControlLabel label={`Pretendo participar do Ping ${new Date().getFullYear()}`}  

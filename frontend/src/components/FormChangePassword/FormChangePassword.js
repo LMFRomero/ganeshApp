@@ -47,13 +47,13 @@ function FormChangePassword({ userId, submitDisabled, setSubmitDisabled,
       </Typography>
       
       <TextField type="password" variant="filled" fullWidth label="Senha Atual" name="password" value={formData.password}
-        required inputProps={{maxLength:64}} error={!!formErrors.password} onChange={handleChange} />
+        required inputProps={{minLength:8, maxLength:64}} error={!!formErrors.password} onChange={handleChange} />
 
       <TextField type="password" variant="filled" fullWidth label="Nova Senha" name="newPassword" value={formData.newPassword}
-        required inputProps={{maxLength:64}} error={!!formErrors.newPassword} onChange={handleChange} />
+        required inputProps={{minLength:8, maxLength:64}} error={!!formErrors.newPassword} onChange={handleChange} />
       
       <TextField type="password" variant="filled" fullWidth label="Confirmar Nova Senha" name="repeatPassword" value={formData.repeatPassword}
-        required inputProps={{maxLength:64}} error={!!formErrors.repeatPassword} onChange={handleChange} />
+        required inputProps={{minLength:8, maxLength:64}} error={!!formErrors.repeatPassword} onChange={handleChange} />
       
       <Button variant="contained" size="large" fullWidth color="secondary"
         type="submit" disabled={submitDisabled}>
