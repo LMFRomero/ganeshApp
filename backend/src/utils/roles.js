@@ -38,6 +38,10 @@ let roles = {
             role: 100,
             title: "Ingressante"
         },
+        pendingApproval: {
+            role: 120,
+            title: "Pendente"
+        }
     },
 
     getRole (role) {
