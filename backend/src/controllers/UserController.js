@@ -2,6 +2,8 @@ const User = require('../models/User');
 
 const bCrypt = require('../services/hashes');
 const passport = require('passport');
+const session = require('../services/passport');
+
 const { SafeFindOne, SafeCreateObj, SafeFindById, SafeFind } = require('../services/safe-exec');
 
 const { canChangeRole } = require('../middlewares/perms');
@@ -50,42 +52,22 @@ function validateUserFields (email, username, name, institution, course, college
         ans.institution = resp;
     }
 
-    resp = validateString(yearJoinCollege, "Ano de ingresso na instituição", false, 12);
-    if (resp) {
+    yearJoinCollege = parseInt(yearJoinCollege);
+    if (isNaN(yearJoinCollege)) {
         hasError = true;
-        ans.yearJoinCollege = resp;
-    }
-    else if (institution != 'NENHUMA') {
-        yearJoinCollege = parseInt(yearJoinCollege);
-        if (isNaN(yearJoinCollege)) {
-            hasError = true;
-            ans.yearJoinCollege = "O campo 'Ano de ingresso na instituição' é inválido";
-        }
+        ans.yearJoinCollege = "O campo 'Ano de ingresso na instituição' é inválido";
     }
 
-    resp = validateString(collegeID, "Número de Matrícula", false, 12);
-    if (resp) {
-        ans.collegeID = resp;
-    }
-    else if (institution != 'NENHUMA') {
-        collegeID = parseInt(collegeID);
-        if (isNaN(collegeID)) {
-            hasError = true;
-            ans.collegeID = "O campo 'Número de Matrícula' é inválido";
-        }
+    collegeID = parseInt(collegeID);
+    if (isNaN(collegeID)) {
+        hasError = true;
+        ans.collegeID = "O campo 'Número de Matrícula' é inválido";
     }
     
-    resp = validateString(yearJoinGanesh, "Ano de ingresso no Ganesh", true, 12);
-    if (resp) {
+    yearJoinGanesh = parseInt(yearJoinGanesh);
+    if (isNaN(yearJoinGanesh)) {
         hasError = true;
-        ans.yearJoinGanesh = resp;
-    }
-    else {
-        yearJoinGanesh = parseInt(yearJoinGanesh);
-        if (isNaN(yearJoinGanesh)) {
-            hasError = true;
-            ans.yearJoinGanesh = "O campo 'Ano de ingresso no Ganesh' é inválido";
-        }
+        ans.yearJoinGanesh = "O campo 'Ano de ingresso no Ganesh' é inválido";
     }
 
     return (hasError) ? ans : null;
@@ -417,7 +399,7 @@ module.exports = {
             return res.status(500).json({ message: "Não foi possível excluir a conta" });
         }
 
-        req.logOut();
+        // req.logOut();
         return res.status(200).json({ message: "Conta excluída com sucesso!" });
     },
 
