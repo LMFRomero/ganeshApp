@@ -73,7 +73,7 @@ module.exports = {
                                            .populate({ path: 'members', select: 'username -_id' });
             } catch (error) {
                 if (error.kind == "ObjectId") {
-                    return res.status(404).json({ userId: "Usuário não encontrado" });
+                    return res.status(404).json({ userId: "Reunião não encontrada" });
                 }
 
                 console.log(err);
@@ -239,16 +239,30 @@ module.exports = {
         duration = duration.trim();
         place = place.trim();
 
-        let front = await SafeFindOne(Front, { slug: frontSlug });
-        if (!front) {
-            return res.status(404).json({ frontSlug: "Frente não encontrada" });
+        let front;
+
+        if (new Date() > new Date(meeting.date)) {
+            title = meeting.title;
+            front = meeting.front;
+            date = meeting.date;
+            duraton = meeting.duration;
+            place = meeting.place;
+        }
+
+        else {
+            front = await SafeFindOne(Front, { slug: frontSlug });
+            if (!front) {
+                return res.status(404).json({ frontSlug: "Frente não encontrada" });
+            }
+
+            front = front._id;
         }
 
         try {
             await Meeting.updateOne({ _id: id }, {
                 title,
                 content,
-                front: front._id,
+                front,
                 date,
                 duration,
                 place,
@@ -393,46 +407,4 @@ module.exports = {
             return res.status(200).end();
         });
     },
-
-    async generateMeetingCode (req, res) {
-        if (!req.session || !req.session.passport || !req.session.passport.user)
-            return res.status(401).end();
-
-        if (!req.params || !req.params.id)
-            return res.status(400).end();
-
-        let meeting = await SafeFindById(Meeting, req.params.id);
-        if (!meeting)
-            return res.status(404).end();
-
-        let code = getRandomInt(9000)+1000;
-        //TODO: while true until unused code
-        frequencyClient.exists(code, async (err, reply) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).end();
-            }
-
-            if (!reply) {
-                frequencyClient.set(code, req.params.id);
-                frequencyClient.expire(code, 60 * 60 * 12);
-
-                meeting.frequencyCode = code;
-
-                try {
-                    await meeting.save();
-                } catch (error) {
-                    console.log(error);
-                    return res.status(500).end();
-                }
-
-                return res.status(200).end();
-            }
-
-            else {
-                return res.status(500).end();
-            }
-        })
-
-    }
 }
