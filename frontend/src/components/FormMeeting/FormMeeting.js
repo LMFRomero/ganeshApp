@@ -73,7 +73,7 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
     delete meeting.author
     delete meeting.front
 
-    if ( (formData.date || formData.time) && isNaN(meeting.date.valueOf()) ) {
+    if ( /*(formData.date || formData.time) &&*/ isNaN(meeting.date.valueOf()) ) {
       setFormErrors({date: "Data ou Hora inválida!"})
       setSubmitDisabled(false)
       return;
@@ -129,13 +129,13 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
         <Grid container spacing={3}>
           <Grid item xs={6} style={{paddingTop: 0, paddingBottom: 0 }}>
           <TextField type="date" variant="filled" fullWidth label="Data" name="date" value={formData.date}
-            inputProps={{maxLength:64}} error={!!formErrors.date} onChange={handleChange} 
+            required inputProps={{maxLength:64}} error={!!formErrors.date} onChange={handleChange} 
             InputLabelProps={{ shrink: true }} />
           </Grid>
           
           <Grid item xs={6} style={{paddingTop: 0, paddingBottom: 0 }}>
           <TextField type="time" variant="filled" fullWidth label="Horário" name="time" value={formData.time}
-            inputProps={{maxLength:64}} error={!!formErrors.date} onChange={handleChange} 
+            required inputProps={{maxLength:64}} error={!!formErrors.date} onChange={handleChange} 
             InputLabelProps={{ shrink: true }}/>
           </Grid>
         </Grid>
