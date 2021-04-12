@@ -96,6 +96,6 @@ module.exports = {
             return res.status(500).json({ message: "Não foi possível salvar código da reunião" });
         }
 
-        return res.status(201).json({ message: "Código da reunião criado com sucesso" });
+        return res.status(201).json({ message: "Código da reunião criado com sucesso, válido até 2h30 depois do início da reunião" });
     },
 }
