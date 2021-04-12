@@ -70,18 +70,24 @@ module.exports = {
                                            .select("title date duration place content front membersOnly isDeleted members author createdAt")
                                            .populate({ path: 'front', select: 'name slug -_id' })
                                            .populate({ path: 'author', select: 'username title -_id' })
-                                           .populate({ path: 'members', select: 'username -_id' });
+                                           .populate({ path: 'members', select: 'username -_id' })
+                                           .populate({ path: 'frequencyCode', select: 'creator code -_id' })
+                                           .lean();
             } catch (error) {
                 if (error.kind == "ObjectId") {
                     return res.status(404).json({ userId: "Reunião não encontrada" });
                 }
 
-                console.log(err);
+                console.log(error);
                 return res.status(500).end();
             }
             
             if (!meeting) {
                 return res.status(404).json({ message: "Reunião não encontrada" });
+            }
+
+            if (!(isCoordinator(req) || meeting.frequencyCode?.creator == req.session?.passport?.user?.id)) {
+                delete meeting.frequencyCode;
             }
 
             return res.status(200).json(meeting);

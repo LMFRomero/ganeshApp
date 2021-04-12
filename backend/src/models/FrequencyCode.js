@@ -26,4 +26,4 @@ const frequencyCode = new mongoose.Schema ({
 
 frequencyCode.plugin(ttl);
 
-module.exports = mongoose.model('frequencyCode', frequencyCode);
+module.exports = mongoose.model('FrequencyCode', frequencyCode);
