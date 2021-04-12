@@ -1,4 +1,3 @@
-const { mongo } = require('mongoose');
 const mongoose = require('mongoose');
 
 const meetingSchema = new mongoose.Schema({
@@ -33,7 +32,8 @@ const meetingSchema = new mongoose.Schema({
     },
 
     frequencyCode: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'FrequencyCode'
     },
 
     author: {
@@ -54,5 +54,7 @@ const meetingSchema = new mongoose.Schema({
         required: true,
     }
 });
+
+
 
 module.exports = mongoose.model('Meeting', meetingSchema);
