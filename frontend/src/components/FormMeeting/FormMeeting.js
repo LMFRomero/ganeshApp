@@ -40,10 +40,12 @@ function FormMeeting({ variant, formSuccess, setFormSuccess, formErrors, setForm
     if(variant === "edit"){
       meetingService.getById(meetingId)
       .then(function(m) { 
+
+        const ISOdate = new Date(m.date)
         setFormData({ ...m, 
           frontSlug: m.front.slug,
-          date: m.date.substr(0,10),
-          time: m.date.substr(11,5)
+          date: `${ISOdate.getFullYear().toString().padStart(4, '0')}-${ISOdate.getMonth().toString().padStart(2, '0')}-${ISOdate.getDate().toString().padStart(2, '0')}`,
+          time: `${ISOdate.getHours().toString().padStart(2, '0')}:${ISOdate.getMinutes().toString().padStart(2, '0')}`
         }) 
       })
       .catch(function(e) { 
