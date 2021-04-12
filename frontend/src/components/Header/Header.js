@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory, Link as RouterLink, useLocation } from 'react-router-dom';
 import { AppBar, Box, Divider, Drawer, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core'
+import { TextField, InputAdornment } from '@material-ui/core'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import './Header.css'
 
@@ -14,6 +15,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import GroupIcon from '@material-ui/icons/Group';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import HowToRegIcon from '@material-ui/icons/HowToReg';
 
 import GaneshSidebarImg from '../../assets/images/Ganesh500x500.png'
 import GaneshHeaderImg from '../../assets/images/GaneshBranco64x64.png'
@@ -79,6 +81,20 @@ function Header(props) {
       <Box className="DrawerContent">
         <img src={GaneshSidebarImg} alt="Logo do Ganesh - Grupo de Extensão do ICMC"/>
         
+        <Divider/>
+
+        <Box className="FrequencyForm"  component="form">
+          <TextField type="text" variant="filled" fullWidth label="Marcar Presença" placeholder="Cód. Reunião"  name="frequencyCode"  
+            inputProps={{minLength: 4, maxLength: 4, pattern: "[0-9]{4}"}}
+            InputProps={{
+              endAdornment: 
+                <InputAdornment position="end">
+                  <IconButton type="submit"><HowToRegIcon/></IconButton>
+                </InputAdornment>,
+            }}
+            />
+        </Box>
+
         <Divider/>
         
         <List>
