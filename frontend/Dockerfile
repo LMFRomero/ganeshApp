@@ -1,11 +1,18 @@
-FROM node
+FROM node:15
 
+# Select the docker app file
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-
-RUN npm install
+# Copying frontend files
 COPY . .
 
+# Install Application
+RUN npm install && \
+    npm run build && \
+    npm install -g serve
+
+# Expose front-end default port
 EXPOSE 3000
-CMD [ "yarn", "start" ]
+
+# Serve front-end in 3000 port
+CMD serve -s build -l 3000
