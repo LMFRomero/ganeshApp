@@ -44,13 +44,12 @@ module.exports = {
     isSelf,
 
     async canChangeRole (req, res, next) {
-        let reqUser = req.user?.role;
-        if (!reqUser) {
+        if (!req.user) {
             return (next) ? res.status(404).end() : false;
         }
 
         //if the request user is not a coordinator
-        if (reqUser.role >= 30) {
+        if (req.user?.role >= 30) {
             return (next) ? res.status(401).end() : false;
         }
         
@@ -61,16 +60,16 @@ module.exports = {
         }
 
         //coordinator can't promote or demote coordinator
-        if (reqUser.role >= 20 && changedUser.role < 30) {
+        if (req.user?.role >= 20 && changedUser.role < 30) {
             return (next) ? res.status(401).end() : false;
         }
 
-        if (reqUser.role > changedUser.role) {
+        if (req.user?.role > changedUser.role) {
             return (next) ? res.status(401).end() : false;
         }
         
         //coodinator can't promote to a higher role than his own
-        if (reqUser.role > newRole) {
+        if (req.user?.role > newRole) {
             return (next) ? res.status(401).end() : false;
         }
 
