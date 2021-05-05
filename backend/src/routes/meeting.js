@@ -14,7 +14,7 @@ routes.use(permsMiddlewares.isAuth);
 
 
 routes.get('/:id', MeetingController.show);
-routes.get('/', MeetingController.show);
+routes.get('/', MeetingController.showAll);
 routes.post('/', MeetingController.store);
 routes.put('/:id', MeetingController.update);
 routes.delete('/:id', permsMiddlewares.isMember, MeetingController.destroy);

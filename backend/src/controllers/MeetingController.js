@@ -59,98 +59,97 @@ function validateMeetingFields (title, content, frontSlug, duration, place, date
 
 module.exports = {
     async show (req, res) {
-        if (req.params?.id) {
-            let resp = validateString(req.params.id, "userId", false, 100);
-            if (resp) {
-                return res.status(400).json({ userId: resp });
-            }
-
-            try {
-                var meeting = await Meeting.findById(req.params.id)
-                                           .select("title date duration place content front membersOnly isDeleted members author createdAt")
-                                           .populate({ path: 'front', select: 'name slug -_id' })
-                                           .populate({ path: 'author', select: 'username title -_id' })
-                                           .populate({ path: 'members', select: 'username -_id' })
-                                           .populate({ path: 'frequencyCode', select: 'creator code -_id' })
-                                           .lean();
-            } catch (error) {
-                if (error.kind == "ObjectId") {
-                    return res.status(404).json({ userId: "Reunião não encontrada" });
-                }
-
-                console.log(error);
-                return res.status(500).end();
-            }
-            
-            if (!meeting) {
-                return res.status(404).json({ message: "Reunião não encontrada" });
-            }
-
-            if (!(isCoordinator(req) || meeting.frequencyCode?.creator == req.session?.passport?.user?.id)) {
-                delete meeting.frequencyCode;
-            }
-
-            return res.status(200).json(meeting);
+        let resp = validateString(req.params?.id, "userId", false, 100);
+        if (resp) {
+            return res.status(400).json({ userId: resp });
         }
-        else {
-            let filter = {};
 
-            if (isCoordinator(req) == false) {
-                filter.isDeleted = { $eq: false };
+        try {
+            var meeting = await Meeting.findById(req.params.id)
+                                        .select("title date duration place content front membersOnly isDeleted members author createdAt")
+                                        .populate({ path: 'front', select: 'name slug -_id' })
+                                        .populate({ path: 'author', select: 'username title -_id' })
+                                        .populate({ path: 'members', select: 'username -_id' })
+                                        .populate({ path: 'frequencyCode', select: 'creator code -_id' })
+                                        .lean();
+        } catch (error) {
+            if (error.kind == "ObjectId") {
+                return res.status(404).json({ userId: "Reunião não encontrada" });
             }
 
-            if (isMember(req) == false) {
-                filter.membersOnly = { $eq: false };
+            console.log(error);
+            return res.status(500).end();
+        }
+        
+        if (!meeting) {
+            return res.status(404).json({ message: "Reunião não encontrada" });
+        }
+
+        if (!(isCoordinator(req) || meeting.frequencyCode?.creator == req.session?.passport?.user?.id)) {
+            delete meeting.frequencyCode;
+        }
+
+        return res.status(200).json(meeting);
+    },
+
+    async showAll (req, res) {
+        let filter = {};
+
+        if (isCoordinator(req) == false) {
+            filter.isDeleted = { $eq: false };
+        }
+
+        if (isMember(req) == false) {
+            filter.membersOnly = { $eq: false };
+        }
+
+        let slug = req.query.slug;
+        let currentPage = parseInt(req.query.page);
+
+        if (slug) {
+            let front = await SafeFindOne(Front, { slug });
+            if (front) {
+                filter.front = front._id;
             }
+        }
 
-            let slug = req.query.slug;
-            let currentPage = parseInt(req.query.page);
+        const docsSize = await Meeting.countDocuments(filter);
+        const pageSize = 8;
+        const div = docsSize/pageSize;
 
-            if (slug) {
-                let front = await SafeFindOne(Front, { slug });
-                if (front) {
-                    filter.front = front._id;
-                }
-            }
+        const maxPage = Math.floor(div) + (Math.floor(div) != div);
 
-            const docsSize = await Meeting.countDocuments(filter);
-            const pageSize = 8;
-            const div = docsSize/pageSize;
+        if (isNaN(currentPage) || currentPage < 1) {
+            currentPage = 1;
+        }
 
-            const maxPage = Math.floor(div) + (Math.floor(div) != div);
+        if (currentPage > maxPage) {
+            currentPage = maxPage;
+        }
 
-            if (isNaN(currentPage) || currentPage < 1) {
-                currentPage = 1;
-            }
+        let resp = { currentPage, maxPage };
 
-            if (currentPage > maxPage) {
-                currentPage = maxPage;
-            }
-
-            let resp = { currentPage, maxPage };
-
-            if (maxPage == 0) {
-                resp.results = [];
-                return res.status(200).json(resp);
-            }
-
-            try {
-                var meetings = await Meeting.find(filter)
-                                            .select("title date duration place front author createdAt members isDeleted")
-                                            .populate({ path: "front", select: "name slug -_id" })
-                                            .populate({ path: "author", select: "username title -_id" })
-                                            .populate({ path: "members", select: "username -_id" })
-                                            .skip(pageSize*(currentPage-1))
-                                            .limit(pageSize)
-                                            .sort({ isDeleted: 1, createdAt: -1 });
-                resp.results = meetings;
-            } catch (err) {
-                console.log(err);
-                return res.status(500).end();
-            }
-
+        if (maxPage == 0) {
+            resp.results = [];
             return res.status(200).json(resp);
         }
+
+        try {
+            var meetings = await Meeting.find(filter)
+                                        .select("title date duration place front author createdAt members isDeleted")
+                                        .populate({ path: "front", select: "name slug -_id" })
+                                        .populate({ path: "author", select: "username title -_id" })
+                                        .populate({ path: "members", select: "username -_id" })
+                                        .skip(pageSize*(currentPage-1))
+                                        .limit(pageSize)
+                                        .sort({ isDeleted: 1, createdAt: -1 });
+            resp.results = meetings;
+        } catch (err) {
+            console.log(err);
+            return res.status(500).end();
+        }
+
+        return res.status(200).json(resp);
     },
     
     async store (req, res) {
