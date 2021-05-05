@@ -28,6 +28,7 @@ services:
             - MONGODB_HOSTNAME=ganeshapp_mongodb
             - REDIS_HOSTNAME=ganeshapp_redis
             - REACT_HOSTNAME=ganeshapp_react
+            - REDIS_SECRET=redistoper
 
     ganeshapp_react:
         build: 
